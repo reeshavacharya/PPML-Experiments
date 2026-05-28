@@ -1,0 +1,6 @@
+**data/
+*.pth
+*pycache*
+.venv/
+*.out
+**calibration/
