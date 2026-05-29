@@ -4,3 +4,4 @@ pandas
 pillow 
 scikit-learn 
 tqdm
+medmnist
