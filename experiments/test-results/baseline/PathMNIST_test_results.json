@@ -1,0 +1,10 @@
+{
+  "dataset": "PathMNIST",
+  "task": "multi-class",
+  "split": "test",
+  "checkpoint": "/home/ree/PPML/checkpoints/baseline/vit_base_PathMNIST_best.pth",
+  "data_root": "/home/ree/PPML/data/PathMNIST",
+  "num_samples": 7180,
+  "AUC": 0.983028408794757,
+  "ACC": 0.843175487465181
+}

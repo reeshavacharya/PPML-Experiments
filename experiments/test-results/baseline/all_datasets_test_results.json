@@ -1,0 +1,62 @@
+{
+  "PathMNIST": {
+    "dataset": "PathMNIST",
+    "task": "multi-class",
+    "split": "test",
+    "checkpoint": "/home/ree/PPML/checkpoints/baseline/vit_base_PathMNIST_best.pth",
+    "data_root": "/home/ree/PPML/data/PathMNIST",
+    "num_samples": 7180,
+    "AUC": 0.983028408794757,
+    "ACC": 0.843175487465181
+  },
+  "ChestMNIST": {
+    "dataset": "ChestMNIST",
+    "task": "multi-label, binary-class",
+    "split": "test",
+    "checkpoint": "/home/ree/PPML/checkpoints/baseline/vit_base_ChestMNIST_best.pth",
+    "data_root": "/home/ree/PPML/data/ChestMNIST",
+    "num_samples": 22433,
+    "AUC": 0.6454118265035106,
+    "ACC": 0.9474307620788253
+  },
+  "DermaMNIST": {
+    "dataset": "DermaMNIST",
+    "task": "multi-class",
+    "split": "test",
+    "checkpoint": "/home/ree/PPML/checkpoints/baseline/vit_base_DermaMNIST_best.pth",
+    "data_root": "/home/ree/PPML/data/DermaMNIST",
+    "num_samples": 2005,
+    "AUC": 0.8981539245183943,
+    "ACC": 0.7162094763092269
+  },
+  "OCTMNIST": {
+    "dataset": "OCTMNIST",
+    "task": "multi-class",
+    "split": "test",
+    "checkpoint": "/home/ree/PPML/checkpoints/baseline/vit_base_OCTMNIST_best.pth",
+    "data_root": "/home/ree/PPML/data/OCTMNIST",
+    "num_samples": 1000,
+    "AUC": 0.9379773333333332,
+    "ACC": 0.667
+  },
+  "BloodMNIST": {
+    "dataset": "BloodMNIST",
+    "task": "multi-class",
+    "split": "test",
+    "checkpoint": "/home/ree/PPML/checkpoints/baseline/vit_base_BloodMNIST_best.pth",
+    "data_root": "/home/ree/PPML/data/BloodMNIST",
+    "num_samples": 3421,
+    "AUC": 0.9935553522193445,
+    "ACC": 0.9237065185618241
+  },
+  "OrganAMNIST": {
+    "dataset": "OrganAMNIST",
+    "task": "multi-class",
+    "split": "test",
+    "checkpoint": "/home/ree/PPML/checkpoints/baseline/vit_base_OrganAMNIST_best.pth",
+    "data_root": "/home/ree/PPML/data/OrganAMNIST",
+    "num_samples": 17778,
+    "AUC": 0.9847020497771652,
+    "ACC": 0.8439082011474857
+  }
+}

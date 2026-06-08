@@ -1,0 +1,10 @@
+{
+  "dataset": "BloodMNIST",
+  "task": "multi-class",
+  "split": "test",
+  "checkpoint": "/home/ree/PPML/checkpoints/baseline/vit_base_BloodMNIST_best.pth",
+  "data_root": "/home/ree/PPML/data/BloodMNIST",
+  "num_samples": 3421,
+  "AUC": 0.9935553522193445,
+  "ACC": 0.9237065185618241
+}

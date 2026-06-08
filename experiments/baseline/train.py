@@ -1,68 +1,62 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.data import DataLoader
-from torchvision import transforms
-from torchvision.models import vit_b_16
-from medmnist import PathMNIST, ChestMNIST, DermaMNIST, OCTMNIST, BloodMNIST, OrganAMNIST
+from pathlib import Path
+import sys
 
-def train_models():
+# Ensure root directory is in path for imports
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
+
+from datasets.medmnist_loader import DATASETS_CONFIG, get_dataloader
+# Assuming the file is named ViT-Base.py we need to import it carefully due to the hyphen
+import importlib.util
+spec = importlib.util.spec_from_file_location("ViT_Base", str(Path(__file__).resolve().parent.parent.parent / "models" / "ViT-Base.py"))
+ViT_Base = importlib.util.module_from_spec(spec)
+sys.modules["ViT_Base"] = ViT_Base
+spec.loader.exec_module(ViT_Base)
+from ViT_Base import build_vit_base
+
+def train_models(datasets=None, batch_size=8):
     # --- Configuration ---
-    BATCH_SIZE = 8
+    BATCH_SIZE = batch_size
     EPOCHS = 10
     LEARNING_RATE = 1e-4
     DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     
     print(f"Using device: {DEVICE}\n")
+    if DEVICE.type == 'cuda':
+        print(f"GPU: {torch.cuda.get_device_name(0)}")
+        print(f"Memory: {torch.cuda.get_device_properties(0).total_memory / (1024**3):.2f} GB")
 
-    # Mapping each MedMNIST dataset to its specific properties
-    datasets_config = {
-        'PathMNIST':   {'dataset_cls': PathMNIST,   'task': 'multi-class', 'num_classes': 9},
-        'ChestMNIST':  {'dataset_cls': ChestMNIST,  'task': 'multi-label', 'num_classes': 14},
-        'DermaMNIST':  {'dataset_cls': DermaMNIST,  'task': 'multi-class', 'num_classes': 7},
-        'OCTMNIST':    {'dataset_cls': OCTMNIST,    'task': 'multi-class', 'num_classes': 4},
-        'BloodMNIST':  {'dataset_cls': BloodMNIST,  'task': 'multi-class', 'num_classes': 8},
-        'OrganAMNIST': {'dataset_cls': OrganAMNIST, 'task': 'multi-class', 'num_classes': 11}
-    }
+    print("Batch Size:", BATCH_SIZE)
 
-    # ViT-Base expects 224x224 RGB inputs. 
-    # medmnist outputs PIL images, so we convert grayscale datasets to RGB.
-    data_transform = transforms.Compose([
-        transforms.Lambda(lambda image: image.convert('RGB')),
-        transforms.Resize((224, 224)),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-    ])
+    # Filter datasets if specified
+    datasets_to_train = DATASETS_CONFIG
+    if datasets is not None:
+        datasets_to_train = {k: v for k, v in DATASETS_CONFIG.items() if k in datasets}
+
+    checkpoint_dir = Path('checkpoints') / 'baseline'
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
 
     # Loop over all datasets and train a separate model for each
-    for dataset_name, config in datasets_config.items():
+    for dataset_name, config in datasets_to_train.items():
         print("="*60)
         print(f" Starting Training Pipeline for: {dataset_name} ")
         print("="*60)
         
-        DatasetClass = config['dataset_cls']
         task_type = config['task']
         num_classes = config['num_classes']
         
         # --- Data Loading ---
-        # download=True will fetch the .npz files into ~/.medmnist if not present
-        train_dataset = DatasetClass(split='train', transform=data_transform, download=True)
-        val_dataset = DatasetClass(split='val', transform=data_transform, download=True)
+        train_loader, _ = get_dataloader(dataset_name, split='train', batch_size=BATCH_SIZE)
+        val_loader, _ = get_dataloader(dataset_name, split='val', batch_size=BATCH_SIZE)
         
         print(f"\n{dataset_name} Task: {task_type} | Classes: {num_classes}")
-        print(f"Train samples: {len(train_dataset)} | Val samples: {len(val_dataset)}")
-        
-        train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=4, pin_memory=True)
-        val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False, num_workers=4, pin_memory=True)
+        print(f"Train batches: {len(train_loader)} | Val batches: {len(val_loader)}")
 
         # --- Model Setup ---
         print("Initializing ViT-Base (~86M parameters)...")
-        model = vit_b_16(weights=None) 
-        
-        # Replace the classification head for the dataset's specific class count
-        model.heads = nn.Sequential(
-            nn.Linear(model.heads[0].in_features, num_classes)
-        )
+        model = build_vit_base(num_classes, is_dp=False)
         model = model.to(DEVICE)
 
         # --- Loss and Optimizer ---
@@ -99,9 +93,10 @@ def train_models():
                 loss.backward()
                 optimizer.step()
                 
+                # Use batch size for correct weighting
                 train_loss += loss.item() * images.size(0)
                 
-            train_loss = train_loss / len(train_dataset)
+            train_loss = train_loss / len(train_loader.dataset)
             
             # --- Validation Loop ---
             model.eval()
@@ -120,15 +115,15 @@ def train_models():
                     loss = criterion(outputs, labels)
                     val_loss += loss.item() * images.size(0)
                     
-            val_loss = val_loss / len(val_dataset)
+            val_loss = val_loss / len(val_loader.dataset)
             print(f"Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f}")
             
             # Save the best model for this specific dataset
             if val_loss < best_val_loss:
                 best_val_loss = val_loss
-                save_path = f'vit_base_{dataset_name}_best.pth'
+                save_path = checkpoint_dir / f'vit_base_{dataset_name}_best.pth'
                 torch.save(model.state_dict(), save_path)
-                print(f"-> Saved new best model: {save_path}")
+                print(f"-> Saved new best model: {save_path.resolve()}")
                 
         print(f"\nFinished training {dataset_name}.\n")
 

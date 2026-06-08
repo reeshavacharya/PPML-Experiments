@@ -1,0 +1,10 @@
+{
+  "dataset": "DermaMNIST",
+  "task": "multi-class",
+  "split": "test",
+  "checkpoint": "/home/ree/PPML/checkpoints/baseline/vit_base_DermaMNIST_best.pth",
+  "data_root": "/home/ree/PPML/data/DermaMNIST",
+  "num_samples": 2005,
+  "AUC": 0.8981539245183943,
+  "ACC": 0.7162094763092269
+}

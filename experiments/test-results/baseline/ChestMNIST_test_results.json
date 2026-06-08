@@ -1,0 +1,10 @@
+{
+  "dataset": "ChestMNIST",
+  "task": "multi-label, binary-class",
+  "split": "test",
+  "checkpoint": "/home/ree/PPML/checkpoints/baseline/vit_base_ChestMNIST_best.pth",
+  "data_root": "/home/ree/PPML/data/ChestMNIST",
+  "num_samples": 22433,
+  "AUC": 0.6454118265035106,
+  "ACC": 0.9474307620788253
+}
