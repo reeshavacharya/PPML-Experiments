@@ -1,0 +1,258 @@
+Using device: cuda
+Creating datasets...
+Data loaders created: Train (2434 batches), Val (271 batches), Test (800 batches)
+
+Epoch 1/10
+  Training: 0% complete
+  Training: 10% complete
+  Training: 20% complete
+  Training: 30% complete
+  Training: 40% complete
+  Training: 50% complete
+  Training: 60% complete
+  Training: 70% complete
+  Training: 80% complete
+  Training: 90% complete
+  Training: 100% complete
+  Validation: 0% complete
+  Validation: 10% complete
+  Validation: 20% complete
+  Validation: 30% complete
+  Validation: 40% complete
+  Validation: 50% complete
+  Validation: 60% complete
+  Validation: 70% complete
+  Validation: 80% complete
+  Validation: 90% complete
+  Validation: 100% complete
+Train Loss: 0.1503 | Val Loss: 0.1491 | Val Macro AUC: 0.7567 | Val Acc: 0.9545
+Validation AUC improved from 0.0000 to 0.7567. Saving model...
+
+Epoch 2/10
+  Training: 0% complete
+  Training: 10% complete
+  Training: 20% complete
+  Training: 30% complete
+  Training: 40% complete
+  Training: 50% complete
+  Training: 60% complete
+  Training: 70% complete
+  Training: 80% complete
+  Training: 90% complete
+  Training: 100% complete
+  Validation: 0% complete
+  Validation: 10% complete
+  Validation: 20% complete
+  Validation: 30% complete
+  Validation: 40% complete
+  Validation: 50% complete
+  Validation: 60% complete
+  Validation: 70% complete
+  Validation: 80% complete
+  Validation: 90% complete
+  Validation: 100% complete
+Train Loss: 0.1420 | Val Loss: 0.1449 | Val Macro AUC: 0.7807 | Val Acc: 0.9545
+Validation AUC improved from 0.7567 to 0.7807. Saving model...
+
+Epoch 3/10
+  Training: 0% complete
+  Training: 10% complete
+  Training: 20% complete
+  Training: 30% complete
+  Training: 40% complete
+  Training: 50% complete
+  Training: 60% complete
+  Training: 70% complete
+  Training: 80% complete
+  Training: 90% complete
+  Training: 100% complete
+  Validation: 0% complete
+  Validation: 10% complete
+  Validation: 20% complete
+  Validation: 30% complete
+  Validation: 40% complete
+  Validation: 50% complete
+  Validation: 60% complete
+  Validation: 70% complete
+  Validation: 80% complete
+  Validation: 90% complete
+  Validation: 100% complete
+Train Loss: 0.1384 | Val Loss: 0.1459 | Val Macro AUC: 0.7737 | Val Acc: 0.9553
+
+Epoch 4/10
+  Training: 0% complete
+  Training: 10% complete
+  Training: 20% complete
+  Training: 30% complete
+  Training: 40% complete
+  Training: 50% complete
+  Training: 60% complete
+  Training: 70% complete
+  Training: 80% complete
+  Training: 90% complete
+  Training: 100% complete
+  Validation: 0% complete
+  Validation: 10% complete
+  Validation: 20% complete
+  Validation: 30% complete
+  Validation: 40% complete
+  Validation: 50% complete
+  Validation: 60% complete
+  Validation: 70% complete
+  Validation: 80% complete
+  Validation: 90% complete
+  Validation: 100% complete
+Train Loss: 0.1353 | Val Loss: 0.1413 | Val Macro AUC: 0.7944 | Val Acc: 0.9551
+Validation AUC improved from 0.7807 to 0.7944. Saving model...
+
+Epoch 5/10
+  Training: 0% complete
+  Training: 10% complete
+  Training: 20% complete
+  Training: 30% complete
+  Training: 40% complete
+  Training: 50% complete
+  Training: 60% complete
+  Training: 70% complete
+  Training: 80% complete
+  Training: 90% complete
+  Training: 100% complete
+  Validation: 0% complete
+  Validation: 10% complete
+  Validation: 20% complete
+  Validation: 30% complete
+  Validation: 40% complete
+  Validation: 50% complete
+  Validation: 60% complete
+  Validation: 70% complete
+  Validation: 80% complete
+  Validation: 90% complete
+  Validation: 100% complete
+Train Loss: 0.1322 | Val Loss: 0.1431 | Val Macro AUC: 0.7927 | Val Acc: 0.9549
+
+Epoch 6/10
+  Training: 0% complete
+  Training: 10% complete
+  Training: 20% complete
+  Training: 30% complete
+  Training: 40% complete
+  Training: 50% complete
+  Training: 60% complete
+  Training: 70% complete
+  Training: 80% complete
+  Training: 90% complete
+  Training: 100% complete
+  Validation: 0% complete
+  Validation: 10% complete
+  Validation: 20% complete
+  Validation: 30% complete
+  Validation: 40% complete
+  Validation: 50% complete
+  Validation: 60% complete
+  Validation: 70% complete
+  Validation: 80% complete
+  Validation: 90% complete
+  Validation: 100% complete
+Train Loss: 0.1288 | Val Loss: 0.1412 | Val Macro AUC: 0.8022 | Val Acc: 0.9549
+Validation AUC improved from 0.7944 to 0.8022. Saving model...
+
+Epoch 7/10
+  Training: 0% complete
+  Training: 10% complete
+  Training: 20% complete
+  Training: 30% complete
+  Training: 40% complete
+  Training: 50% complete
+  Training: 60% complete
+  Training: 70% complete
+  Training: 80% complete
+  Training: 90% complete
+  Training: 100% complete
+  Validation: 0% complete
+  Validation: 10% complete
+  Validation: 20% complete
+  Validation: 30% complete
+  Validation: 40% complete
+  Validation: 50% complete
+  Validation: 60% complete
+  Validation: 70% complete
+  Validation: 80% complete
+  Validation: 90% complete
+  Validation: 100% complete
+Train Loss: 0.1246 | Val Loss: 0.1420 | Val Macro AUC: 0.7961 | Val Acc: 0.9551
+
+Epoch 8/10
+  Training: 0% complete
+  Training: 10% complete
+  Training: 20% complete
+  Training: 30% complete
+  Training: 40% complete
+  Training: 50% complete
+  Training: 60% complete
+  Training: 70% complete
+  Training: 80% complete
+  Training: 90% complete
+  Training: 100% complete
+  Validation: 0% complete
+  Validation: 10% complete
+  Validation: 20% complete
+  Validation: 30% complete
+  Validation: 40% complete
+  Validation: 50% complete
+  Validation: 60% complete
+  Validation: 70% complete
+  Validation: 80% complete
+  Validation: 90% complete
+  Validation: 100% complete
+Train Loss: 0.1195 | Val Loss: 0.1428 | Val Macro AUC: 0.8045 | Val Acc: 0.9538
+Validation AUC improved from 0.8022 to 0.8045. Saving model...
+
+Epoch 9/10
+  Training: 0% complete
+  Training: 10% complete
+  Training: 20% complete
+  Training: 30% complete
+  Training: 40% complete
+  Training: 50% complete
+  Training: 60% complete
+  Training: 70% complete
+  Training: 80% complete
+  Training: 90% complete
+  Training: 100% complete
+  Validation: 0% complete
+  Validation: 10% complete
+  Validation: 20% complete
+  Validation: 30% complete
+  Validation: 40% complete
+  Validation: 50% complete
+  Validation: 60% complete
+  Validation: 70% complete
+  Validation: 80% complete
+  Validation: 90% complete
+  Validation: 100% complete
+Train Loss: 0.1130 | Val Loss: 0.1461 | Val Macro AUC: 0.8012 | Val Acc: 0.9527
+
+Epoch 10/10
+  Training: 0% complete
+  Training: 10% complete
+  Training: 20% complete
+  Training: 30% complete
+  Training: 40% complete
+  Training: 50% complete
+  Training: 60% complete
+  Training: 70% complete
+  Training: 80% complete
+  Training: 90% complete
+  Training: 100% complete
+  Validation: 0% complete
+  Validation: 10% complete
+  Validation: 20% complete
+  Validation: 30% complete
+  Validation: 40% complete
+  Validation: 50% complete
+  Validation: 60% complete
+  Validation: 70% complete
+  Validation: 80% complete
+  Validation: 90% complete
+  Validation: 100% complete
+Train Loss: 0.1037 | Val Loss: 0.1564 | Val Macro AUC: 0.7805 | Val Acc: 0.9519
