@@ -1,0 +1,39 @@
+{
+  "format_version": 2,
+  "executors": [
+    {
+      "tasks": [
+        "train"
+      ],
+      "executor": {
+        "id": "executor",
+        "path": "nvflare.app_common.executors.client_api_launcher_executor.ClientAPILauncherExecutor",
+        "args": {
+          "launcher_id": "launcher",
+          "pipe_id": "pipe",
+          "heartbeat_timeout": 600
+        }
+      }
+    }
+  ],
+  "task_result_filters": [],
+  "task_data_filters": [],
+  "components": [
+    {
+      "id": "launcher",
+      "path": "nvflare.app_common.launchers.subprocess_launcher.SubprocessLauncher",
+      "args": {
+        "script": "python3 /work/r/reeshav/PPML-Experiments-FL/train/baseline.py",
+        "launch_once": true
+      }
+    },
+    {
+      "id": "pipe",
+      "path": "nvflare.fuel.utils.pipe.file_pipe.FilePipe",
+      "args": {
+        "mode": "PASSIVE",
+        "root_path": "{WORKSPACE}/{JOB_ID}/{SITE_NAME}"
+      }
+    }
+  ]
+}

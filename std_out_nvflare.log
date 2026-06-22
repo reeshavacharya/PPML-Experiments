@@ -1,0 +1,109 @@
+[38m2026-06-21 18:38:38,355 - INFO - model selection weights control: None[0m
+[38m2026-06-21 18:38:38,418 - INFO - Initializing ScatterAndGather workflow for Federated Averaging.[0m
+[38m2026-06-21 18:38:38,419 - INFO - Both source_ckpt_file_full_name and ckpt_preload_path are not provided. Using the default model weights initialized on the persistor side.[0m
+[38m2026-06-21 18:38:38,422 - INFO - Beginning ScatterAndGather training phase.[0m
+[38m2026-06-21 18:38:38,422 - INFO - Round 0 started.[0m
+[38m2026-06-21 18:38:56,988 - INFO - _start_external_process: launching new subprocess[0m
+[38m2026-06-21 18:38:56,991 - INFO - _start_external_process: launching new subprocess[0m
+[38m2026-06-21 18:38:56,991 - INFO - _start_external_process: launching new subprocess[0m
+[33m2026-06-21 18:38:57,006 - WARNING - Timeout inconsistency: np_min_download_timeout (300s) < np_streaming_per_request_timeout (600.0s). Transactions may be killed mid-download. Set np_min_download_timeout >= 600.0s in job config.[0m
+[33m2026-06-21 18:38:57,007 - WARNING - Timeout inconsistency: np_min_download_timeout (300s) < np_streaming_per_request_timeout (600.0s). Transactions may be killed mid-download. Set np_min_download_timeout >= 600.0s in job config.[0m
+[33m2026-06-21 18:38:57,007 - WARNING - Timeout inconsistency: np_min_download_timeout (300s) < np_streaming_per_request_timeout (600.0s). Transactions may be killed mid-download. Set np_min_download_timeout >= 600.0s in job config.[0m
+[38m2026-06-21 18:38:57,279 - INFO - set transaction info: tx_id='T5355cf23-b224-4091-bbd2-2afcc45c3cbb', ref_id='7c21a6e1-5c68-4490-8a46-eb1f694f127c' self.num_receivers=1[0m
+[38m2026-06-21 18:38:57,279 - INFO - set transaction info: tx_id='T011ffde7-04fe-4282-936d-244017bd3473', ref_id='0f6f2e57-b630-4843-8384-41762c514d2c' self.num_receivers=1[0m
+[38m2026-06-21 18:38:57,286 - INFO - set transaction info: tx_id='Tf3178921-ea5a-4c7b-b920-b7d234e267c6', ref_id='aaa8b116-c13a-4a85-893b-67d01ea334fb' self.num_receivers=1[0m
+[38m2026-06-21 18:39:00,614 - INFO - object has been downloaded to all 1 receivers - clear cache[0m
+[38m2026-06-21 18:39:00,625 - INFO - execute for task (train)[0m
+[38m2026-06-21 18:39:00,626 - INFO - Launcher successfully launched task (train).[0m
+[38m2026-06-21 18:39:00,706 - INFO - object has been downloaded to all 1 receivers - clear cache[0m
+[38m2026-06-21 18:39:00,712 - INFO - object has been downloaded to all 1 receivers - clear cache[0m
+[38m2026-06-21 18:39:00,714 - INFO - execute for task (train)[0m
+[38m2026-06-21 18:39:00,715 - INFO - Launcher successfully launched task (train).[0m
+[38m2026-06-21 18:39:00,721 - INFO - execute for task (train)[0m
+[38m2026-06-21 18:39:00,721 - INFO - Launcher successfully launched task (train).[0m
+[38m2026-06-21 18:39:51,937 - INFO - Using device: cuda[0m
+[38m2026-06-21 18:39:51,937 - INFO - Using device: cuda[0m
+[38m2026-06-21 18:39:51,937 - INFO - Traceback (most recent call last):[0m
+[38m2026-06-21 18:39:51,937 - INFO - Traceback (most recent call last):[0m
+[38m2026-06-21 18:39:51,938 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/train/baseline.py", line 270, in <module>[0m
+[38m2026-06-21 18:39:51,938 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/train/baseline.py", line 270, in <module>[0m
+[38m2026-06-21 18:39:51,938 - INFO -     train(epochs=1, batch_size=32)[0m
+[38m2026-06-21 18:39:51,938 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/train/baseline.py", line 96, in train[0m
+[38m2026-06-21 18:39:51,938 - INFO -     train(epochs=1, batch_size=32)[0m
+[38m2026-06-21 18:39:51,938 - INFO - Using device: cuda[0m
+[38m2026-06-21 18:39:51,938 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/train/baseline.py", line 96, in train[0m
+[38m2026-06-21 18:39:51,939 - INFO - Traceback (most recent call last):[0m
+[38m2026-06-21 18:39:51,939 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/train/baseline.py", line 270, in <module>[0m
+[38m2026-06-21 18:39:51,939 - INFO -     train(epochs=1, batch_size=32)[0m
+[38m2026-06-21 18:39:51,939 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/train/baseline.py", line 96, in train[0m
+[38m2026-06-21 18:39:51,946 - INFO -     train_loader, val_loader, test_loader = create_data_loaders([0m
+[38m2026-06-21 18:39:51,946 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/data_loader/nih_chest.py", line 109, in create_data_loaders[0m
+[38m2026-06-21 18:39:51,946 - INFO -     train_loader, val_loader, test_loader = create_data_loaders([0m
+[38m2026-06-21 18:39:51,947 - INFO -     train_loader, val_loader, test_loader = create_data_loaders([0m
+[38m2026-06-21 18:39:51,947 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/data_loader/nih_chest.py", line 109, in create_data_loaders[0m
+[38m2026-06-21 18:39:51,947 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/data_loader/nih_chest.py", line 109, in create_data_loaders[0m
+[38m2026-06-21 18:39:51,962 - INFO -     df = pd.read_csv(csv_path)[0m
+[38m2026-06-21 18:39:51,962 - INFO -     df = pd.read_csv(csv_path)[0m
+[38m2026-06-21 18:39:51,962 - INFO -     df = pd.read_csv(csv_path)[0m
+[38m2026-06-21 18:39:51,962 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/util/_decorators.py", line 211, in wrapper[0m
+[38m2026-06-21 18:39:51,962 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/util/_decorators.py", line 211, in wrapper[0m
+[38m2026-06-21 18:39:51,962 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/util/_decorators.py", line 211, in wrapper[0m
+[38m2026-06-21 18:39:51,975 - INFO -     return func(*args, **kwargs)[0m
+[38m2026-06-21 18:39:51,975 - INFO -     return func(*args, **kwargs)[0m
+[38m2026-06-21 18:39:51,975 - INFO -     return func(*args, **kwargs)[0m
+[38m2026-06-21 18:39:51,975 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/util/_decorators.py", line 331, in wrapper[0m
+[38m2026-06-21 18:39:51,975 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/util/_decorators.py", line 331, in wrapper[0m
+[38m2026-06-21 18:39:51,975 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/util/_decorators.py", line 331, in wrapper[0m
+[38m2026-06-21 18:39:51,976 - INFO -     return func(*args, **kwargs)[0m
+[38m2026-06-21 18:39:51,976 - INFO -     return func(*args, **kwargs)[0m
+[38m2026-06-21 18:39:51,976 - INFO -     return func(*args, **kwargs)[0m
+[38m2026-06-21 18:39:51,976 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/io/parsers/readers.py", line 950, in read_csv[0m
+[38m2026-06-21 18:39:51,976 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/io/parsers/readers.py", line 950, in read_csv[0m
+[38m2026-06-21 18:39:51,976 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/io/parsers/readers.py", line 950, in read_csv[0m
+[38m2026-06-21 18:39:52,017 - INFO -     return _read(filepath_or_buffer, kwds)[0m
+[38m2026-06-21 18:39:52,017 - INFO -     return _read(filepath_or_buffer, kwds)[0m
+[38m2026-06-21 18:39:52,017 - INFO -     return _read(filepath_or_buffer, kwds)[0m
+[38m2026-06-21 18:39:52,017 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/io/parsers/readers.py", line 605, in _read[0m
+[38m2026-06-21 18:39:52,017 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/io/parsers/readers.py", line 605, in _read[0m
+[38m2026-06-21 18:39:52,017 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/io/parsers/readers.py", line 605, in _read[0m
+[38m2026-06-21 18:39:52,018 - INFO -     parser = TextFileReader(filepath_or_buffer, **kwds)[0m
+[38m2026-06-21 18:39:52,018 - INFO -     parser = TextFileReader(filepath_or_buffer, **kwds)[0m
+[38m2026-06-21 18:39:52,018 - INFO -     parser = TextFileReader(filepath_or_buffer, **kwds)[0m
+[38m2026-06-21 18:39:52,018 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/io/parsers/readers.py", line 1442, in __init__[0m
+[38m2026-06-21 18:39:52,018 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/io/parsers/readers.py", line 1442, in __init__[0m
+[38m2026-06-21 18:39:52,018 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/io/parsers/readers.py", line 1442, in __init__[0m
+[38m2026-06-21 18:39:52,038 - INFO -     self._engine = self._make_engine(f, self.engine)[0m
+[38m2026-06-21 18:39:52,038 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/io/parsers/readers.py", line 1735, in _make_engine[0m
+[38m2026-06-21 18:39:52,038 - INFO -     self._engine = self._make_engine(f, self.engine)[0m
+[38m2026-06-21 18:39:52,038 - INFO -     self._engine = self._make_engine(f, self.engine)[0m
+[38m2026-06-21 18:39:52,038 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/io/parsers/readers.py", line 1735, in _make_engine[0m
+[38m2026-06-21 18:39:52,038 - INFO -     self.handles = get_handle([0m
+[38m2026-06-21 18:39:52,039 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/io/parsers/readers.py", line 1735, in _make_engine[0m
+[38m2026-06-21 18:39:52,039 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/io/common.py", line 856, in get_handle[0m
+[38m2026-06-21 18:39:52,039 - INFO -     self.handles = get_handle([0m
+[38m2026-06-21 18:39:52,039 - INFO -     self.handles = get_handle([0m
+[38m2026-06-21 18:39:52,039 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/io/common.py", line 856, in get_handle[0m
+[38m2026-06-21 18:39:52,039 - INFO -   File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/pandas/io/common.py", line 856, in get_handle[0m
+[38m2026-06-21 18:39:52,077 - INFO -     handle = open([0m
+[38m2026-06-21 18:39:52,077 - INFO -     handle = open([0m
+[38m2026-06-21 18:39:52,077 - INFO -     handle = open([0m
+[38m2026-06-21 18:39:52,077 - INFO - FileNotFoundError: [Errno 2] No such file or directory: 'data/NIH-Chest/Data_Entry_2017.csv'[0m
+[38m2026-06-21 18:39:52,077 - INFO - FileNotFoundError: [Errno 2] No such file or directory: 'data/NIH-Chest/Data_Entry_2017.csv'[0m
+[38m2026-06-21 18:39:52,077 - INFO - FileNotFoundError: [Errno 2] No such file or directory: 'data/NIH-Chest/Data_Entry_2017.csv'[0m
+[38m2026-06-21 18:39:52,278 - INFO - External setup for task (train) succeeded.[0m
+[38m2026-06-21 18:39:52,278 - INFO - sending task to peer self.peer_read_timeout=300.0[0m
+[38m2026-06-21 18:39:52,395 - INFO - External setup for task (train) succeeded.[0m
+[38m2026-06-21 18:39:52,396 - INFO - sending task to peer self.peer_read_timeout=300.0[0m
+[38m2026-06-21 18:39:52,456 - INFO - External setup for task (train) succeeded.[0m
+[38m2026-06-21 18:39:52,456 - INFO - sending task to peer self.peer_read_timeout=300.0[0m
+[38m2026-06-21 18:39:54,244 - INFO - launcher completed with status failed at time 1782081594.244256[0m
+[38m2026-06-21 18:39:54,246 - INFO - launcher completed with status failed at time 1782081594.2460136[0m
+[38m2026-06-21 18:39:54,255 - INFO - launcher completed with status failed at time 1782081594.2556071[0m
+[31m2026-06-21 18:44:54,461 - ERROR - peer does not accept task 'train' in 302.18242287635803 secs - aborting task![0m
+[31m2026-06-21 18:44:54,470 - ERROR - Aborting current RUN due to FATAL_SYSTEM_ERROR received: Result from site-2 is bad, error code: TASK_ABORTED. Cannot reach min_responses: remaining good clients (2) < min_responses (3). ScatterAndGather exiting at round 0.[0m
+[31m2026-06-21 18:44:54,524 - ERROR - peer does not accept task 'train' in 302.1278386116028 secs - aborting task![0m
+[38m2026-06-21 18:44:54,547 - INFO - Abort signal received. Exiting at round 0.[0m
+[31m2026-06-21 18:44:54,580 - ERROR - peer does not accept task 'train' in 302.12323546409607 secs - aborting task![0m
+[38m2026-06-21 18:44:54,683 - INFO - _stop_external_process: terminating pid=29253[0m
+[38m2026-06-21 18:44:56,589 - INFO - _stop_external_process: terminating pid=29255[0m
+[38m2026-06-21 18:44:56,646 - INFO - _stop_external_process: terminating pid=29254[0m

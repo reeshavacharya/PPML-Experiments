@@ -10,7 +10,7 @@ project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_root)
 
 from data_loader.nih_chest import create_data_loaders
-from models.vit_base import get_model
+from models.monai_vit import get_model
 
 def test(batch_size=32, data_dir="data/NIH-Chest"):
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
@@ -48,8 +48,8 @@ def test(batch_size=32, data_dir="data/NIH-Chest"):
     last_test_pct = -1
     
     with torch.no_grad():
-        for i, (images, labels) in enumerate(test_loader):
-            images, labels = images.to(device), labels.to(device)
+        for i, batch in enumerate(test_loader):
+            images, labels = batch["image"].to(device), batch["label"].to(device)
             
             outputs = model(images)
             loss = criterion(outputs, labels)

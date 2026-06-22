@@ -73,16 +73,33 @@ project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_root)
 
 from data_loader.nih_chest import create_data_loaders
-from models.vit_base import get_model
+from models.monai_vit import get_model
 
-def train(epochs=10, batch_size=32, lr=1e-4, data_dir="data/NIH-Chest"):
+import nvflare.client as flare
+
+# Initialize NVFlare Client API immediately (before any expensive I/O)
+# to ensure the heartbeat handshake completes within the timeout window.
+flare.init()
+
+def train(epochs=1, batch_size=32, lr=1e-4, data_dir="data/NIH-Chest"):
+    
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
     print(f"Using device: {device}")
+    
+    # Get the site name (e.g. site-1, site-2)
+    try:
+        site_name = flare.get_site_name()
+    except Exception:
+        site_name = "standalone"
 
-    # Create data loaders
-    # Construct absolute path for data_dir
+    # Create datasets and dataloaders with partitioning
     abs_data_dir = os.path.join(project_root, data_dir)
-    train_loader, val_loader, _ = create_data_loaders(data_dir=abs_data_dir, batch_size=batch_size)
+    train_loader, val_loader, test_loader = create_data_loaders(
+        data_dir=abs_data_dir, 
+        batch_size=batch_size, 
+        client_id=site_name, 
+        num_clients=3
+    )
 
     # Initialize model
     model = get_model(num_classes=14, pretrained=True)
@@ -97,133 +114,159 @@ def train(epochs=10, batch_size=32, lr=1e-4, data_dir="data/NIH-Chest"):
     os.makedirs(checkpoint_dir, exist_ok=True)
     dataset_name = os.path.basename(data_dir.strip('/'))
     model_name = "vit_base"
-    best_model_path = os.path.join(checkpoint_dir, f"{model_name}_{dataset_name}.pth")
+    best_model_path = os.path.join(checkpoint_dir, f"{model_name}_{dataset_name}_{site_name}.pth")
     
     # Setup CSV logging
     train_dir = os.path.dirname(os.path.abspath(__file__))
-    metrics_csv_path = os.path.join(train_dir, "metrics.csv")
+    metrics_csv_path = os.path.join(train_dir, f"metrics_{site_name}.csv")
     with open(metrics_csv_path, mode='w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow([
-            "Epoch", "Train Loss", "Val Loss", "Val Macro AUC", "Val Accuracy", 
+            "FL Round", "Epoch", "Train Loss", "Val Loss", "Val Macro AUC", "Val Accuracy", 
             "Peak RAM (MB)", "Peak VRAM (MB)", "Peak GPU Util (%)"
         ])
         
     monitor = ResourceMonitor()
-    
     best_val_auc = 0.0
 
-    for epoch in range(1, epochs + 1):
-        monitor.start()
-        print(f"\nEpoch {epoch}/{epochs}")
+    # Main Federated Learning Loop
+    while flare.is_running():
+        # Receive the global model from the FL server
+        input_model = flare.receive()
         
-        # Training phase
-        model.train()
-        train_loss = 0.0
-        train_steps = 0
-        total_train_batches = len(train_loader)
-        last_train_pct = -1
-        
-        for i, (images, labels) in enumerate(train_loader):
-            images, labels = images.to(device), labels.to(device)
+        if input_model is None:
+            break
             
-            optimizer.zero_grad()
-            outputs = model(images)
-            loss = criterion(outputs, labels)
+        current_round = input_model.current_round if hasattr(input_model, 'current_round') else 0
+        print(f"\n--- Starting FL Round {current_round} ---")
             
-            loss.backward()
-            optimizer.step()
+        # Load global model weights if available
+        if input_model.params:
+            # NVFlare sends params as numpy arrays; convert to torch tensors
+            params = {k: torch.as_tensor(v) for k, v in input_model.params.items()}
+            model.load_state_dict(params)
+            print("Loaded global model parameters.")
+
+        for epoch in range(1, epochs + 1):
+            monitor.start()
+            print(f"\nRound {current_round} - Local Epoch {epoch}/{epochs}")
             
-            train_loss += loss.item()
-            train_steps += 1
+            # Training phase
+            model.train()
+            train_loss = 0.0
+            train_steps = 0
+            total_train_batches = len(train_loader)
+            last_train_pct = -1
             
-            pct = int(100 * (i + 1) / total_train_batches)
-            if pct % 10 == 0 and pct != last_train_pct:
-                print(f"  Training: {pct}% complete", flush=True)
-                last_train_pct = pct
-            
-        avg_train_loss = train_loss / train_steps
-        
-        # Validation phase
-        model.eval()
-        val_loss = 0.0
-        val_steps = 0
-        total_val_batches = len(val_loader)
-        last_val_pct = -1
-        
-        all_preds = []
-        all_labels = []
-        
-        with torch.no_grad():
-            for i, (images, labels) in enumerate(val_loader):
-                images, labels = images.to(device), labels.to(device)
+            for i, batch in enumerate(train_loader):
+                images, labels = batch["image"].to(device), batch["label"].to(device)
                 
+                optimizer.zero_grad()
                 outputs = model(images)
                 loss = criterion(outputs, labels)
                 
-                val_loss += loss.item()
-                val_steps += 1
+                loss.backward()
+                optimizer.step()
                 
-                all_preds.append(outputs.cpu().numpy())
-                all_labels.append(labels.cpu().numpy())
+                train_loss += loss.item()
+                train_steps += 1
                 
-                pct = int(100 * (i + 1) / total_val_batches)
-                if pct % 10 == 0 and pct != last_val_pct:
-                    print(f"  Validation: {pct}% complete", flush=True)
-                    last_val_pct = pct
+                pct = int(100 * (i + 1) / total_train_batches)
+                if pct % 10 == 0 and pct != last_train_pct:
+                    print(f"  Training: {pct}% complete", flush=True)
+                    last_train_pct = pct
                 
-        avg_val_loss = val_loss / val_steps
-        
-        # Calculate validation AUC
-        all_preds = np.vstack(all_preds)
-        all_labels = np.vstack(all_labels)
-        
-        # Apply sigmoid to get probabilities
-        all_preds_prob = 1 / (1 + np.exp(-all_preds))
-        
-        # Calculate macro AUC
-        try:
-            val_auc = roc_auc_score(all_labels, all_preds_prob, average='macro')
-        except ValueError:
-            print("Warning: Only one class present in y_true. AUC score is not defined in that case. Setting AUC to 0.")
-            val_auc = 0.0
+            avg_train_loss = train_loss / train_steps
             
-        preds_binary = (all_preds_prob > 0.5).astype(int)
-        val_accuracy = np.mean(preds_binary == all_labels)
-        
-        monitor.stop()
+            # Validation phase
+            model.eval()
+            val_loss = 0.0
+            val_steps = 0
+            total_val_batches = len(val_loader)
+            last_val_pct = -1
             
-        print(f"Train Loss: {avg_train_loss:.4f} | Val Loss: {avg_val_loss:.4f} | Val Macro AUC: {val_auc:.4f} | Val Acc: {val_accuracy:.4f}")
+            all_preds = []
+            all_labels = []
+            
+            with torch.no_grad():
+                for i, batch in enumerate(val_loader):
+                    images, labels = batch["image"].to(device), batch["label"].to(device)
+                    
+                    outputs = model(images)
+                    loss = criterion(outputs, labels)
+                    
+                    val_loss += loss.item()
+                    val_steps += 1
+                    
+                    all_preds.append(outputs.cpu().numpy())
+                    all_labels.append(labels.cpu().numpy())
+                    
+                    pct = int(100 * (i + 1) / total_val_batches)
+                    if pct % 10 == 0 and pct != last_val_pct:
+                        print(f"  Validation: {pct}% complete", flush=True)
+                        last_val_pct = pct
+                    
+            avg_val_loss = val_loss / val_steps
+            
+            # Calculate validation AUC
+            all_preds = np.vstack(all_preds)
+            all_labels = np.vstack(all_labels)
+            all_preds_prob = 1 / (1 + np.exp(-all_preds))
+            
+            try:
+                val_auc = roc_auc_score(all_labels, all_preds_prob, average='macro')
+            except ValueError:
+                print("Warning: Only one class present in y_true. AUC score is not defined.")
+                val_auc = 0.0
+                
+            preds_binary = (all_preds_prob > 0.5).astype(int)
+            val_accuracy = np.mean(preds_binary == all_labels)
+            
+            monitor.stop()
+                
+            print(f"Train Loss: {avg_train_loss:.4f} | Val Loss: {avg_val_loss:.4f} | Val Macro AUC: {val_auc:.4f} | Val Acc: {val_accuracy:.4f}")
+            
+            # Log metrics
+            with open(metrics_csv_path, mode='a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([
+                    current_round,
+                    epoch, 
+                    f"{avg_train_loss:.4f}", 
+                    f"{avg_val_loss:.4f}", 
+                    f"{val_auc:.4f}", 
+                    f"{val_accuracy:.4f}",
+                    f"{monitor.peak_ram:.2f}",
+                    f"{monitor.peak_vram:.2f}",
+                    f"{monitor.peak_gpu_util:.2f}"
+                ])
+            
+            scheduler.step(val_auc)
+            
+            # Save best model
+            if val_auc > best_val_auc:
+                print(f"Validation AUC improved from {best_val_auc:.4f} to {val_auc:.4f}. Saving model...")
+                best_val_auc = val_auc
+                torch.save({
+                    'epoch': epoch,
+                    'round': current_round,
+                    'model_state_dict': model.state_dict(),
+                    'optimizer_state_dict': optimizer.state_dict(),
+                    'val_auc': val_auc,
+                }, best_model_path)
+
+        # Send the locally trained model back to the FL server
+        print("Sending local model back to server...")
+        # Convert PyTorch tensors back to numpy arrays for NVFlare serialization
+        params_numpy = {k: v.cpu().numpy() for k, v in model.state_dict().items()}
         
-        # Log metrics to CSV
-        with open(metrics_csv_path, mode='a', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow([
-                epoch, 
-                f"{avg_train_loss:.4f}", 
-                f"{avg_val_loss:.4f}", 
-                f"{val_auc:.4f}", 
-                f"{val_accuracy:.4f}",
-                f"{monitor.peak_ram:.2f}",
-                f"{monitor.peak_vram:.2f}",
-                f"{monitor.peak_gpu_util:.2f}"
-            ])
-        
-        # We handle scheduler logic explicitly since it depends on torch version slightly
-        # ReduceLROnPlateau expects the metric (val_auc in this case)
-        # Note: older versions don't have verbose, it's deprecated in 2.2, but typical usage is fine.
-        scheduler.step(val_auc)
-        
-        # Save best model
-        if val_auc > best_val_auc:
-            print(f"Validation AUC improved from {best_val_auc:.4f} to {val_auc:.4f}. Saving model...")
-            best_val_auc = val_auc
-            torch.save({
-                'epoch': epoch,
-                'model_state_dict': model.state_dict(),
-                'optimizer_state_dict': optimizer.state_dict(),
-                'val_auc': val_auc,
-            }, best_model_path)
+        output_model = flare.FLModel(
+            params=params_numpy,
+            metrics={"val_auc": val_auc, "val_accuracy": val_accuracy}
+        )
+        model.to(device) # put model back on device for next round
+        flare.send(output_model)
 
 if __name__ == "__main__":
-    train(epochs=10, batch_size=32)
+    train(epochs=1, batch_size=32)
+

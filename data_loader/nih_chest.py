@@ -7,6 +7,7 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 from sklearn.model_selection import train_test_split
 
+
 def download_nih_chest_dataset(target_dir="data/NIH-Chest"):
     """
     Downloads the NIH Chest X-ray dataset from Kaggle using kagglehub
@@ -61,12 +62,13 @@ class NIHChestDataset(Dataset):
             # Fallback if image not found in expected structure
             img_path = os.path.join(self.data_dir, img_name)
             
-        # Load image
-        image = Image.open(img_path).convert('RGB')
+        # Load image with PIL and convert to RGB (grayscale -> 3 channels)
+        image = Image.open(img_path).convert("RGB")
         
+        # Apply torchvision transforms
         if self.transform:
             image = self.transform(image)
-            
+
         # Get labels
         labels_str = self.df.loc[img_name, 'Finding Labels']
         labels_list = labels_str.split('|')
@@ -76,28 +78,30 @@ class NIHChestDataset(Dataset):
         for i, label in enumerate(self.all_labels):
             if label in labels_list:
                 labels[i] = 1.0
-                
-        return image, labels
+
+        return {"image": image, "label": labels}
 
 
-def create_data_loaders(data_dir="data/NIH-Chest", batch_size=32, num_workers=4):
+def create_data_loaders(data_dir="data/NIH-Chest", batch_size=32, num_workers=4, client_id=None, num_clients=1):
     """
     Creates train, validation, and test data loaders.
     Uses 90% for training and 10% for validation from train_val_list.txt
     and test_list.txt for test loader.
     """
-    # Define transforms
+    # Use standard torchvision transforms for reliable 2D image handling
     train_transform = transforms.Compose([
         transforms.Resize((224, 224)),
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        transforms.RandomHorizontalFlip(p=0.5),
+        transforms.ToTensor(),           # Converts PIL [0,255] -> [0,1] float tensor
+        transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                             std=[0.229, 0.224, 0.225]),
     ])
     
     val_test_transform = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                             std=[0.229, 0.224, 0.225]),
     ])
 
     # Load dataframe
@@ -113,6 +117,36 @@ def create_data_loaders(data_dir="data/NIH-Chest", batch_size=32, num_workers=4)
 
     # Split train_val into 90% train and 10% val
     train_list, val_list = train_test_split(train_val_list, test_size=0.10, random_state=42)
+
+    # Partition data if running in a federated setting with multiple clients
+    if client_id is not None and num_clients > 1:
+        print(f"Partitioning data for {client_id} (Total clients: {num_clients})")
+        # Ensure lists are sorted for deterministic partitioning
+        train_list.sort()
+        val_list.sort()
+        
+        # Determine client index (e.g., 'site-1' -> 0, 'site-2' -> 1)
+        try:
+            client_idx = int(client_id.split('-')[-1]) - 1
+        except Exception as e:
+            print(f"Warning: Could not parse client index from {client_id}. Defaulting to index 0.")
+            client_idx = 0
+            
+        client_idx = max(0, min(client_idx, num_clients - 1)) # bound check
+        
+        # Calculate chunk boundaries for train
+        train_chunk_size = len(train_list) // num_clients
+        train_start = client_idx * train_chunk_size
+        train_end = train_start + train_chunk_size if client_idx < num_clients - 1 else len(train_list)
+        train_list = train_list[train_start:train_end]
+        
+        # Calculate chunk boundaries for val
+        val_chunk_size = len(val_list) // num_clients
+        val_start = client_idx * val_chunk_size
+        val_end = val_start + val_chunk_size if client_idx < num_clients - 1 else len(val_list)
+        val_list = val_list[val_start:val_end]
+        
+        print(f"{client_id} partition size -> Train: {len(train_list)}, Val: {len(val_list)}")
 
     # Create datasets
     print("Creating datasets...")
