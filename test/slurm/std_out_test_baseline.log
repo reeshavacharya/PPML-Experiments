@@ -1,0 +1,36 @@
+==================================================
+System Information for: Centralized Baseline Test
+Node Name: mdc-1057-18-1.rc.usf.edu
+OS Platform: Linux-3.10.0-1160.2.1.el7.x86_64-x86_64-with-glibc2.17
+CPU: 32 physical cores, 64 logical cores
+Total RAM: 251.21 GB
+GPUs Available: 2
+  GPU 0: NVIDIA L40S (VRAM: 44.53 GB)
+  GPU 1: NVIDIA L40S (VRAM: 44.53 GB)
+==================================================
+Using device: cuda
+Test set size: 127 samples
+Loading checkpoint from /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_centralized_best.pth...
+  Testing: 9% (12/127)
+  Testing: 18% (24/127)
+  Testing: 28% (36/127)
+  Testing: 37% (48/127)
+  Testing: 47% (60/127)
+  Testing: 56% (72/127)
+  Testing: 66% (84/127)
+  Testing: 75% (96/127)
+  Testing: 85% (108/127)
+  Testing: 94% (120/127)
+  Testing: 100% (127/127)
+
+========================================
+Centralized Baseline Test Results
+========================================
+  Test Loss   : 0.1364
+  Dice WT     : 0.9051
+  Dice TC     : 0.8803
+  Dice ET     : 0.8256
+  Mean Dice   : 0.8703
+========================================
+
+Results saved to /work/r/reeshav/PPML-Experiments-FL/test/centralized_baseline_results.json

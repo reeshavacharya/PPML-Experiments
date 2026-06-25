@@ -1,0 +1,166 @@
+@article{pati_federated_2025,
+	title = {The Federated Tumor Segmentation ({FeTS}) Challenge},
+	volume = {16},
+	issn = {2041-1723},
+	url = {http://arxiv.org/abs/2105.05874},
+	doi = {10.1038/s41467-025-60466-1},
+	abstract = {This manuscript describes the first challenge on Federated Learning, namely the Federated Tumor Segmentation ({FeTS}) challenge 2021. International challenges have become the standard for validation of biomedical image analysis methods. However, the actual performance of participating (even the winning) algorithms on "real-world" clinical data often remains unclear, as the data included in challenges are usually acquired in very controlled settings at few institutions. The seemingly obvious solution of just collecting increasingly more data from more institutions in such challenges does not scale well due to privacy and ownership hurdles. Towards alleviating these concerns, we are proposing the {FeTS} challenge 2021 to cater towards both the development and the evaluation of models for the segmentation of intrinsically heterogeneous (in appearance, shape, and histology) brain tumors, namely gliomas. Specifically, the {FeTS} 2021 challenge uses clinically acquired, multi-institutional magnetic resonance imaging ({MRI}) scans from the {BraTS} 2020 challenge, as well as from various remote independent institutions included in the collaborative network of a real-world federation (https://www.fets.ai/). The goals of the {FeTS} challenge are directly represented by the two included tasks: 1) the identification of the optimal weight aggregation approach towards the training of a consensus model that has gained knowledge via federated learning from multiple geographically distinct institutions, while their data are always retained within each institution, and 2) the federated evaluation of the generalizability of brain tumor segmentation models "in the wild", i.e. on data from institutional distributions that were not part of the training datasets.},
+	pages = {6274},
+	number = {1},
+	journaltitle = {Nature Communications},
+	shortjournal = {Nat Commun},
+	author = {Pati, Sarthak and Baid, Ujjwal and Zenk, Maximilian and Edwards, Brandon and Sheller, Micah and Reina, G. Anthony and Foley, Patrick and Gruzdev, Alexey and Martin, Jason and Albarqouni, Shadi and Chen, Yong and Shinohara, Russell Taki and Reinke, Annika and Zimmerer, David and Freymann, John B. and Kirby, Justin S. and Davatzikos, Christos and Colen, Rivka R. and Kotrotsou, Aikaterini and Marcus, Daniel and Milchenko, Mikhail and Nazeri, Arash and Fathallah-Shaykh, Hassan and Wiest, Roland and Jakab, Andras and Weber, Marc-Andre and Mahajan, Abhishek and Maier-Hein, Lena and Kleesiek, Jens and Menze, Bjoern and Maier-Hein, Klaus and Bakas, Spyridon},
+	urldate = {2026-06-24},
+	date = {2025-07-08},
+	eprinttype = {arxiv},
+	eprint = {2105.05874 [eess.IV]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition, Electrical Engineering and Systems Science - Image and Video Processing},
+	file = {Preprint PDF:/Users/reeshavacharya/Zotero/storage/GT6JPZF2/Pati et al. - 2025 - The Federated Tumor Segmentation (FeTS) Challenge.pdf:application/pdf;Snapshot:/Users/reeshavacharya/Zotero/storage/BH4BP9JS/2105.html:text/html},
+}
+
+@article{reina_openfl_2022,
+	title = {{OpenFL}: An open-source framework for Federated Learning},
+	volume = {67},
+	issn = {0031-9155, 1361-6560},
+	url = {http://arxiv.org/abs/2105.06413},
+	doi = {10.1088/1361-6560/ac97d9},
+	shorttitle = {{OpenFL}},
+	abstract = {Federated learning ({FL}) is a computational paradigm that enables organizations to collaborate on machine learning ({ML}) projects without sharing sensitive data, such as, patient records, financial data, or classified secrets. Open Federated Learning ({OpenFL} https://github.com/intel/openfl) is an open-source framework for training {ML} algorithms using the data-private collaborative learning paradigm of {FL}. {OpenFL} works with training pipelines built with both {TensorFlow} and {PyTorch}, and can be easily extended to other {ML} and deep learning frameworks. Here, we summarize the motivation and development characteristics of {OpenFL}, with the intention of facilitating its application to existing {ML} model training in a production environment. Finally, we describe the first use of the {OpenFL} framework to train consensus {ML} models in a consortium of international healthcare organizations, as well as how it facilitates the first computational competition on {FL}.},
+	pages = {214001},
+	number = {21},
+	journaltitle = {Physics in Medicine \& Biology},
+	shortjournal = {Phys. Med. Biol.},
+	author = {Reina, G. Anthony and Gruzdev, Alexey and Foley, Patrick and Perepelkina, Olga and Sharma, Mansi and Davidyuk, Igor and Trushkin, Ilya and Radionov, Maksim and Mokrov, Aleksandr and Agapov, Dmitry and Martin, Jason and Edwards, Brandon and Sheller, Micah J. and Pati, Sarthak and Moorthy, Prakash Narayana and Wang, Shih-han and Shah, Prashant and Bakas, Spyridon},
+	urldate = {2026-06-24},
+	date = {2022-11-07},
+	eprinttype = {arxiv},
+	eprint = {2105.06413 [cs.LG]},
+	keywords = {Computer Science - Distributed, Parallel, and Cluster Computing, Computer Science - Machine Learning},
+	file = {Preprint PDF:/Users/reeshavacharya/Zotero/storage/5CFKBZGL/Reina et al. - 2022 - OpenFL An open-source framework for Federated Learning.pdf:application/pdf;Snapshot:/Users/reeshavacharya/Zotero/storage/KXCEEDGI/2105.html:text/html},
+}
+
+@inproceedings{khan_adaptive_2022,
+	location = {Cham},
+	title = {Adaptive Weight Aggregation in Federated Learning for Brain Tumor Segmentation},
+	isbn = {978-3-031-09002-8},
+	doi = {10.1007/978-3-031-09002-8_40},
+	abstract = {We introduce similarity weighted aggregation, a principled and efficient method for regularized weight aggregation in federated learning. Our method is adapted to non-{IID} collaborators and is simultaneously cost-efficient. This is the first method to propose a sliding-window to select the collaborators, to the best of our knowledge. We demonstrate our method on the federate training task of the {FeTS} 2021 challenge. We proposed two variations coined Similarity Weighted Aggregation ({SimAgg}) and Regularized Aggregation ({RegAgg}). {SimAgg} results on internal validation data demonstrate that the proposed method outperforms the baseline {FedAvg}. The method {SimAgg} by our team {HT}-{TUAS} won 2nd position on both leaderboards in {FeTS}2021 challenge. {SimAgg} is the only method to be among the top performing methods on both the leaderboards, making it robust and reliable to data variations. Our solution is open sourced at: https://github.com/dskhanirfan/{FeTS}2021},
+	pages = {455--469},
+	booktitle = {Brainlesion: Glioma, Multiple Sclerosis, Stroke and Traumatic Brain Injuries},
+	publisher = {Springer International Publishing},
+	author = {Khan, Muhammad Irfan and Jafaritadi, Mojtaba and Alhoniemi, Esa and Kontio, Elina and Khan, Suleiman A.},
+	editor = {Crimi, Alessandro and Bakas, Spyridon},
+	date = {2022},
+	langid = {english},
+	keywords = {Brain tumors, Cancer, Collaborative learning, Federated learning, {FeTS} challenge, Lesion segmentation, Weight aggregation},
+	file = {Full Text PDF:/Users/reeshavacharya/Zotero/storage/RIMNZSMT/Khan et al. - 2022 - Adaptive Weight Aggregation in Federated Learning for Brain Tumor Segmentation.pdf:application/pdf},
+}
+
+@article{luo_influence_2023,
+	title = {Influence of Data Distribution on Federated Learning Performance in                     Tumor Segmentation},
+	volume = {5},
+	url = {https://pubs.rsna.org/doi/full/10.1148/ryai.220082},
+	doi = {10.1148/ryai.220082},
+	abstract = {{PurposeTo} investigate the correlation between differences in data distributions and federated deep learning (Fed-{DL}) algorithm performance in tumor segmentation on {CT} and {MR} images.Materials and {MethodsTwo} Fed-{DL} datasets were retrospectively collected (from November 2020 to December 2021): one dataset of liver tumor {CT} images (Federated Imaging in Liver Tumor Segmentation [or, {FILTS}]; three sites, 692 scans) and one publicly available dataset of brain tumor {MR} images (Federated Tumor Segmentation [or, {FeTS}]; 23 sites, 1251 scans). Scans from both datasets were grouped according to site, tumor type, tumor size, dataset size, and tumor intensity. To quantify differences in data distributions, the following four distance metrics were calculated: earth mover’s distance ({EMD}), Bhattacharyya distance ({BD}), χ2 distance ({CSD}), and Kolmogorov-Smirnov distance ({KSD}). Both federated and centralized {nnU}-Net models were trained by using the same grouped datasets. Fed-{DL} model performance was evaluated by using the ratio of Dice coefficients, θ, between federated and centralized models trained and tested on the same 80:20 split datasets.{ResultsThe} Dice coefficient ratio (θ) between federated and centralized models was strongly negatively correlated with the distances between data distributions, with correlation coefficients of −0.920 for {EMD}, −0.893 for {BD}, and −0.899 for {CSD}. However, {KSD} was weakly correlated with θ, with a correlation coefficient of −0.479.{ConclusionPerformance} of Fed-{DL} models in tumor segmentation on {CT} and {MRI} datasets was strongly negatively correlated with the distances between data distributions.Keywords: {CT}, Abdomen/{GI}, Liver, Comparative Studies, {MR} Imaging, Brain/Brain Stem, Convolutional Neural Network ({CNN}), Federated Deep Learning, Tumor Segmentation, Data {DistributionSupplemental} material is available for this article.© {RSNA}, 2023See also the commentary by Kwak and Bai in this issue.},
+	pages = {e220082},
+	number = {3},
+	journaltitle = {Radiology: Artificial Intelligence},
+	publisher = {Radiological Society of North America},
+	author = {Luo, Guibo and Liu, Tianyu and Lu, Jinghui and Chen, Xin and Yu, Lequan and Wu, Jian and Chen, Danny Z. and Cai, Wenli},
+	urldate = {2026-06-24},
+	date = {2023-05},
+	file = {Full Text PDF:/Users/reeshavacharya/Zotero/storage/ELRTZ4EF/Luo et al. - 2023 - Influence of Data Distribution on Federated Learning Performance in                     Tumor Segmen.pdf:application/pdf},
+}
+
+@inproceedings{nalawade_federated_2022,
+	location = {Cham},
+	title = {Federated Learning for Brain Tumor Segmentation Using {MRI} and Transformers},
+	isbn = {978-3-031-09002-8},
+	doi = {10.1007/978-3-031-09002-8_39},
+	abstract = {This work focuses on training a deep learning network in a federated learning framework. The Federated Tumor Segmentation Challenge has 2 separate tasks. Task-1 was to design an aggregation logic for a given network, which is trained in a federated learning framework. Task-2 of the challenge was to train a network that is robust and generalizable in a federated testing environment. 341 subjects were used for training both tasks of the challenge. This data was distributed across 17 collaborators, which were then used to train an individual network for each collaborator. A new weight aggregation logic was developed. The network weights in this logic were determined based on the average validation dice scores of each collaborator. A concise model was obtained using the developed weighted aggregation logic. The Dice scores for task-1 on the validation dataset for whole tumor, tumor core, and enhancing tumor were 0.767, 0.612, and 0.628 respectively. The Dice scores for task-2 on the validation dataset for whole tumor, tumor core, and enhancing tumor were 0.874, 0.773, and 0.721 respectively.},
+	pages = {444--454},
+	booktitle = {Brainlesion: Glioma, Multiple Sclerosis, Stroke and Traumatic Brain Injuries},
+	publisher = {Springer International Publishing},
+	author = {Nalawade, Sahil and Ganesh, Chandan and Wagner, Ben and Reddy, Divya and Das, Yudhajit and Yu, Fang F. and Fei, Baowei and Madhuranthakam, Ananth J. and Maldjian, Joseph A.},
+	editor = {Crimi, Alessandro and Bakas, Spyridon},
+	date = {2022},
+	langid = {english},
+	keywords = {Brain tumor, Convolutional neural network, Deep learning, Federated learning, Segmentation, Transformers},
+	file = {Full Text PDF:/Users/reeshavacharya/Zotero/storage/5GWRREFC/Nalawade et al. - 2022 - Federated Learning for Brain Tumor Segmentation Using MRI and Transformers.pdf:application/pdf},
+}
+
+@misc{spyridon_bakas_2022_6622476,
+  author       = {Spyridon Bakas and
+                  Sarthak Pati and
+                  Micah Sheller and
+                  Alexandros Karargyris and
+                  Peter Mattson and
+                  Brandon Edwards and
+                  Ujjwal Baid and
+                  Yong Chen and
+                  Russell (Taki) Shinohara and
+                  Jason Martin and
+                  Bjoern Menze and
+                  Maximilian Zenk and
+                  Klaus Maier-Hein and
+                  Ralf Floca and
+                  Annika Reinke and
+                  Lena Maier-Hein and
+                  Fabian Isensee and
+                  David Zimmerer and
+                  Yong Chen},
+  title        = {The Federated Tumor Segmentation (FeTS) Challenge
+                   2022
+                  },
+  month        = mar,
+  year         = 2022,
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.6622476},
+  url          = {https://doi.org/10.5281/zenodo.6622476},
+}
+@misc{baid2023brats2021dataset,
+  author = {Baid, Ujjwal and Ghodasara, Sarthak and Mohan, Shreyas and Bilello, Michel and Calabrese, Evan and Colak, Erdem and Farahani, Keyvan and Kalpathy-Cramer, Jayashree and Kitamura, F. C. and Pati, Spyridon and Prevedello, Luciano and Rudie, Jeffrey and Sako, Chiharu and Shinohara, Russell and Bergquist, Timothy and Chai, Raymond and Eddy, James and Elliott, Joshua and Reade, Walter and Schaffter, Thomas and Yu, Tianyu and Zheng, Jia and Davatzikos, Christos and Mongan, John and Hess, Christopher and Cha, Soonmee and Villanueva-Meyer, Javier and Freymann, John B. and Kirby, Justin S. and Wiestler, Benedikt and Crivellaro, Pietro and Colen, Randall R. and Kotrotsou, Aikaterini and Marcus, Daniel and Milchenko, Mikhail and Nazeri, Alireza and Fathallah-Shaykh, Hassan and Wiest, Roland and Jakab, Andras and Weber, Marc-Andr{\'e} and Mahajan, Ankit and Menze, Bjoern and Flanders, Adam E. and Bakas, Spyridon},
+  title = {RSNA-ASNR-MICCAI-BraTS-2021 Dataset},
+  year = {2023},
+  publisher = {The Cancer Imaging Archive},
+  doi = {10.7937/jc8x-9874},
+  note = {The Cancer Imaging Archive}
+}
+
+
+@article{manthe_federated_2024,
+	title = {Federated brain tumor segmentation: An extensive benchmark},
+	volume = {97},
+	issn = {1361-8415},
+	url = {https://www.sciencedirect.com/science/article/pii/S1361841524001956},
+	doi = {10.1016/j.media.2024.103270},
+	shorttitle = {Federated brain tumor segmentation},
+	abstract = {Recently, federated learning has raised increasing interest in the medical image analysis field due to its ability to aggregate multi-center data with privacy-preserving properties. A large amount of federated training schemes have been published, which we categorize into global (one final model), personalized (one model per institution) or hybrid (one model per cluster of institutions) methods. However, their applicability on the recently published Federated Brain Tumor Segmentation 2022 dataset has not been explored yet. We propose an extensive benchmark of federated learning algorithms from all three classes on this task. While standard {FedAvg} already performs very well, we show that some methods from each category can bring a slight performance improvement and potentially limit the final model(s) bias toward the predominant data distribution of the federation. Moreover, we provide a deeper understanding of the behavior of federated learning on this task through alternative ways of distributing the pooled dataset among institutions, namely an Independent and Identical Distributed ({IID}) setup, and a limited data setup. Our code is available at (https://github.com/{MatthisManthe}/Benchmark\_FeTS2022).},
+	pages = {103270},
+	journaltitle = {Medical Image Analysis},
+	shortjournal = {Medical Image Analysis},
+	author = {Manthe, Matthis and Duffner, Stefan and Lartizien, Carole},
+	urldate = {2026-06-24},
+	date = {2024-10-01},
+	keywords = {{BraTS}, Clustered federated learning, Deep learning, Federated learning, Medical image segmentation, Personalized federated learning},
+	file = {ScienceDirect Full Text PDF:/Users/reeshavacharya/Zotero/storage/CGNWE5XD/Manthe et al. - 2024 - Federated brain tumor segmentation An extensive benchmark.pdf:application/pdf;ScienceDirect Snapshot:/Users/reeshavacharya/Zotero/storage/RJDIAJG7/S1361841524001956.html:text/html},
+}
+
+
+@inproceedings{hatamizadeh_swin_2022,
+	location = {Cham},
+	title = {Swin {UNETR}: Swin Transformers for Semantic Segmentation of Brain Tumors in {MRI} Images},
+	isbn = {978-3-031-08999-2},
+	doi = {10.1007/978-3-031-08999-2_22},
+	shorttitle = {Swin {UNETR}},
+	abstract = {Semantic segmentation of brain tumors is a fundamental medical image analysis task involving multiple {MRI} imaging modalities that can assist clinicians in diagnosing the patient and successively studying the progression of the malignant entity. In recent years, Fully Convolutional Neural Networks ({FCNNs}) approaches have become the de facto standard for 3D medical image segmentation. The popular “U-shaped” network architecture has achieved state-of-the-art performance benchmarks on different 2D and 3D semantic segmentation tasks and across various imaging modalities. However, due to the limited kernel size of convolution layers in {FCNNs}, their performance of modeling long-range information is sub-optimal, and this can lead to deficiencies in the segmentation of tumors with variable sizes. On the other hand, transformer models have demonstrated excellent capabilities in capturing such long-range information in multiple domains, including natural language processing and computer vision. Inspired by the success of vision transformers and their variants, we propose a novel segmentation model termed Swin {UNEt} {TRansformers} (Swin {UNETR}). Specifically, the task of 3D brain tumor semantic segmentation is reformulated as a sequence to sequence prediction problem wherein multi-modal input data is projected into a 1D sequence of embedding and used as an input to a hierarchical Swin transformer as the encoder. The swin transformer encoder extracts features at five different resolutions by utilizing shifted windows for computing self-attention and is connected to an {FCNN}-based decoder at each resolution via skip connections. We have participated in {BraTS} 2021 segmentation challenge, and our proposed model ranks among the top-performing approaches in the validation phase.},
+	pages = {272--284},
+	booktitle = {Brainlesion: Glioma, Multiple Sclerosis, Stroke and Traumatic Brain Injuries},
+	publisher = {Springer International Publishing},
+	author = {Hatamizadeh, Ali and Nath, Vishwesh and Tang, Yucheng and Yang, Dong and Roth, Holger R. and Xu, Daguang},
+	editor = {Crimi, Alessandro and Bakas, Spyridon},
+	date = {2022},
+	langid = {english},
+	keywords = {Brain tumor segmentation, {BRATS}, Image segmentation, Swin transformer, Swin {UNETR}, {UNETR}, Vision transformer},
+	file = {Full Text PDF:/Users/reeshavacharya/Zotero/storage/BX8QQUQD/Hatamizadeh et al. - 2022 - Swin UNETR Swin Transformers for Semantic Segmentation of Brain Tumors in MRI Images.pdf:application/pdf},
+}

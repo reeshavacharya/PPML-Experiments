@@ -1,0 +1,11 @@
+{
+  "client_id": 2,
+  "num_test_samples": 39,
+  "test_loss": 0.1605,
+  "dice_wt": 0.8661,
+  "dice_tc": 0.8447,
+  "dice_et": 0.8432,
+  "mean_dice": 0.8513,
+  "model": "swin_unetr_fl",
+  "checkpoint": "/work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_88.pth"
+}

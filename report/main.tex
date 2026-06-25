@@ -1,0 +1,308 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\title{Federated Learning for Brain Tumor Segmentation: Experiment Design, Implementation and Analysis}
+\author{Reeshav Acharya}
+\date{June $24^{th}$, 2026}
+\bibliographystyle{IEEEtran}
+
+\begin{document}
+
+\maketitle
+
+\section{Abstract}
+This document provides a detailed account of the design, implementation and evaluation of a Federated Learning (FL) experiment on the Federated Tumor Segmentation (FeTS) 2022 dataset using the Swin UNETR model. We describe the reasoning behind each design choice: the dataset partitioning strategy that preserves non-IID properties, the selection of the Swin UNETR architecture, the construction of a fair centralized baseline, and the FL training infrastructure built on Flower. We conclude with a comparative analysis of segmentation performance and resource utilization between the centralized and federated settings.
+
+\section{Goals}
+Our goal is to analyze Privacy Enhancing Techniques (PETs) in the medical imaging domain. Because the scope of this topic is broad, we narrow it to a specific comparative analysis: centralized training versus distributed Federated Learning for 3D brain tumor segmentation. Medical data demands the highest standards of privacy, yet training accurate deep learning models typically requires large, diverse datasets. FL offers a paradigm in which institutions collaboratively train a shared model without exchanging raw patient data. We aim to quantify the cost of this privacy guarantee in terms of segmentation accuracy and computational resources.
+
+Our primary task is 3D image segmentation. Segmentation refers to the task of identifying and delineating a region of interest (ROI) in an image. In our setting, the model receives a multi-modal MRI scan of the brain and produces a voxel-wise segmentation mask that identifies tumor sub-regions. During training, each scan is paired with a ground truth mask in which tumor tissue is labeled and healthy tissue is background. Once trained, the model should generalize to produce accurate masks on previously unseen scans.
+
+We measure segmentation performance using the Dice Similarity Coefficient (DSC), which quantifies the spatial overlap between a predicted mask and the ground truth. It is defined as:
+\begin{equation}
+    \text{DSC} = \frac{2 |P \cap G|}{|P| + |G|}
+\end{equation}
+where $P$ is the set of predicted voxels and $G$ is the set of ground truth voxels. The score ranges from 0 (no overlap) to 1 (perfect agreement).
+
+This experiment focuses exclusively on FL without Differential Privacy (DP). Subsequent experiments will incorporate DP, Homomorphic Encryption (HE) and Secure Multi-Party Computation (MPC) as additional privacy layers.
+
+\section{Federated Tumor Segmentation Dataset}
+The FeTS dataset \cite{pati_federated_2025} has been used extensively in studies on FL for medical imaging \cite{reina_openfl_2022, khan_adaptive_2022, luo_influence_2023, nalawade_federated_2022} and serves as a standard benchmark for FL algorithms and segmentation models. We use the FeTS Challenge 2022 dataset \cite{spyridon_bakas_2022_6622476}, which was designed to evaluate how well federated models generalize when confronted with intrinsically heterogeneous brain tumors, specifically gliomas and glioblastomas.
+
+The dataset comprises clinically acquired, multi-parametric MRI (mpMRI) scans with four sequences: native T1-weighted (T1), contrast-enhanced T1-weighted (T1-Gd), T2-weighted (T2) and T2-FLAIR. These four modalities are stacked as input channels to the model, providing complementary contrast for different tissue types. The dataset builds upon the RSNA-ASNR-MICCAI BraTS 2021 challenge data \cite{baid2023brats2021dataset} and aggregates scans from 23 medical institutions worldwide, including public collections from The Cancer Imaging Archive.
+
+Ground truth segmentation masks label three tumor sub-regions according to the BraTS annotation protocol: Enhancing Tumor (ET, label 4), the peritumoral Edematous tissue (ED, label 2) and the Necrotic tumor core (NCR, label 1). For evaluation, these raw labels are converted into three clinically relevant, potentially overlapping regions:
+\begin{itemize}
+    \item \textbf{Whole Tumor (WT):} The union of all tumor classes (labels 1, 2, and 4).
+    \item \textbf{Tumor Core (TC):} The union of NCR and ET (labels 1 and 4).
+    \item \textbf{Enhancing Tumor (ET):} The enhancing region alone (label 4).
+\end{itemize}
+
+\paragraph{Training Data} The training portion contains 1,251 patients distributed across the 23 institutions, with ground truth segmentation masks provided for all cases.
+
+\paragraph{Validation and Testing} The official challenge provides 219 validation patients without ground truth; participants must submit predictions to an online evaluation platform. Additionally, federated evaluation in the challenge takes place across 30 independent institutions that are intentionally excluded from training, ensuring evaluation on entirely unseen data distributions. Since we do not have access to this infrastructure, we construct our own test sets from the training data as described in Section~\ref{sec:split}.
+
+\subsection{Data Imbalance and the Non-IID Problem}
+
+The dataset provides two partition files. \texttt{partitioning\_1.csv} assigns each sample to one of the 23 source institutions. \texttt{partitioning\_2.csv} further subdivides the five largest institutions based on median whole-tumor size. In the primary partitioning, Institutions 1 and 18 contribute 511 and 382 samples respectively, together accounting for 71\% of the dataset. Meanwhile, more than 61\% of institutions contribute fewer than 15 samples each \cite{manthe_federated_2024}. This extreme imbalance is representative of real-world medical data federations, where a few large hospitals dominate while many smaller clinics contribute limited data.
+
+\subsection{Addressing the Partitioning Challenge}
+
+Several approaches have been proposed to handle the data imbalance in the FeTS dataset. Manthe et al.\ \cite{manthe_federated_2024} survey these approaches and ultimately resort to shuffling the dataset between institutions to create an Independent and Identically Distributed (IID) setup with synthetic institutions. While this simplifies training, it fundamentally undermines the FL premise: institutions engage in FL precisely because they cannot or will not share their data. Random redistribution eliminates the non-IID property that makes FL challenging and necessary in practice.
+
+\subsection{Adopted Partitioning Strategy}
+\label{sec:split}
+
+We adopt a partial clustering strategy that preserves the non-IID property while producing a tractable number of FL clients. The 1,251 training samples are distributed across three clients that reflect the natural institutional hierarchy:
+
+\begin{itemize}
+    \item \textbf{Client 1:} Institution 1 --- 511 samples (40.8\%). Represents one large hospital.
+    \item \textbf{Client 2:} Institution 18 --- 382 samples (30.5\%). Represents one mid-sized institution.
+    \item \textbf{Client 3:} All remaining 21 institutions --- 358 samples (28.6\%). Represents an aggregation of many small clinics, each contributing between 4 and 47 samples.
+\end{itemize}
+
+This distribution creates meaningful heterogeneity: Client 1 sees data from a single large institution with consistent acquisition protocols, Client 2 sees data from a different institution with its own characteristics, and Client 3 sees a highly diverse mixture of scans from 21 different sources. The resulting non-IID property arises naturally from inter-institutional differences in scanner hardware, imaging protocols, patient demographics and tumor characteristics.
+
+Since we do not have access to the official held-out test data, each client independently applies an 80\%-10\%-10\% patient-level split for training, validation and testing respectively. This yields the following sample counts:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Client} & \textbf{Train} & \textbf{Val} & \textbf{Test} \\
+\midrule
+Client 1 (Institution 1) & 408 & 51 & 52 \\
+Client 2 (Institution 18) & 305 & 38 & 39 \\
+Client 3 (Other 21) & 286 & 36 & 36 \\
+\midrule
+\textbf{Total} & \textbf{999} & \textbf{125} & \textbf{127} \\
+\bottomrule
+\end{tabular}
+\caption{Patient-level data splits per client (80-10-10).}
+\label{tab:splits}
+\end{table}
+
+\section{Model: Swin UNETR}
+
+The original FeTS 2022 challenge employed a 3D U-Net as the baseline architecture. However, recent advances in transformer-based models for medical image segmentation motivate their evaluation under federated settings. We adopt the Swin UNETR (Swin UNEt TRansformers) model \cite{hatamizadeh_swin_2022}, a transformer-hybrid architecture designed specifically for 3D brain tumor segmentation. Hatamizadeh et al.\ developed Swin UNETR for the BraTS 2021 segmentation challenge --- the same challenge dataset from which the FeTS 2022 data is derived --- and their model ranked among the top-performing approaches in the validation phase.
+
+\subsection{Architecture Overview}
+
+Swin UNETR follows a U-shaped encoder-decoder design but replaces the traditional convolutional encoder with a hierarchical Swin Transformer. The architecture can be decomposed into three components:
+
+\paragraph{Encoder (Swin Transformer)} The encoder reformulates 3D segmentation as a sequence-to-sequence prediction problem. The input volume (4 modalities $\times$ 128 $\times$ 128 $\times$ 128 voxels) is first divided into non-overlapping 3D patches and linearly projected into token embeddings. These tokens are processed by a hierarchy of Swin Transformer stages, each consisting of multiple transformer blocks that compute self-attention within local 3D windows. Between stages, patch merging layers downsample the spatial resolution by a factor of 2 while doubling the feature dimension, producing feature maps at five distinct resolutions.
+
+The key innovation of the Swin Transformer is \textbf{shifted window self-attention}. Standard vision transformers compute global self-attention over all tokens, resulting in quadratic computational complexity with respect to the input size --- prohibitively expensive for 3D volumes. Swin UNETR instead partitions the feature map into non-overlapping local windows and computes self-attention within each window, reducing complexity to linear with respect to the input size. To enable cross-window communication, successive transformer blocks alternate between regular and shifted window configurations, allowing information to flow across window boundaries.
+
+This hierarchical design produces multi-scale feature representations: early stages capture fine-grained local patterns (edges, textures), while deeper stages model long-range contextual dependencies (spatial relationships between tumor sub-regions). This capacity for long-range modeling is the primary advantage over Fully Convolutional Neural Networks (FCNNs), whose limited receptive fields can lead to deficiencies when segmenting tumors of variable size and shape.
+
+\paragraph{Decoder (FCNN)} The decoder follows the standard U-Net paradigm. At each resolution level, the Swin Transformer encoder features are connected to the decoder via skip connections. The decoder progressively upsamples the features through transposed convolutions and residual blocks, recovering the original spatial resolution.
+
+\paragraph{Skip Connections} Skip connections at each of the five resolution levels concatenate encoder features with decoder features. These connections preserve fine-grained spatial details that would otherwise be lost during downsampling, enabling precise boundary delineation of tumor regions.
+
+\subsection{Configuration}
+
+We use the MONAI (Medical Open Network for Artificial Intelligence) implementation of Swin UNETR with the following configuration:
+\begin{itemize}
+    \item \textbf{Input:} 4-channel 3D patches of size $128 \times 128 \times 128$ (one channel per MRI modality).
+    \item \textbf{Output:} 3-channel probability map (WT, TC, ET).
+    \item \textbf{Feature size:} 48 (initial embedding dimension).
+    \item \textbf{Gradient checkpointing:} Enabled to reduce GPU memory consumption at the cost of additional computation during backpropagation.
+    \item \textbf{Spatial dimensions:} 3 (volumetric data).
+\end{itemize}
+
+\subsection{Preprocessing Pipeline}
+
+All input volumes undergo a standardized preprocessing pipeline implemented with MONAI transforms:
+\begin{enumerate}
+    \item \textbf{Orientation and Spacing:} Volumes are reoriented to RAS (Right-Anterior-Superior) convention and resampled to isotropic 1.0\,mm spacing.
+    \item \textbf{Intensity Normalization:} Channel-wise z-score normalization is applied to non-zero voxels only, accounting for the background.
+    \item \textbf{Foreground Cropping:} Background regions are cropped away to reduce computational waste.
+    \item \textbf{Patch Extraction:} During training, random $128^3$ patches are extracted with balanced positive/negative sampling (ensuring patches contain tumor voxels). During validation, volumes are padded to be divisible by 32 and processed whole.
+    \item \textbf{Data Augmentation (training only):} Random flips along all three axes, random 90-degree rotations and random intensity shifts.
+\end{enumerate}
+
+\section{Baseline Experiment}
+\label{sec:baseline}
+
+The centralized baseline simulates the scenario in which all institutional data is pooled into a single dataset. It serves as the upper-bound performance benchmark: if data privacy were not a concern, this is the performance one would achieve by training on all available data at once.
+
+\subsection{Ensuring a Fair Comparison}
+\label{sec:fair}
+
+A scientifically valid comparison between centralized and federated training requires that the \textit{only} difference between the two settings is the training paradigm. To guarantee this, we enforce the following constraints:
+
+\begin{enumerate}
+    \item \textbf{Identical Data Splits:} The centralized baseline does not create its own random 80/10/10 split over the global dataset. Instead, it precisely aggregates the independent splits computed for each FL client:
+    \begin{align*}
+        \text{Centralized}_{train} &= \text{Client1}_{train} \cup \text{Client2}_{train} \cup \text{Client3}_{train} \\
+        \text{Centralized}_{val} &= \text{Client1}_{val} \cup \text{Client2}_{val} \cup \text{Client3}_{val} \\
+        \text{Centralized}_{test} &= \text{Client1}_{test} \cup \text{Client2}_{test} \cup \text{Client3}_{test}
+    \end{align*}
+    This mathematically guarantees that every patient appears in the same set (train, val or test) in both settings. The random seed for the split is fixed at 42 for reproducibility.
+
+    \item \textbf{Identical Preprocessing:} Both settings use the exact same 3D preprocessing pipeline (orientation, spacing normalization, intensity normalization, cropping and augmentation).
+
+    \item \textbf{Identical Architecture:} Both settings use the same Swin UNETR model with identical hyperparameters (feature size 48, gradient checkpointing enabled).
+
+    \item \textbf{Identical Optimization:} Both settings use the AdamW optimizer with learning rate $3 \times 10^{-4}$ and weight decay $10^{-5}$, and minimize the same DiceCE loss (a combination of Dice loss and Cross-Entropy loss).
+\end{enumerate}
+
+\subsection{Training Configuration}
+
+The centralized baseline trains for 100 epochs on the pooled training set of 999 samples with a batch size of 1, necessitated by the large memory footprint of $128^3$ 3D volumes. A Cosine Annealing learning rate schedule decays the learning rate from $3 \times 10^{-4}$ to near zero over the 100 epochs, promoting convergence stability in the later stages of training. The model checkpoint with the highest validation Mean Dice is retained as the best model.
+
+The DiceCE loss combines two complementary objectives: the Dice loss directly optimizes the overlap metric we evaluate on, while the Cross-Entropy loss provides stable gradients early in training when predictions are far from the ground truth. The sigmoid activation is applied to model outputs to produce per-voxel probabilities for each of the three target regions.
+
+Training was conducted on a SLURM-managed HPC cluster node equipped with 2$\times$ NVIDIA L40S GPUs (44.5\,GB VRAM each), 64 CPU cores and 251\,GB RAM. The two GPUs were utilized via PyTorch's DataParallel.
+
+\section{Federated Learning Experiment}
+\label{sec:fl}
+
+\subsection{Flower Framework}
+
+We use \textbf{Flower} (flwr), an open-source, framework-agnostic FL platform, to orchestrate federated training. Flower was chosen for several reasons: it provides a clean separation between the FL protocol (server-side aggregation strategy) and the local training logic (client-side model), it supports standard aggregation strategies out of the box, and it communicates over gRPC, enabling deployment across networked machines or within a single node.
+
+In our setup, the Flower server coordinates three clients using the \textbf{Federated Averaging (FedAvg)} strategy. The training proceeds as follows for each of 100 communication rounds:
+
+\begin{enumerate}
+    \item The server broadcasts the current global model parameters to all three clients.
+    \item Each client loads the received parameters into its local Swin UNETR model and trains for \textbf{one local epoch} on its private dataset partition.
+    \item Each client sends its updated model parameters back to the server, along with the number of training examples.
+    \item The server computes the new global model as a \textbf{weighted average} of the client parameters, where the weight of each client is proportional to the number of examples it trained on.
+    \item The server broadcasts the updated global model back to all clients for evaluation on their local validation sets.
+\end{enumerate}
+
+Each client implements Flower's \texttt{NumPyClient} interface, exposing three methods: \texttt{get\_parameters} (extract model weights as NumPy arrays), \texttt{fit} (perform one epoch of local training and return updated weights) and \texttt{evaluate} (compute validation metrics on local data). The server aggregates training losses and validation Dice scores using weighted averaging.
+
+\subsection{Training Configuration}
+
+All FL training hyperparameters mirror the centralized baseline to ensure a fair comparison: AdamW optimizer with learning rate $3 \times 10^{-4}$, weight decay $10^{-5}$, batch size 1, and DiceCE loss. Each client performs one local epoch per communication round, and training runs for 100 rounds total. The best global model (highest weighted-average validation Dice across all clients) is retained.
+
+\subsection{Infrastructure}
+
+The FL experiment was run on a single SLURM-managed HPC node (2$\times$ NVIDIA L40S GPUs, 64 CPU cores, 251\,GB RAM). The server process ran on CPU only (no GPU required for parameter aggregation), while each of the three client processes was assigned to a specific GPU. Clients 1 and 3 shared GPU 0, Client 2 used GPU 1, each with 2 DataLoader worker processes to manage memory pressure. A background \texttt{ResourceMonitor} thread on each client polled system metrics (RAM, VRAM, GPU utilization) every second throughout training.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Segmentation Performance}
+
+Table~\ref{tab:test_results} presents the test-set Dice scores for both the centralized baseline and the federated model evaluated on each client's held-out test partition. The centralized model is evaluated on the union of all client test sets (127 samples), while the FL model is evaluated separately on each client's test split using the best global model from round 88.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Setting} & \textbf{Test Samples} & \textbf{Test Loss} & \textbf{Dice WT} & \textbf{Dice TC} & \textbf{Dice ET} & \textbf{Mean Dice} \\
+\midrule
+Centralized (all) & 127 & 0.1364 & 0.9051 & 0.8803 & 0.8256 & 0.8703 \\
+\midrule
+FL --- Client 1 & 52 & 0.0902 & 0.9350 & 0.9257 & 0.8923 & 0.9177 \\
+FL --- Client 2 & 39 & 0.1605 & 0.8661 & 0.8447 & 0.8432 & 0.8513 \\
+FL --- Client 3 & 36 & 0.1937 & 0.9192 & 0.8382 & 0.7121 & 0.8232 \\
+\midrule
+FL --- Weighted Avg & 127 & --- & --- & --- & --- & 0.8705 \\
+\bottomrule
+\end{tabular}
+\caption{Test-set segmentation performance. The FL weighted average is computed by weighting each client's Mean Dice by its number of test samples: $(52 \times 0.9177 + 39 \times 0.8513 + 36 \times 0.8232) / 127 = 0.8705$.}
+\label{tab:test_results}
+\end{table}
+
+\paragraph{Key Observation: Near-Parity Overall Performance} The weighted-average Mean Dice of the FL model (0.8705) is essentially identical to the centralized baseline (0.8703). This demonstrates that FL with FedAvg can match centralized training performance on this task, even under non-IID data distributions, with no meaningful loss in overall segmentation quality.
+
+\paragraph{Per-Client Analysis}
+\begin{itemize}
+    \item \textbf{Client 1} achieves the highest FL test Dice (0.9177), substantially \textit{exceeding} the centralized baseline (0.8703). This client holds the largest partition (511 training samples from a single institution), meaning its local data distribution is well-represented in the global model. The high test performance suggests that the global model retains the patterns specific to Institution 1's data even after averaging with the other clients.
+
+    \item \textbf{Client 2} achieves a Mean Dice of 0.8513, below the centralized baseline. Institution 18 contributes the second-largest share of data, but its scans may exhibit acquisition characteristics that differ from Institution 1. The averaging of parameters with other clients dilutes some institution-specific features, resulting in a modest performance gap.
+
+    \item \textbf{Client 3} shows the lowest Mean Dice (0.8232), driven primarily by a significantly lower Enhancing Tumor Dice (0.7121 vs. 0.8256 centralized). This client aggregates 21 small institutions, each contributing only 4--47 samples. The extreme heterogeneity within this client --- different scanners, protocols and patient demographics across 21 sources --- makes it the hardest partition for the global model to fit well. Furthermore, the ET region is typically the smallest and most variable tumor sub-region, making it particularly sensitive to distribution shifts.
+\end{itemize}
+
+\subsection{Training Dynamics}
+
+Table~\ref{tab:training} summarizes the training progression for both settings.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Setting} & \textbf{Best Epoch/Round} & \textbf{Best Val Dice} & \textbf{Final Val Dice} & \textbf{Total Duration} \\
+\midrule
+Centralized & Epoch 78 & 0.8966 & 0.8949 & $\sim$17 hours \\
+FL (global) & Round 88 & 0.8934 & 0.8874 & $\sim$17 hours \\
+\bottomrule
+\end{tabular}
+\caption{Training dynamics comparison.}
+\label{tab:training}
+\end{table}
+
+The centralized model achieved its best validation Dice of 0.8966 at epoch 78, while the FL model peaked at 0.8934 at round 88. Both models show convergence stability in later epochs/rounds, with minimal fluctuation in validation Dice after round 60 (FL) and epoch 60 (centralized). The slight delay in the FL model reaching its peak (round 88 vs. epoch 78) is expected: each FL round involves only one local epoch followed by parameter averaging, which introduces noise from the aggregation step. The model requires additional rounds to compensate for this perturbation.
+
+\subsection{Per-Client Training Behavior}
+
+Analysis of the per-client validation Dice over 100 rounds reveals distinct convergence patterns:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Client} & \textbf{Train Samples} & \textbf{Round 1 Val Dice} & \textbf{Best Val Dice} & \textbf{Best Round} & \textbf{Round 100 Val Dice} \\
+\midrule
+Client 1 & 408 & 0.7155 & 0.9127 & 95 & 0.9072 \\
+Client 2 & 305 & 0.6427 & 0.9059 & 74 & 0.8946 \\
+Client 3 & 286 & 0.6897 & 0.8663 & 91 & 0.8604 \\
+\bottomrule
+\end{tabular}
+\caption{Per-client FL training progression.}
+\label{tab:client_train}
+\end{table}
+
+Client 2 starts with the lowest initial Dice (0.6427) but converges rapidly, reaching its peak earliest at round 74. Client 3 consistently lags behind, reflecting the challenge of fitting a single global model to a distribution that spans 21 heterogeneous sources. The gap between Client 3's best validation Dice (0.8663) and its test Dice (0.8232) also suggests that the validation and test sets, while drawn from the same pool, may contain different proportions of the harder small-institution cases.
+
+\subsection{Resource Utilization}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Metric} & \textbf{Centralized} & \textbf{FL (per client)} & \textbf{FL (total node)} \\
+\midrule
+GPUs Used & 2$\times$ L40S & 1$\times$ L40S per client & 2$\times$ L40S \\
+Peak VRAM (MB) & 26,719 & $\sim$61,306 & $\sim$61,306 \\
+Peak RAM (MB) & $\sim$11,400 & $\sim$25,000--27,000 & $\sim$75,000 \\
+GPU Utilization & 100\% & 100\% (during training) & 100\% \\
+Training Duration & $\sim$17 hours & --- & $\sim$17 hours \\
+\bottomrule
+\end{tabular}
+\caption{Resource utilization comparison.}
+\label{tab:resources}
+\end{table}
+
+Both settings ran for approximately 17 hours on equivalent hardware. The centralized baseline used 2 GPUs via DataParallel with a peak VRAM of 26.7\,GB (across both GPUs combined) and approximately 11.4\,GB of system RAM. The FL setting consumed more memory overall: each client used approximately 60\,GB of VRAM (measured as the combined allocation reported by nvidia-smi for the shared GPUs) and 25--27\,GB of RAM, with a total node-level RAM footprint of approximately 75\,GB across the three client processes and the server.
+
+The higher per-client VRAM measurement in the FL setting reflects the fact that the reported value captures the total GPU allocation visible to each process (including memory used by other co-resident processes), rather than each client's isolated consumption. In a true multi-node deployment where each client runs on its own dedicated GPU, VRAM usage per client would be comparable to the centralized per-GPU usage.
+
+The similar total training duration is explained by the parallelism in the FL setup: all three clients train simultaneously on their respective partitions, and each client's partition is smaller than the full centralized dataset (286--408 vs. 999 samples). Thus, while the FL setting runs 100 rounds compared to 100 epochs, the wall-clock time per round is comparable to the time per epoch since the per-client data volume is roughly one-third of the centralized volume. The overhead from parameter serialization, gRPC communication and server-side aggregation is negligible relative to the cost of forward and backward passes on 3D volumes.
+
+\subsection{Summary}
+
+The experimental results lead to three conclusions:
+
+\begin{enumerate}
+    \item \textbf{FL matches centralized performance overall.} The weighted-average test Dice of the FL model (0.8705) is within 0.02\% of the centralized baseline (0.8703), confirming that FedAvg can effectively aggregate knowledge from non-IID medical imaging data without meaningful performance degradation.
+
+    \item \textbf{Performance varies across clients.} Clients with larger, more homogeneous datasets (Client 1) benefit from FL, achieving test performance that exceeds the centralized baseline. Clients with smaller, more heterogeneous data (Client 3) see reduced performance, particularly on the challenging ET sub-region. This heterogeneity gap is an inherent characteristic of global FL models and motivates future work on personalized FL strategies.
+
+    \item \textbf{Resource costs are comparable.} Both settings consumed similar wall-clock time and hardware resources, indicating that the communication and aggregation overhead of FL is negligible for this model size and network configuration. In a real multi-node deployment, FL would additionally incur network transfer costs for the Swin UNETR's $\sim$62M parameters ($\sim$248\,MB per transfer), but this remains small relative to the minutes-long training step per round.
+\end{enumerate}
+
+\bibliography{references}
+
+\end{document}

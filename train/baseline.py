@@ -101,7 +101,7 @@ def train(epochs=10, batch_size=32, lr=1e-4, data_dir="data/NIH-Chest"):
     
     # Setup CSV logging
     train_dir = os.path.dirname(os.path.abspath(__file__))
-    metrics_csv_path = os.path.join(train_dir, "metrics.csv")
+    metrics_csv_path = os.path.join(train_dir, "baseline_metrics.csv")
     with open(metrics_csv_path, mode='w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow([

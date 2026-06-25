@@ -1,0 +1,1121 @@
+=== FL Local run on mdc-1057-18-2.rc.usf.edu at Tue Jun 23 22:53:45 EDT 2026 ===
+GPUs available: GPU 0: NVIDIA L40S (UUID: GPU-56c88c3e-6de1-376f-71a4-5a1bafe7d3f1)
+GPU 1: NVIDIA L40S (UUID: GPU-45602cb9-3a9b-ce13-be3f-e2d72a37114e)
+Server started (PID: 22812), waiting for gRPC to initialize...
+Client 1 started (PID: 22947) on GPU 0
+Client 2 started (PID: 22948) on GPU 1
+Client 3 started (PID: 22949) on GPU 0
+All processes launched. Waiting for server to finish...
+============================================================
+[2026-06-23 22:56:01] FL Server — mdc-1057-18-2.rc.usf.edu
+  Rounds: 100
+  Bind address: 127.0.0.1:8080
+  Waiting for 3 clients to connect...
+============================================================
+[2026-06-23 22:56:01] Server hostname written to /work/r/reeshav/PPML-Experiments-FL/fl/server_address.txt
+[2026-06-23 22:56:10] Round 1 [FIT-CONFIG] — 3 client(s) available
+[2026-06-23 22:56:10]   CONNECTED: client 695a45218a09401f83d40633c140a2c6
+[2026-06-23 22:56:10]   CONNECTED: client ad4d417143fa4d2aabc22ad39b4266d9
+[2026-06-23 22:56:10]   CONNECTED: client ae83a4bce4d84a85a907adae6da90c77
+[2026-06-23 23:03:55] Round 1 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.5393106361160745}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.518888246817667}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.45471072487313957}
+[2026-06-23 23:03:58] Saved global model round 1 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_1.pth
+[2026-06-23 23:03:58] Round 1 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-23 23:04:50] Round 1 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.5744, metrics={'val_dice': 0.7155474821726481}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.6286, metrics={'val_dice': 0.642687718073527}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.5447, metrics={'val_dice': 0.6897486845652262}
+[2026-06-23 23:04:50] Round 2 [FIT-CONFIG] — 3 client(s) available
+[2026-06-23 23:14:13] Round 2 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.30437070894595625}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.22396671121903494}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.28312903899149816}
+[2026-06-23 23:14:15] Saved global model round 2 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_2.pth
+[2026-06-23 23:14:15] Round 2 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-23 23:15:05] Round 2 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.2842, metrics={'val_dice': 0.796566883722941}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.3287, metrics={'val_dice': 0.7652654647827148}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.3125, metrics={'val_dice': 0.7630023161570231}
+[2026-06-23 23:15:05] Round 3 [FIT-CONFIG] — 3 client(s) available
+[2026-06-23 23:24:26] Round 3 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.18930569013544157}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.24304911081419617}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.2691380800223434}
+[2026-06-23 23:24:30] Saved global model round 3 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_3.pth
+[2026-06-23 23:24:30] Round 3 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-23 23:25:22] Round 3 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.2664, metrics={'val_dice': 0.7893806298573812}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.3015, metrics={'val_dice': 0.761872927347819}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.2802, metrics={'val_dice': 0.776438315709432}
+[2026-06-23 23:25:22] Round 4 [FIT-CONFIG] — 3 client(s) available
+[2026-06-23 23:34:43] Round 4 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.18702551379215485}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.22912581448183686}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.2550340123943516}
+[2026-06-23 23:34:46] Saved global model round 4 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_4.pth
+[2026-06-23 23:34:46] Round 4 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-23 23:35:34] Round 4 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.2702, metrics={'val_dice': 0.7708788712819418}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.2586, metrics={'val_dice': 0.7765270868937174}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.2757, metrics={'val_dice': 0.7724191347757975}
+[2026-06-23 23:35:34] Round 5 [FIT-CONFIG] — 3 client(s) available
+[2026-06-23 23:44:59] Round 5 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.20599744293044825}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.16964490622208983}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.2563748131994601}
+[2026-06-23 23:45:02] Saved global model round 5 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_5.pth
+[2026-06-23 23:45:02] Round 5 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-23 23:45:52] Round 5 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.2383, metrics={'val_dice': 0.8015357653299967}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.2346, metrics={'val_dice': 0.7985998789469401}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1951, metrics={'val_dice': 0.8378019332885742}
+[2026-06-23 23:45:52] Round 6 [FIT-CONFIG] — 3 client(s) available
+[2026-06-23 23:55:11] Round 6 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.19671878343234298}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.2489212646403096}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.160309232597915}
+[2026-06-23 23:55:14] Saved global model round 6 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_6.pth
+[2026-06-23 23:55:14] Round 6 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-23 23:56:03] Round 6 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.2235, metrics={'val_dice': 0.801026185353597}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.2366, metrics={'val_dice': 0.7986542383829752}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1803, metrics={'val_dice': 0.8454693953196207}
+[2026-06-23 23:56:03] Round 7 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 00:05:23] Round 7 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1890474484103625}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.24817152774625725}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.16124551583483232}
+[2026-06-24 00:05:26] Saved global model round 7 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_7.pth
+[2026-06-24 00:05:26] Round 7 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 00:06:15] Round 7 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.2386, metrics={'val_dice': 0.7891127268473307}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.2337, metrics={'val_dice': 0.7829933166503906}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.2136, metrics={'val_dice': 0.8003644148508707}
+[2026-06-24 00:06:15] Round 8 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 00:15:37] Round 8 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1584800453582669}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1909371302142495}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.2468578981144445}
+[2026-06-24 00:15:40] Saved global model round 8 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_8.pth
+[2026-06-24 00:15:40] Round 8 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 00:16:30] Round 8 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.2191, metrics={'val_dice': 0.7949260075887045}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1896, metrics={'val_dice': 0.824275016784668}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.2324, metrics={'val_dice': 0.7942148049672445}
+[2026-06-24 00:16:30] Round 9 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 00:25:54] Round 9 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.18542161550922473}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1521226118830051}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.24287550800017543}
+[2026-06-24 00:25:57] Saved global model round 9 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_9.pth
+[2026-06-24 00:25:58] Round 9 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 00:26:49] Round 9 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.2174, metrics={'val_dice': 0.810607115427653}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1893, metrics={'val_dice': 0.8221807479858398}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1607, metrics={'val_dice': 0.8524680137634277}
+[2026-06-24 00:26:49] Round 10 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 00:36:08] Round 10 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.19718497890185138}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.14506902456210524}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.24533352753394969}
+[2026-06-24 00:36:10] Saved global model round 10 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_10.pth
+[2026-06-24 00:36:10] Round 10 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 00:37:01] Round 10 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.2183, metrics={'val_dice': 0.8059560457865397}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1669, metrics={'val_dice': 0.8439830938975016}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1943, metrics={'val_dice': 0.8146234353383383}
+[2026-06-24 00:37:01] Round 11 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 00:46:25] Round 11 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.23717248015157827}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.14191722517431365}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.182500721147803}
+[2026-06-24 00:46:29] Saved global model round 11 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_11.pth
+[2026-06-24 00:46:29] Round 11 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 00:47:15] Round 11 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1847, metrics={'val_dice': 0.8235696951548258}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1532, metrics={'val_dice': 0.8571186860402426}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.2143, metrics={'val_dice': 0.8108027776082357}
+[2026-06-24 00:47:15] Round 12 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 00:56:36] Round 12 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.23547255649016455}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.144634916967548}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.17331186182430533}
+[2026-06-24 00:56:38] Saved global model round 12 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_12.pth
+[2026-06-24 00:56:38] Round 12 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 00:57:31] Round 12 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1584, metrics={'val_dice': 0.8478653430938721}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.2033, metrics={'val_dice': 0.818811813990275}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1810, metrics={'val_dice': 0.8234086036682129}
+[2026-06-24 00:57:31] Round 13 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 01:06:57] Round 13 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.16413155171226282}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.14407874247990549}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.2283003358886792}
+[2026-06-24 01:07:00] Saved global model round 13 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_13.pth
+[2026-06-24 01:07:00] Round 13 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 01:07:46] Round 13 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.2051, metrics={'val_dice': 0.8169000148773193}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1773, metrics={'val_dice': 0.8260399500528971}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1570, metrics={'val_dice': 0.8483246167500814}
+[2026-06-24 01:07:46] Round 14 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 01:17:06] Round 14 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1441363037618644}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.16108227068039238}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.22589192390962914}
+[2026-06-24 01:17:09] Saved global model round 14 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_14.pth
+[2026-06-24 01:17:09] Round 14 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 01:17:59] Round 14 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1796, metrics={'val_dice': 0.8198146025339762}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1687, metrics={'val_dice': 0.8337316513061523}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.2087, metrics={'val_dice': 0.8087593714396158}
+[2026-06-24 01:17:59] Round 15 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 01:27:24] Round 15 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.2315872115558469}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.14445771026772028}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.16659097037598736}
+[2026-06-24 01:27:27] Saved global model round 15 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_15.pth
+[2026-06-24 01:27:27] Round 15 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 01:28:17] Round 15 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1997, metrics={'val_dice': 0.8201471169789633}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1436, metrics={'val_dice': 0.8598608175913492}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1505, metrics={'val_dice': 0.8504579861958822}
+[2026-06-24 01:28:17] Round 16 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 01:37:37] Round 16 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.23075617211577776}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.13383369411195756}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.16843402625107373}
+[2026-06-24 01:37:40] Saved global model round 16 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_16.pth
+[2026-06-24 01:37:40] Round 16 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 01:38:28] Round 16 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1893, metrics={'val_dice': 0.8075304826100668}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.2118, metrics={'val_dice': 0.8023801644643148}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1764, metrics={'val_dice': 0.8234774271647135}
+[2026-06-24 01:38:28] Round 17 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 01:47:48] Round 17 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1685288968511292}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.13905745289087587}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.22003968319223893}
+[2026-06-24 01:47:50] Saved global model round 17 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_17.pth
+[2026-06-24 01:47:50] Round 17 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 01:48:38] Round 17 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1562, metrics={'val_dice': 0.8456292152404785}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.2004, metrics={'val_dice': 0.8161482810974121}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1713, metrics={'val_dice': 0.827653964360555}
+[2026-06-24 01:48:38] Round 18 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 01:58:04] Round 18 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1546337645439828}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.13539637093815735}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.22280878034400772}
+[2026-06-24 01:58:07] Saved global model round 18 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_18.pth
+[2026-06-24 01:58:07] Round 18 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 01:58:53] Round 18 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1406, metrics={'val_dice': 0.8619620005289713}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.2040, metrics={'val_dice': 0.81256103515625}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1615, metrics={'val_dice': 0.8379680315653483}
+[2026-06-24 01:58:53] Round 19 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 02:08:18] Round 19 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.22497538779373769}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.12969221945340728}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.15752401240780706}
+[2026-06-24 02:08:21] Saved global model round 19 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_19.pth
+[2026-06-24 02:08:21] Round 19 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 02:09:08] Round 19 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1343, metrics={'val_dice': 0.8718405564626058}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1906, metrics={'val_dice': 0.8268687725067139}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1575, metrics={'val_dice': 0.8439416885375977}
+[2026-06-24 02:09:08] Round 20 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 02:18:29] Round 20 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.22555257191139083}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.16053875512519822}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.13223942704316155}
+[2026-06-24 02:18:32] Saved global model round 20 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_20.pth
+[2026-06-24 02:18:32] Round 20 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 02:19:21] Round 20 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1951, metrics={'val_dice': 0.8211054801940918}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1503, metrics={'val_dice': 0.8515020211537679}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1672, metrics={'val_dice': 0.8317263126373291}
+[2026-06-24 02:19:21] Round 21 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 02:28:50] Round 21 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1284666603394583}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.22209943491001646}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1561121632451894}
+[2026-06-24 02:28:52] Saved global model round 21 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_21.pth
+[2026-06-24 02:28:53] Round 21 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 02:29:43] Round 21 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1431, metrics={'val_dice': 0.8611261049906412}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1534, metrics={'val_dice': 0.8479528427124023}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1957, metrics={'val_dice': 0.8203466733296713}
+[2026-06-24 02:29:43] Round 22 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 02:39:03] Round 22 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.13396266452036798}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.21933479872825262}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.15637493093238503}
+[2026-06-24 02:39:06] Saved global model round 22 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_22.pth
+[2026-06-24 02:39:06] Round 22 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 02:39:54] Round 22 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1381, metrics={'val_dice': 0.8673667907714844}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1536, metrics={'val_dice': 0.8486169974009196}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1890, metrics={'val_dice': 0.8286388715108236}
+[2026-06-24 02:39:54] Round 23 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 02:49:15] Round 23 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.22285273860019822}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.12344388937230642}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.15396528208597762}
+[2026-06-24 02:49:18] Saved global model round 23 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_23.pth
+[2026-06-24 02:49:18] Round 23 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 02:50:04] Round 23 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1450, metrics={'val_dice': 0.8524415493011475}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1860, metrics={'val_dice': 0.8318463166554769}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1305, metrics={'val_dice': 0.8725167115529379}
+[2026-06-24 02:50:04] Round 24 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 02:59:25] Round 24 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.15272683463379985}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.21989959437999276}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.13320166983769513}
+[2026-06-24 02:59:28] Saved global model round 24 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_24.pth
+[2026-06-24 02:59:28] Round 24 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 03:00:15] Round 24 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1881, metrics={'val_dice': 0.8268064657847086}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1344, metrics={'val_dice': 0.8680683771769205}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1427, metrics={'val_dice': 0.8551904360453287}
+[2026-06-24 03:00:15] Round 25 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 03:09:38] Round 25 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1261805512933243}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.2166870271565614}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.15096161166419747}
+[2026-06-24 03:09:40] Saved global model round 25 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_25.pth
+[2026-06-24 03:09:40] Round 25 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 03:10:34] Round 25 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1846, metrics={'val_dice': 0.8334292570749918}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1294, metrics={'val_dice': 0.8756353855133057}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1436, metrics={'val_dice': 0.8587156136830648}
+[2026-06-24 03:10:34] Round 26 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 03:19:55] Round 26 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.2191424984615166}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1448717445379398}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.12830536744520799}
+[2026-06-24 03:19:58] Saved global model round 26 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_26.pth
+[2026-06-24 03:19:58] Round 26 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 03:20:47] Round 26 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1877, metrics={'val_dice': 0.828338623046875}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1326, metrics={'val_dice': 0.8713613351186117}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1393, metrics={'val_dice': 0.8613857428232828}
+[2026-06-24 03:20:47] Round 27 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 03:30:06] Round 27 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.12258324217891284}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.2170822053261987}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.15145313193807836}
+[2026-06-24 03:30:09] Saved global model round 27 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_27.pth
+[2026-06-24 03:30:09] Round 27 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 03:30:55] Round 27 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1413, metrics={'val_dice': 0.8597942988077799}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1120, metrics={'val_dice': 0.8939328193664551}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1802, metrics={'val_dice': 0.8369859854380289}
+[2026-06-24 03:30:55] Round 28 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 03:40:15] Round 28 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.14918187684455855}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11972080678313825}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.21243909738593167}
+[2026-06-24 03:40:18] Saved global model round 28 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_28.pth
+[2026-06-24 03:40:18] Round 28 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 03:41:06] Round 28 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1837, metrics={'val_dice': 0.8346724510192871}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1209, metrics={'val_dice': 0.8849793275197347}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1375, metrics={'val_dice': 0.8644746144612631}
+[2026-06-24 03:41:06] Round 29 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 03:50:28] Round 29 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.14799100313274588}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.21126123857716997}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1303704191620151}
+[2026-06-24 03:50:31] Saved global model round 29 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_29.pth
+[2026-06-24 03:50:31] Round 29 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 03:51:22] Round 29 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1296, metrics={'val_dice': 0.8749955495198568}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1927, metrics={'val_dice': 0.8241155942281088}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1521, metrics={'val_dice': 0.8492365678151449}
+[2026-06-24 03:51:22] Round 30 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 04:00:41] Round 30 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.21072351269528167}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1553959605513049}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.12680299144110405}
+[2026-06-24 04:00:44] Saved global model round 30 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_30.pth
+[2026-06-24 04:00:44] Round 30 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 04:01:35] Round 30 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1837, metrics={'val_dice': 0.8351743221282959}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1441, metrics={'val_dice': 0.8586445649464926}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1217, metrics={'val_dice': 0.8851120471954346}
+[2026-06-24 04:01:35] Round 31 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 04:11:01] Round 31 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.14279263235750744}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.2130615449139288}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.12107554625025858}
+[2026-06-24 04:11:03] Saved global model round 31 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_31.pth
+[2026-06-24 04:11:03] Round 31 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 04:11:53] Round 31 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1820, metrics={'val_dice': 0.8350675106048584}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1389, metrics={'val_dice': 0.8641901810963949}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1192, metrics={'val_dice': 0.8884797890981039}
+[2026-06-24 04:11:53] Round 32 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 04:21:09] Round 32 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.12412146502174437}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.14832271352166035}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20756709793178768}
+[2026-06-24 04:21:12] Saved global model round 32 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_32.pth
+[2026-06-24 04:21:12] Round 32 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 04:22:03] Round 32 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1151, metrics={'val_dice': 0.8904469807942709}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1813, metrics={'val_dice': 0.8353049755096436}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1274, metrics={'val_dice': 0.8749667008717855}
+[2026-06-24 04:22:03] Round 33 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 04:31:24] Round 33 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.14886298897202874}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20499337774577675}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11762952659388676}
+[2026-06-24 04:31:27] Saved global model round 33 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_33.pth
+[2026-06-24 04:31:27] Round 33 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 04:33:40] Round 33 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1768, metrics={'val_dice': 0.8433617750803629}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1212, metrics={'val_dice': 0.8889639377593994}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1409, metrics={'val_dice': 0.8665310541788737}
+[2026-06-24 04:33:40] Round 34 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 04:43:03] Round 34 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20735620152387585}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.12210992552047852}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.14064281635352824}
+[2026-06-24 04:43:06] Saved global model round 34 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_34.pth
+[2026-06-24 04:43:06] Round 34 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 04:43:52] Round 34 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1387, metrics={'val_dice': 0.8653348286946615}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1171, metrics={'val_dice': 0.890459934870402}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1808, metrics={'val_dice': 0.8376115163167318}
+[2026-06-24 04:43:52] Round 35 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 04:53:15] Round 35 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1410128100424028}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11734211390527587}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20325811661884086}
+[2026-06-24 04:53:18] Saved global model round 35 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_35.pth
+[2026-06-24 04:53:18] Round 35 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 04:54:08] Round 35 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1388, metrics={'val_dice': 0.8624940713246664}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1802, metrics={'val_dice': 0.8355738321940104}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1209, metrics={'val_dice': 0.8842598597208658}
+[2026-06-24 04:54:08] Round 36 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 05:03:30] Round 36 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1215695757510177}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.14259617601017482}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20650080050882344}
+[2026-06-24 05:03:33] Saved global model round 36 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_36.pth
+[2026-06-24 05:03:33] Round 36 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 05:04:23] Round 36 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1388, metrics={'val_dice': 0.863826592763265}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1815, metrics={'val_dice': 0.8354378541310629}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1170, metrics={'val_dice': 0.8891193072001139}
+[2026-06-24 05:04:23] Round 37 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 05:13:43] Round 37 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11730366611086271}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20560285602728803}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13799644615806517}
+[2026-06-24 05:13:46] Saved global model round 37 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_37.pth
+[2026-06-24 05:13:46] Round 37 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 05:14:35] Round 37 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1349, metrics={'val_dice': 0.866508960723877}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1119, metrics={'val_dice': 0.8943690458933512}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1769, metrics={'val_dice': 0.8395989735921224}
+[2026-06-24 05:14:35] Round 38 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 05:23:57] Round 38 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20165115852768606}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1384280035485987}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11542173305197674}
+[2026-06-24 05:23:59] Saved global model round 38 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_38.pth
+[2026-06-24 05:23:59] Round 38 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 05:24:46] Round 38 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1738, metrics={'val_dice': 0.8427043755849203}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1337, metrics={'val_dice': 0.8690307935078939}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1122, metrics={'val_dice': 0.8939580917358398}
+[2026-06-24 05:24:46] Round 39 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 05:34:04] Round 39 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1193230993653118}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.137258380101841}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20343472200309062}
+[2026-06-24 05:34:07] Saved global model round 39 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_39.pth
+[2026-06-24 05:34:07] Round 39 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 05:34:56] Round 39 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1796, metrics={'val_dice': 0.836832602818807}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1372, metrics={'val_dice': 0.8654115994771322}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1112, metrics={'val_dice': 0.8951630592346191}
+[2026-06-24 05:34:56] Round 40 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 05:44:22] Round 40 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.2096717716227253}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.14061268228487891}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11900569779761866}
+[2026-06-24 05:44:26] Saved global model round 40 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_40.pth
+[2026-06-24 05:44:26] Round 40 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 05:45:15] Round 40 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1166, metrics={'val_dice': 0.8874727090199789}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1805, metrics={'val_dice': 0.8369423548380533}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1470, metrics={'val_dice': 0.8540565967559814}
+[2026-06-24 05:45:15] Round 41 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 05:54:34] Round 41 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13912736110267093}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1172397805779588}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19915219190550018}
+[2026-06-24 05:54:37] Saved global model round 41 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_41.pth
+[2026-06-24 05:54:37] Round 41 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 05:55:26] Round 41 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1370, metrics={'val_dice': 0.864175001780192}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1815, metrics={'val_dice': 0.8351546128590902}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1127, metrics={'val_dice': 0.8923174540201823}
+[2026-06-24 05:55:26] Round 42 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 06:04:50] Round 42 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.14032465238429484}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20003459573938295}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11482654733345936}
+[2026-06-24 06:04:53] Saved global model round 42 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_42.pth
+[2026-06-24 06:04:53] Round 42 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 06:05:42] Round 42 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1214, metrics={'val_dice': 0.8795732657114664}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1779, metrics={'val_dice': 0.838713804880778}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1109, metrics={'val_dice': 0.8945018450419108}
+[2026-06-24 06:05:42] Round 43 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 06:15:04] Round 43 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11782762775307193}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1365874923521378}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19983554727860264}
+[2026-06-24 06:15:06] Saved global model round 43 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_43.pth
+[2026-06-24 06:15:06] Round 43 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 06:15:56] Round 43 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1307, metrics={'val_dice': 0.8690245946248373}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1730, metrics={'val_dice': 0.842183510462443}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1142, metrics={'val_dice': 0.8910694122314453}
+[2026-06-24 06:15:56] Round 44 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 06:25:17] Round 44 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13581427119550157}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11552013013073627}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19940507195733645}
+[2026-06-24 06:25:20] Saved global model round 44 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_44.pth
+[2026-06-24 06:25:20] Round 44 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 06:26:08] Round 44 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1717, metrics={'val_dice': 0.8467357158660889}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1137, metrics={'val_dice': 0.8921826680501302}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1316, metrics={'val_dice': 0.8704920609792074}
+[2026-06-24 06:26:08] Round 45 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 06:35:28] Round 45 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11667797102264184}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13939190224790182}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19922792645809534}
+[2026-06-24 06:35:31] Saved global model round 45 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_45.pth
+[2026-06-24 06:35:31] Round 45 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 06:36:20] Round 45 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1750, metrics={'val_dice': 0.8423008918762207}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1165, metrics={'val_dice': 0.8859808444976807}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1142, metrics={'val_dice': 0.8915921847025553}
+[2026-06-24 06:36:20] Round 46 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 06:45:41] Round 46 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.15081802896056018}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1183900115783235}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20142255452546207}
+[2026-06-24 06:45:43] Saved global model round 46 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_46.pth
+[2026-06-24 06:45:43] Round 46 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 06:46:29] Round 46 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1190, metrics={'val_dice': 0.8851002057393392}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1329, metrics={'val_dice': 0.8675353527069092}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1704, metrics={'val_dice': 0.8476179440816244}
+[2026-06-24 06:46:29] Round 47 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 06:55:51] Round 47 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.14028921143808326}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20569886605847965}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1176220543052563}
+[2026-06-24 06:55:54] Saved global model round 47 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_47.pth
+[2026-06-24 06:55:54] Round 47 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 06:56:40] Round 47 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1737, metrics={'val_dice': 0.8460427125295004}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1070, metrics={'val_dice': 0.8990319569905599}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1263, metrics={'val_dice': 0.8762505054473877}
+[2026-06-24 06:56:40] Round 48 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 07:06:00] Round 48 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11138800548973914}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13247678214531453}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20070828968932578}
+[2026-06-24 07:06:03] Saved global model round 48 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_48.pth
+[2026-06-24 07:06:03] Round 48 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 07:06:51] Round 48 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1764, metrics={'val_dice': 0.843847910563151}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1141, metrics={'val_dice': 0.8945470650990804}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1369, metrics={'val_dice': 0.8683821360270182}
+[2026-06-24 07:06:51] Round 49 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 07:16:14] Round 49 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13444969225369516}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19360189242744363}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11073611977546677}
+[2026-06-24 07:16:17] Saved global model round 49 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_49.pth
+[2026-06-24 07:16:17] Round 49 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 07:17:06] Round 49 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1720, metrics={'val_dice': 0.8478700319925944}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1298, metrics={'val_dice': 0.871737003326416}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1052, metrics={'val_dice': 0.9007824261983236}
+[2026-06-24 07:17:06] Round 50 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 07:26:27] Round 50 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19802075343115347}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11444697889736762}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1315995423398057}
+[2026-06-24 07:26:29] Saved global model round 50 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_50.pth
+[2026-06-24 07:26:30] Round 50 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 07:27:18] Round 50 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1328, metrics={'val_dice': 0.8682577610015869}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1760, metrics={'val_dice': 0.8417325019836426}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1107, metrics={'val_dice': 0.8947986761728922}
+[2026-06-24 07:27:18] Round 51 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 07:36:46] Round 51 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11253646676264265}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1343213553677817}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20122690286513392}
+[2026-06-24 07:36:49] Saved global model round 51 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_51.pth
+[2026-06-24 07:36:49] Round 51 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 07:37:36] Round 51 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1314, metrics={'val_dice': 0.8708494504292806}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1142, metrics={'val_dice': 0.891236146291097}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1762, metrics={'val_dice': 0.8398388226826986}
+[2026-06-24 07:37:36] Round 52 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 07:46:59] Round 52 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11317623596565396}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13870720680131288}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20107944854176962}
+[2026-06-24 07:47:02] Saved global model round 52 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_52.pth
+[2026-06-24 07:47:02] Round 52 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 07:47:52] Round 52 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1400, metrics={'val_dice': 0.8645171324412028}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1188, metrics={'val_dice': 0.8887777328491211}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1822, metrics={'val_dice': 0.8345410823822021}
+[2026-06-24 07:47:52] Round 53 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 07:57:13] Round 53 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13233906334785164}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20305730250071397}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11390061398018517}
+[2026-06-24 07:57:16] Saved global model round 53 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_53.pth
+[2026-06-24 07:57:16] Round 53 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 07:58:04] Round 53 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.0997, metrics={'val_dice': 0.9074987570444742}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1226, metrics={'val_dice': 0.8794306119283041}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1697, metrics={'val_dice': 0.8490564823150635}
+[2026-06-24 07:58:04] Round 54 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 08:07:25] Round 54 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11640869893188424}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13339596191634898}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.2026755322239824}
+[2026-06-24 08:07:27] Saved global model round 54 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_54.pth
+[2026-06-24 08:07:27] Round 54 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 08:08:14] Round 54 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1035, metrics={'val_dice': 0.902590274810791}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1684, metrics={'val_dice': 0.8496088186899821}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1268, metrics={'val_dice': 0.8758407433827718}
+[2026-06-24 08:08:14] Round 55 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 08:17:36] Round 55 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11213281108340357}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13534697172705268}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19127143182225162}
+[2026-06-24 08:17:39] Saved global model round 55 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_55.pth
+[2026-06-24 08:17:39] Round 55 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 08:18:28] Round 55 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1008, metrics={'val_dice': 0.9059475262959799}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1747, metrics={'val_dice': 0.8441226482391357}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1243, metrics={'val_dice': 0.8783051172892252}
+[2026-06-24 08:18:28] Round 56 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 08:27:51] Round 56 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20024613207662023}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1160772195560675}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.14047725738072003}
+[2026-06-24 08:27:53] Saved global model round 56 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_56.pth
+[2026-06-24 08:27:53] Round 56 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 08:28:41] Round 56 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1041, metrics={'val_dice': 0.9020801385243734}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1673, metrics={'val_dice': 0.8499352137247721}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1298, metrics={'val_dice': 0.8722226619720459}
+[2026-06-24 08:28:41] Round 57 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 08:38:00] Round 57 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.1931757529923966}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13263127267604968}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1099531036098579}
+[2026-06-24 08:38:03] Saved global model round 57 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_57.pth
+[2026-06-24 08:38:03] Round 57 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 08:38:51] Round 57 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1256, metrics={'val_dice': 0.876065731048584}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1047, metrics={'val_dice': 0.901262124379476}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1633, metrics={'val_dice': 0.8538435300191244}
+[2026-06-24 08:38:51] Round 58 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 08:48:13] Round 58 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11192181832887524}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.20146354799764557}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13322927231182818}
+[2026-06-24 08:48:15] Saved global model round 58 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_58.pth
+[2026-06-24 08:48:15] Round 58 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 08:49:04] Round 58 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1274, metrics={'val_dice': 0.8758196036020914}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1663, metrics={'val_dice': 0.850547711054484}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1084, metrics={'val_dice': 0.8979920546213785}
+[2026-06-24 08:49:04] Round 59 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 08:58:25] Round 59 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11025470422179091}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19049613662324585}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13298843910948174}
+[2026-06-24 08:58:29] Saved global model round 59 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_59.pth
+[2026-06-24 08:58:29] Round 59 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 08:59:18] Round 59 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1168, metrics={'val_dice': 0.8862175941467285}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1052, metrics={'val_dice': 0.9007630348205566}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1678, metrics={'val_dice': 0.8495612939198812}
+[2026-06-24 08:59:18] Round 60 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 09:08:37] Round 60 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1309331484200036}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11521553573673408}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19559154956490843}
+[2026-06-24 09:08:40] Saved global model round 60 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_60.pth
+[2026-06-24 09:08:40] Round 60 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 09:09:28] Round 60 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1165, metrics={'val_dice': 0.885841449101766}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1722, metrics={'val_dice': 0.8480653762817383}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1011, metrics={'val_dice': 0.9057958920796713}
+[2026-06-24 09:09:28] Round 61 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 09:18:52] Round 61 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10933998549430102}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19645274147860237}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1274251634346657}
+[2026-06-24 09:18:55] Saved global model round 61 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_61.pth
+[2026-06-24 09:18:55] Round 61 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 09:19:45] Round 61 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1688, metrics={'val_dice': 0.849590539932251}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1236, metrics={'val_dice': 0.8814274470011393}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1052, metrics={'val_dice': 0.9029849370320638}
+[2026-06-24 09:19:45] Round 62 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 09:29:05] Round 62 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19277056767702935}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1107788253255992}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12779177438895234}
+[2026-06-24 09:29:08] Saved global model round 62 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_62.pth
+[2026-06-24 09:29:08] Round 62 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 09:29:56] Round 62 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1009, metrics={'val_dice': 0.9092907905578613}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1704, metrics={'val_dice': 0.8498456478118896}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1191, metrics={'val_dice': 0.887580951054891}
+[2026-06-24 09:29:56] Round 63 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 09:39:21] Round 63 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18839470336174632}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11349761037740345}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.131886473517926}
+[2026-06-24 09:39:23] Saved global model round 63 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_63.pth
+[2026-06-24 09:39:23] Round 63 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 09:40:12] Round 63 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1735, metrics={'val_dice': 0.8483935991923014}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1058, metrics={'val_dice': 0.900723934173584}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1290, metrics={'val_dice': 0.8744730154673258}
+[2026-06-24 09:40:12] Round 64 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 09:49:36] Round 64 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13031066333661315}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11298496623103525}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19542005749328153}
+[2026-06-24 09:49:40] Saved global model round 64 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_64.pth
+[2026-06-24 09:49:40] Round 64 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 09:50:27] Round 64 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1628, metrics={'val_dice': 0.8553047974904379}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1081, metrics={'val_dice': 0.8978109359741211}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1182, metrics={'val_dice': 0.8840703964233398}
+[2026-06-24 09:50:27] Round 65 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 09:59:51] Round 65 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12953637316823005}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1132923018954256}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19225170816314388}
+[2026-06-24 09:59:54] Saved global model round 65 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_65.pth
+[2026-06-24 09:59:54] Round 65 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 10:00:43] Round 65 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1151, metrics={'val_dice': 0.8910747369130453}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1185, metrics={'val_dice': 0.8856565157572428}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1674, metrics={'val_dice': 0.8497606118520101}
+[2026-06-24 10:00:43] Round 66 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 10:10:01] Round 66 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1360160828247422}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.1982473312792453}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11099805142821781}
+[2026-06-24 10:10:04] Saved global model round 66 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_66.pth
+[2026-06-24 10:10:04] Round 66 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 10:10:56] Round 66 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1670, metrics={'val_dice': 0.853155771891276}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1133, metrics={'val_dice': 0.8926678498586019}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1328, metrics={'val_dice': 0.8725930054982504}
+[2026-06-24 10:10:56] Round 67 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 10:20:14] Round 67 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13213454752427634}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19049971678352856}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10827437445850056}
+[2026-06-24 10:20:16] Saved global model round 67 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_67.pth
+[2026-06-24 10:20:16] Round 67 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 10:21:07] Round 67 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1122, metrics={'val_dice': 0.8932216962178549}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1646, metrics={'val_dice': 0.8544244766235352}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1256, metrics={'val_dice': 0.8780272801717123}
+[2026-06-24 10:21:07] Round 68 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 10:30:30] Round 68 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12967917546629906}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.1888793945520908}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1068243490641608}
+[2026-06-24 10:30:33] Saved global model round 68 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_68.pth
+[2026-06-24 10:30:33] Round 68 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 10:31:16] Round 68 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1039, metrics={'val_dice': 0.9026643435160319}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1222, metrics={'val_dice': 0.8820353349049886}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1740, metrics={'val_dice': 0.844600518544515}
+[2026-06-24 10:31:16] Round 69 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 10:40:32] Round 69 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11092954661295402}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19019977516540282}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12494347405726793}
+[2026-06-24 10:40:35] Saved global model round 69 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_69.pth
+[2026-06-24 10:40:35] Round 69 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 10:41:24] Round 69 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1181, metrics={'val_dice': 0.8846965630849203}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1639, metrics={'val_dice': 0.8549815018971761}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.0997, metrics={'val_dice': 0.9072389602661133}
+[2026-06-24 10:41:24] Round 70 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 10:50:43] Round 70 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12599939308205588}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19030253315617987}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1078045606640551}
+[2026-06-24 10:50:46] Saved global model round 70 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_70.pth
+[2026-06-24 10:50:46] Round 70 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 10:51:32] Round 70 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1254, metrics={'val_dice': 0.8778671423594157}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1099, metrics={'val_dice': 0.8948632876078287}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1735, metrics={'val_dice': 0.8460900783538818}
+[2026-06-24 10:51:32] Round 71 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 11:00:51] Round 71 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19428565825980443}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13016623815552134}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11768391405177467}
+[2026-06-24 11:00:54] Saved global model round 71 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_71.pth
+[2026-06-24 11:00:54] Round 71 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 11:01:42] Round 71 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1029, metrics={'val_dice': 0.9048587481180826}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1213, metrics={'val_dice': 0.8827706972757975}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1664, metrics={'val_dice': 0.8527700901031494}
+[2026-06-24 11:01:42] Round 72 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 11:11:04] Round 72 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10940115251030554}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12797655215273138}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18767821541303523}
+[2026-06-24 11:11:06] Saved global model round 72 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_72.pth
+[2026-06-24 11:11:06] Round 72 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 11:11:54] Round 72 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1053, metrics={'val_dice': 0.8992323080698649}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1219, metrics={'val_dice': 0.8802604675292969}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1650, metrics={'val_dice': 0.852331797281901}
+[2026-06-24 11:11:54] Round 73 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 11:21:13] Round 73 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18627154237063198}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12778859653311675}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10957583174219027}
+[2026-06-24 11:21:16] Saved global model round 73 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_73.pth
+[2026-06-24 11:21:17] Round 73 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 11:22:06] Round 73 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1053, metrics={'val_dice': 0.9004583358764648}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1235, metrics={'val_dice': 0.879714568456014}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1617, metrics={'val_dice': 0.85674516359965}
+[2026-06-24 11:22:06] Round 74 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 11:31:28] Round 74 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19194517149166626}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11153480731973461}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12125658204809564}
+[2026-06-24 11:31:31] Saved global model round 74 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_74.pth
+[2026-06-24 11:31:31] Round 74 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 11:32:19] Round 74 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1020, metrics={'val_dice': 0.9059391021728516}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1062, metrics={'val_dice': 0.9009408950805664}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1632, metrics={'val_dice': 0.8565882047017416}
+[2026-06-24 11:32:19] Round 75 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 11:41:37] Round 75 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18806405563454529}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12544771153174464}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10629851123610255}
+[2026-06-24 11:41:40] Saved global model round 75 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_75.pth
+[2026-06-24 11:41:40] Round 75 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 11:42:30] Round 75 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1044, metrics={'val_dice': 0.9040975570678711}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1612, metrics={'val_dice': 0.860140323638916}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1167, metrics={'val_dice': 0.8896721998850504}
+[2026-06-24 11:42:30] Round 76 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 11:51:52] Round 76 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13006062319532768}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.104178916224662}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18992152234370058}
+[2026-06-24 11:51:54] Saved global model round 76 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_76.pth
+[2026-06-24 11:51:54] Round 76 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 11:52:44] Round 76 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1072, metrics={'val_dice': 0.900741974512736}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1074, metrics={'val_dice': 0.9004685878753662}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1674, metrics={'val_dice': 0.8535633087158203}
+[2026-06-24 11:52:44] Round 77 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 12:02:02] Round 77 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10722217871807516}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1278311446736582}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19000791276355725}
+[2026-06-24 12:02:04] Saved global model round 77 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_77.pth
+[2026-06-24 12:02:04] Round 77 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 12:02:53] Round 77 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1057, metrics={'val_dice': 0.9015500545501709}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1208, metrics={'val_dice': 0.8856550852457682}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1680, metrics={'val_dice': 0.8498891989390055}
+[2026-06-24 12:02:53] Round 78 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 12:12:25] Round 78 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10516188315152392}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.1925689580010159}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12690421468043914}
+[2026-06-24 12:12:28] Saved global model round 78 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_78.pth
+[2026-06-24 12:12:28] Round 78 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 12:13:22] Round 78 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1071, metrics={'val_dice': 0.8986817200978597}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1148, metrics={'val_dice': 0.8889710903167725}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1631, metrics={'val_dice': 0.8536330858866373}
+[2026-06-24 12:13:22] Round 79 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 12:22:51] Round 79 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12136726962005506}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.188558831459263}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10889607678423179}
+[2026-06-24 12:22:54] Saved global model round 79 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_79.pth
+[2026-06-24 12:22:54] Round 79 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 12:24:08] Round 79 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1640, metrics={'val_dice': 0.8567299048105875}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1007, metrics={'val_dice': 0.9043825467427572}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1010, metrics={'val_dice': 0.9052667617797852}
+[2026-06-24 12:24:08] Round 80 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 12:33:32] Round 80 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1081797765869209}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12539147733420622}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18831198239191013}
+[2026-06-24 12:33:35] Saved global model round 80 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_80.pth
+[2026-06-24 12:33:35] Round 80 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 12:34:26] Round 80 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1016, metrics={'val_dice': 0.9065596262613932}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1229, metrics={'val_dice': 0.8820899327596029}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1591, metrics={'val_dice': 0.859479029973348}
+[2026-06-24 12:34:26] Round 81 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 12:43:48] Round 81 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.1939479402312032}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.13707331200359296}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10909892216452635}
+[2026-06-24 12:43:52] Saved global model round 81 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_81.pth
+[2026-06-24 12:43:52] Round 81 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 12:44:43] Round 81 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1615, metrics={'val_dice': 0.8569397926330566}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1043, metrics={'val_dice': 0.9030756155649821}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1155, metrics={'val_dice': 0.8891731897989908}
+[2026-06-24 12:44:43] Round 82 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 12:54:08] Round 82 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18874210249502343}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1222656474433473}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10550077824269001}
+[2026-06-24 12:54:11] Saved global model round 82 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_82.pth
+[2026-06-24 12:54:11] Round 82 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 12:54:57] Round 82 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1690, metrics={'val_dice': 0.8506325880686442}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1054, metrics={'val_dice': 0.9007400671641032}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1248, metrics={'val_dice': 0.8789556821187338}
+[2026-06-24 12:54:57] Round 83 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 13:04:15] Round 83 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18621509088450797}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10833917889177945}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12792345196863666}
+[2026-06-24 13:04:17] Saved global model round 83 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_83.pth
+[2026-06-24 13:04:17] Round 83 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 13:05:10] Round 83 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1100, metrics={'val_dice': 0.8936179478963217}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1782, metrics={'val_dice': 0.8425064086914062}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.0995, metrics={'val_dice': 0.9057216644287109}
+[2026-06-24 13:05:10] Round 84 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 13:14:36] Round 84 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18933322334049882}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12398126953449405}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10982581726092772}
+[2026-06-24 13:14:38] Saved global model round 84 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_84.pth
+[2026-06-24 13:14:39] Round 84 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 13:15:30] Round 84 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.0993, metrics={'val_dice': 0.9083520571390787}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1152, metrics={'val_dice': 0.8899405797322592}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1705, metrics={'val_dice': 0.8481677373250326}
+[2026-06-24 13:15:31] Round 85 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 13:24:57] Round 85 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.1898524074886854}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1274420523496925}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10624385165397589}
+[2026-06-24 13:25:00] Saved global model round 85 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_85.pth
+[2026-06-24 13:25:00] Round 85 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 13:25:50] Round 85 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1055, metrics={'val_dice': 0.9007294972737631}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1612, metrics={'val_dice': 0.8540237744649252}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1210, metrics={'val_dice': 0.8830405871073405}
+[2026-06-24 13:25:50] Round 86 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 13:35:12] Round 86 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10565097633219671}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18610488385014184}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1256277186215901}
+[2026-06-24 13:35:15] Saved global model round 86 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_86.pth
+[2026-06-24 13:35:15] Round 86 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 13:36:02] Round 86 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1001, metrics={'val_dice': 0.9073743025461832}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1153, metrics={'val_dice': 0.8899850845336914}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1560, metrics={'val_dice': 0.862654447555542}
+[2026-06-24 13:36:02] Round 87 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 13:45:32] Round 87 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18407973693358107}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10288975698709049}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.1255691861703259}
+[2026-06-24 13:45:35] Saved global model round 87 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_87.pth
+[2026-06-24 13:45:35] Round 87 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 13:46:25] Round 87 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1012, metrics={'val_dice': 0.906014601389567}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1613, metrics={'val_dice': 0.8573826948801676}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1179, metrics={'val_dice': 0.8859133720397949}
+[2026-06-24 13:46:25] Round 88 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 13:55:46] Round 88 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12140989144806003}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19177822146069753}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1045068158612897}
+[2026-06-24 13:55:50] Saved global model round 88 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_88.pth
+[2026-06-24 13:55:50] Round 88 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 13:56:43] Round 88 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1542, metrics={'val_dice': 0.8649977842966715}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.0961, metrics={'val_dice': 0.9114306767781576}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1037, metrics={'val_dice': 0.9036962985992432}
+[2026-06-24 13:56:43] Round 89 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 14:06:12] Round 89 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12286991125247518}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18934084204110233}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10231950885031883}
+[2026-06-24 14:06:15] Saved global model round 89 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_89.pth
+[2026-06-24 14:06:15] Round 89 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 14:07:05] Round 89 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1032, metrics={'val_dice': 0.9025434652964274}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1586, metrics={'val_dice': 0.8600161870320638}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1007, metrics={'val_dice': 0.9070227940877279}
+[2026-06-24 14:07:05] Round 90 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 14:16:25] Round 90 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18934671538458628}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12158368468651029}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10912730508739603}
+[2026-06-24 14:16:27] Saved global model round 90 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_90.pth
+[2026-06-24 14:16:27] Round 90 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 14:17:16] Round 90 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1380, metrics={'val_dice': 0.8713853359222412}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1777, metrics={'val_dice': 0.8447901407877604}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1185, metrics={'val_dice': 0.8920477231343588}
+[2026-06-24 14:17:16] Round 91 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 14:26:45] Round 91 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10722667022206474}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18998170195968}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12270677620392353}
+[2026-06-24 14:26:48] Saved global model round 91 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_91.pth
+[2026-06-24 14:26:48] Round 91 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 14:27:38] Round 91 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1181, metrics={'val_dice': 0.8835755983988444}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1518, metrics={'val_dice': 0.8663177490234375}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1007, metrics={'val_dice': 0.9049017429351807}
+[2026-06-24 14:27:38] Round 92 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 14:37:04] Round 92 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10738197371692342}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12937884296550126}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.1841830107663478}
+[2026-06-24 14:37:07] Saved global model round 92 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_92.pth
+[2026-06-24 14:37:07] Round 92 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 14:37:59] Round 92 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1017, metrics={'val_dice': 0.9047187169392904}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1609, metrics={'val_dice': 0.8572309017181396}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1031, metrics={'val_dice': 0.9001542727152506}
+[2026-06-24 14:37:59] Round 93 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 14:47:19] Round 93 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10532124243293177}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19033241554625802}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12517165224083135}
+[2026-06-24 14:47:22] Saved global model round 93 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_93.pth
+[2026-06-24 14:47:22] Round 93 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 14:48:15] Round 93 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1595, metrics={'val_dice': 0.8581848939259847}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.1015, metrics={'val_dice': 0.903350035349528}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1046, metrics={'val_dice': 0.8985772927602133}
+[2026-06-24 14:48:15] Round 94 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 14:57:43] Round 94 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12258148815055363}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10603064415045083}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18469452537544123}
+[2026-06-24 14:57:46] Saved global model round 94 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_94.pth
+[2026-06-24 14:57:46] Round 94 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 14:58:39] Round 94 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1534, metrics={'val_dice': 0.8633747100830078}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.0984, metrics={'val_dice': 0.9094787438710531}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1013, metrics={'val_dice': 0.9027337233225504}
+[2026-06-24 14:58:39] Round 95 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 15:08:01] Round 95 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18044795530971947}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12204447280554498}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10324503407430123}
+[2026-06-24 15:08:04] Saved global model round 95 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_95.pth
+[2026-06-24 15:08:04] Round 95 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 15:08:56] Round 95 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: loss=0.0948, metrics={'val_dice': 0.9127240180969238}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1001, metrics={'val_dice': 0.9036804835001627}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1604, metrics={'val_dice': 0.8577698866526285}
+[2026-06-24 15:08:56] Round 96 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 15:18:30] Round 96 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.1032933116041343}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.11946284777683312}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.1905847474594008}
+[2026-06-24 15:18:32] Saved global model round 96 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_96.pth
+[2026-06-24 15:18:32] Round 96 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 15:19:21] Round 96 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1008, metrics={'val_dice': 0.9035092194875082}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.0953, metrics={'val_dice': 0.91194748878479}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1557, metrics={'val_dice': 0.8627639611562093}
+[2026-06-24 15:19:21] Round 97 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 15:28:43] Round 97 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10544094172142007}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.17970758765102265}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12638284274544873}
+[2026-06-24 15:28:46] Saved global model round 97 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_97.pth
+[2026-06-24 15:28:46] Round 97 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 15:29:35] Round 97 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1652, metrics={'val_dice': 0.8542449474334717}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.0984, metrics={'val_dice': 0.9073524475097656}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1143, metrics={'val_dice': 0.8885680834452311}
+[2026-06-24 15:29:35] Round 98 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 15:39:05] Round 98 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.12281013572069466}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.1892360813290506}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.10932941128974598}
+[2026-06-24 15:39:07] Saved global model round 98 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_98.pth
+[2026-06-24 15:39:07] Round 98 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 15:40:02] Round 98 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1162, metrics={'val_dice': 0.8856340249379476}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1541, metrics={'val_dice': 0.8615898291269938}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.0973, metrics={'val_dice': 0.9084440072377523}
+[2026-06-24 15:40:02] Round 99 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 15:49:22] Round 99 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.11968160136068454}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.19064433286552662}
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.103351545374037}
+[2026-06-24 15:49:24] Saved global model round 99 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_99.pth
+[2026-06-24 15:49:25] Round 99 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 15:50:14] Round 99 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1133, metrics={'val_dice': 0.8895391623179117}
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1612, metrics={'val_dice': 0.8556291262308756}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.0978, metrics={'val_dice': 0.9086793263753256}
+[2026-06-24 15:50:14] Round 100 [FIT-CONFIG] — 3 client(s) available
+[2026-06-24 15:59:41] Round 100 [FIT-AGG] — 3 result(s), 0 failure(s)
+  client 695a45218a09401f83d40633c140a2c6: 408 examples, metrics={'train_loss': 0.11228284227899184}
+  client ae83a4bce4d84a85a907adae6da90c77: 305 examples, metrics={'train_loss': 0.11924688094219224}
+  client ad4d417143fa4d2aabc22ad39b4266d9: 286 examples, metrics={'train_loss': 0.18149597586581964}
+[2026-06-24 15:59:44] Saved global model round 100 -> /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_100.pth
+[2026-06-24 15:59:44] Round 100 [EVAL-CONFIG] — 3 client(s) available
+[2026-06-24 16:00:35] Round 100 [EVAL-AGG] — 3 result(s), 0 failure(s)
+  client ad4d417143fa4d2aabc22ad39b4266d9: loss=0.1571, metrics={'val_dice': 0.8603981335957845}
+  client 695a45218a09401f83d40633c140a2c6: loss=0.0990, metrics={'val_dice': 0.9072113037109375}
+  client ae83a4bce4d84a85a907adae6da90c77: loss=0.1070, metrics={'val_dice': 0.8945733706156412}
+[2026-06-24 16:00:35] FL training complete. Server shutting down.
+Server exited with code 0. Cleaning up clients...
+=== FL Local run finished at Wed Jun 24 16:00:41 EDT 2026 ===

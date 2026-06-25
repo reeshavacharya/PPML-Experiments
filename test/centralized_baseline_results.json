@@ -1,0 +1,10 @@
+{
+  "model": "swin_unetr_centralized",
+  "checkpoint": "/work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_centralized_best.pth",
+  "num_test_samples": 127,
+  "test_loss": 0.1364,
+  "dice_wt": 0.9051,
+  "dice_tc": 0.8803,
+  "dice_et": 0.8256,
+  "mean_dice": 0.8703
+}

@@ -1,0 +1,91 @@
+=== FL Inference starting on mdc-1057-13-8.rc.usf.edu at Wed Jun 24 16:57:17 EDT 2026 ===
+==================================================
+System Information for: FL Inference
+Node Name: mdc-1057-13-8.rc.usf.edu
+OS Platform: Linux-3.10.0-1160.2.1.el7.x86_64-x86_64-with-glibc2.17
+CPU: 32 physical cores, 32 logical cores
+Total RAM: 251.09 GB
+GPUs Available: 1
+  GPU 0: NVIDIA RTX A6000 (VRAM: 47.54 GB)
+==================================================
+Using device: cuda
+Loading checkpoint: /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_88.pth
+
+[Client 1] Test set: 52 samples
+  [Client 1] Testing: 9% (5/52)
+  [Client 1] Testing: 19% (10/52)
+  [Client 1] Testing: 28% (15/52)
+  [Client 1] Testing: 38% (20/52)
+  [Client 1] Testing: 48% (25/52)
+  [Client 1] Testing: 57% (30/52)
+  [Client 1] Testing: 67% (35/52)
+  [Client 1] Testing: 76% (40/52)
+  [Client 1] Testing: 86% (45/52)
+  [Client 1] Testing: 96% (50/52)
+  [Client 1] Testing: 100% (52/52)
+
+========================================
+Client 1 Test Results
+========================================
+  Samples     : 52
+  Test Loss   : 0.0902
+  Dice WT     : 0.935
+  Dice TC     : 0.9257
+  Dice ET     : 0.8923
+  Mean Dice   : 0.9177
+========================================
+Saved to /work/r/reeshav/PPML-Experiments-FL/fl/slurm/client_1_results.json
+
+[Client 2] Test set: 39 samples
+  [Client 2] Testing: 7% (3/39)
+  [Client 2] Testing: 15% (6/39)
+  [Client 2] Testing: 23% (9/39)
+  [Client 2] Testing: 30% (12/39)
+  [Client 2] Testing: 38% (15/39)
+  [Client 2] Testing: 46% (18/39)
+  [Client 2] Testing: 53% (21/39)
+  [Client 2] Testing: 61% (24/39)
+  [Client 2] Testing: 69% (27/39)
+  [Client 2] Testing: 76% (30/39)
+  [Client 2] Testing: 84% (33/39)
+  [Client 2] Testing: 92% (36/39)
+  [Client 2] Testing: 100% (39/39)
+
+========================================
+Client 2 Test Results
+========================================
+  Samples     : 39
+  Test Loss   : 0.1605
+  Dice WT     : 0.8661
+  Dice TC     : 0.8447
+  Dice ET     : 0.8432
+  Mean Dice   : 0.8513
+========================================
+Saved to /work/r/reeshav/PPML-Experiments-FL/fl/slurm/client_2_results.json
+
+[Client 3] Test set: 36 samples
+  [Client 3] Testing: 8% (3/36)
+  [Client 3] Testing: 16% (6/36)
+  [Client 3] Testing: 25% (9/36)
+  [Client 3] Testing: 33% (12/36)
+  [Client 3] Testing: 41% (15/36)
+  [Client 3] Testing: 50% (18/36)
+  [Client 3] Testing: 58% (21/36)
+  [Client 3] Testing: 66% (24/36)
+  [Client 3] Testing: 75% (27/36)
+  [Client 3] Testing: 83% (30/36)
+  [Client 3] Testing: 91% (33/36)
+  [Client 3] Testing: 100% (36/36)
+
+========================================
+Client 3 Test Results
+========================================
+  Samples     : 36
+  Test Loss   : 0.1937
+  Dice WT     : 0.9192
+  Dice TC     : 0.8382
+  Dice ET     : 0.7121
+  Mean Dice   : 0.8232
+========================================
+Saved to /work/r/reeshav/PPML-Experiments-FL/fl/slurm/client_3_results.json
+=== FL Inference finished at Wed Jun 24 17:01:00 EDT 2026 ===
