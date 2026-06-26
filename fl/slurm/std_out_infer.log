@@ -1,4 +1,4 @@
-=== FL Inference starting on mdc-1057-13-8.rc.usf.edu at Wed Jun 24 16:57:17 EDT 2026 ===
+=== FL Inference starting on mdc-1057-13-8.rc.usf.edu at Fri Jun 26 13:08:52 EDT 2026 ===
 ==================================================
 System Information for: FL Inference
 Node Name: mdc-1057-13-8.rc.usf.edu
@@ -9,7 +9,7 @@ GPUs Available: 1
   GPU 0: NVIDIA RTX A6000 (VRAM: 47.54 GB)
 ==================================================
 Using device: cuda
-Loading checkpoint: /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_88.pth
+Loading checkpoint: /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_best.pth
 
 [Client 1] Test set: 52 samples
   [Client 1] Testing: 9% (5/52)
@@ -28,11 +28,11 @@ Loading checkpoint: /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl
 Client 1 Test Results
 ========================================
   Samples     : 52
-  Test Loss   : 0.0902
-  Dice WT     : 0.935
-  Dice TC     : 0.9257
-  Dice ET     : 0.8923
-  Mean Dice   : 0.9177
+  Test Loss   : 0.0928
+  Dice WT     : 0.928
+  Dice TC     : 0.9217
+  Dice ET     : 0.8819
+  Mean Dice   : 0.9105
 ========================================
 Saved to /work/r/reeshav/PPML-Experiments-FL/fl/slurm/client_1_results.json
 
@@ -55,11 +55,11 @@ Saved to /work/r/reeshav/PPML-Experiments-FL/fl/slurm/client_1_results.json
 Client 2 Test Results
 ========================================
   Samples     : 39
-  Test Loss   : 0.1605
-  Dice WT     : 0.8661
-  Dice TC     : 0.8447
-  Dice ET     : 0.8432
-  Mean Dice   : 0.8513
+  Test Loss   : 0.1588
+  Dice WT     : 0.8726
+  Dice TC     : 0.8311
+  Dice ET     : 0.8288
+  Mean Dice   : 0.8442
 ========================================
 Saved to /work/r/reeshav/PPML-Experiments-FL/fl/slurm/client_2_results.json
 
@@ -81,11 +81,11 @@ Saved to /work/r/reeshav/PPML-Experiments-FL/fl/slurm/client_2_results.json
 Client 3 Test Results
 ========================================
   Samples     : 36
-  Test Loss   : 0.1937
-  Dice WT     : 0.9192
-  Dice TC     : 0.8382
-  Dice ET     : 0.7121
-  Mean Dice   : 0.8232
+  Test Loss   : 0.2081
+  Dice WT     : 0.917
+  Dice TC     : 0.8095
+  Dice ET     : 0.6967
+  Mean Dice   : 0.8078
 ========================================
 Saved to /work/r/reeshav/PPML-Experiments-FL/fl/slurm/client_3_results.json
-=== FL Inference finished at Wed Jun 24 17:01:00 EDT 2026 ===
+=== FL Inference finished at Fri Jun 26 13:13:00 EDT 2026 ===

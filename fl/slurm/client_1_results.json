@@ -1,11 +1,11 @@
 {
   "client_id": 1,
   "num_test_samples": 52,
-  "test_loss": 0.0902,
-  "dice_wt": 0.935,
-  "dice_tc": 0.9257,
-  "dice_et": 0.8923,
-  "mean_dice": 0.9177,
+  "test_loss": 0.0928,
+  "dice_wt": 0.928,
+  "dice_tc": 0.9217,
+  "dice_et": 0.8819,
+  "mean_dice": 0.9105,
   "model": "swin_unetr_fl",
-  "checkpoint": "/work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_round_88.pth"
+  "checkpoint": "/work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_best.pth"
 }

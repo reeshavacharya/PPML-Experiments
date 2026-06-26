@@ -1,6 +1,8 @@
 import argparse
 import os
 import sys
+import time
+import traceback
 import torch
 import flwr as fl
 from collections import OrderedDict
@@ -143,6 +145,7 @@ def main():
     parser.add_argument("--server_address", type=str, default="127.0.0.1:8080", help="Address of the FL server")
     parser.add_argument("--data_dir", type=str, default="data/FeTS2022", help="Path to FeTS dataset")
     parser.add_argument("--num_workers", type=int, default=4, help="DataLoader worker processes")
+    parser.add_argument("--resume", action="store_true", help="Resume from previous run (append to existing metrics CSV)")
     args = parser.parse_args()
 
     log_system_info(client_id=args.client_id)
@@ -171,11 +174,40 @@ def main():
     model.to(device)
 
     metrics_csv = os.path.join(project_root, "fl", f"client_{args.client_id}_metrics.csv")
-    init_metrics_csv(metrics_csv)
+    round_offset = 0
+
+    if args.resume and os.path.exists(metrics_csv):
+        import csv
+        with open(metrics_csv, "r") as f:
+            rows = list(csv.reader(f))
+        for row in reversed(rows[1:]):
+            entry = row[0].replace("_val", "")
+            try:
+                round_offset = int(entry)
+                break
+            except ValueError:
+                continue
+        print(f"[Client {args.client_id}] Resuming from round {round_offset}, appending to {metrics_csv}", flush=True)
+    else:
+        init_metrics_csv(metrics_csv)
 
     client = FeTSClient(model, train_loader, val_loader, device, args.client_id, metrics_csv)
+    client.round = round_offset
 
-    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+    max_retries = 10
+    for attempt in range(1, max_retries + 1):
+        try:
+            print(f"[Client {args.client_id}] Connection attempt {attempt}/{max_retries}", flush=True)
+            fl.client.start_client(server_address=args.server_address, client=client.to_client())
+            break
+        except Exception:
+            traceback.print_exc()
+            if attempt == max_retries:
+                print(f"[Client {args.client_id}] All {max_retries} attempts exhausted. Exiting.", flush=True)
+                sys.exit(1)
+            wait = min(30 * attempt, 300)
+            print(f"[Client {args.client_id}] Disconnected. Retrying in {wait}s...", flush=True)
+            time.sleep(wait)
 
 if __name__ == "__main__":
     main()

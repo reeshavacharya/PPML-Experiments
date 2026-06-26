@@ -2,5 +2,5 @@
 data/
 clara-train-examples/
 checkpoint/
-clara-train-examples/
 papers/
+core.*

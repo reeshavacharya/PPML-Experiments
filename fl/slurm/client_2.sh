@@ -8,6 +8,7 @@
 #SBATCH --mem=64G
 #SBATCH --gres=gpu:1
 #SBATCH --time=48:00:00
+#SBATCH --nodelist=mdc-1057-18-1
 #SBATCH --output=/work/r/reeshav/PPML-Experiments-FL/fl/slurm/std_out_client_2.log
 #SBATCH --error=/work/r/reeshav/PPML-Experiments-FL/fl/slurm/std_err_client_2.log
 
@@ -22,6 +23,6 @@ done
 SERVER_ADDR=$(cat "$ADDR_FILE" | tr -d '[:space:]')
 echo "=== FL Client 2 connecting to ${SERVER_ADDR}:8080 from $(hostname) at $(date) ==="
 
-srun python3 -u fl/client.py --client_id 2 --server_address "${SERVER_ADDR}:8080"
+srun python3 -u fl/client.py --client_id 2 --server_address "${SERVER_ADDR}:8080" --num_workers 2
 
 echo "=== FL Client 2 finished at $(date) ==="

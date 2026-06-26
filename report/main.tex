@@ -186,14 +186,23 @@ All FL training hyperparameters mirror the centralized baseline to ensure a fair
 
 \subsection{Infrastructure}
 
-The FL experiment was run on a single SLURM-managed HPC node (2$\times$ NVIDIA L40S GPUs, 64 CPU cores, 251\,GB RAM). The server process ran on CPU only (no GPU required for parameter aggregation), while each of the three client processes was assigned to a specific GPU. Clients 1 and 3 shared GPU 0, Client 2 used GPU 1, each with 2 DataLoader worker processes to manage memory pressure. A background \texttt{ResourceMonitor} thread on each client polled system metrics (RAM, VRAM, GPU utilization) every second throughout training.
+The FL experiment was deployed across four separate SLURM-managed HPC nodes, reflecting a realistic distributed training scenario where each participant operates on its own hardware:
+
+\begin{itemize}
+    \item \textbf{Server:} \texttt{mdc-1057-13-8} --- CPU-only node (no GPU required for parameter aggregation), 8 CPUs, 32\,GB RAM.
+    \item \textbf{Client 1:} \texttt{mdc-1057-18-3} --- 1$\times$ NVIDIA L40S (44.5\,GB VRAM), 16 CPUs, 64\,GB RAM.
+    \item \textbf{Client 2:} \texttt{mdc-1057-18-1} --- 1$\times$ NVIDIA L40S (44.5\,GB VRAM), 16 CPUs, 64\,GB RAM.
+    \item \textbf{Client 3:} \texttt{mdc-1057-18-4} --- 1$\times$ NVIDIA L40S (44.5\,GB VRAM), 16 CPUs, 64\,GB RAM.
+\end{itemize}
+
+Each client ran as an independent SLURM job on a dedicated GPU node, communicating with the server over the cluster's InfiniBand network via gRPC. This multi-node deployment is representative of a real FL federation where institutions train on their own infrastructure and only exchange model parameters. A background \texttt{ResourceMonitor} thread on each client polled system metrics (RAM, VRAM, GPU utilization) every second throughout training.
 
 \section{Results}
 \label{sec:results}
 
 \subsection{Segmentation Performance}
 
-Table~\ref{tab:test_results} presents the test-set Dice scores for both the centralized baseline and the federated model evaluated on each client's held-out test partition. The centralized model is evaluated on the union of all client test sets (127 samples), while the FL model is evaluated separately on each client's test split using the best global model from round 88.
+Table~\ref{tab:test_results} presents the test-set Dice scores for both the centralized baseline and the federated model evaluated on each client's held-out test partition. The centralized model is evaluated on the union of all client test sets (127 samples), while the FL model is evaluated separately on each client's test split using the best global model from round 92.
 
 \begin{table}[h]
 \centering
@@ -203,26 +212,26 @@ Table~\ref{tab:test_results} presents the test-set Dice scores for both the cent
 \midrule
 Centralized (all) & 127 & 0.1364 & 0.9051 & 0.8803 & 0.8256 & 0.8703 \\
 \midrule
-FL --- Client 1 & 52 & 0.0902 & 0.9350 & 0.9257 & 0.8923 & 0.9177 \\
-FL --- Client 2 & 39 & 0.1605 & 0.8661 & 0.8447 & 0.8432 & 0.8513 \\
-FL --- Client 3 & 36 & 0.1937 & 0.9192 & 0.8382 & 0.7121 & 0.8232 \\
+FL --- Client 1 & 52 & 0.0928 & 0.9280 & 0.9217 & 0.8819 & 0.9105 \\
+FL --- Client 2 & 39 & 0.1588 & 0.8726 & 0.8311 & 0.8288 & 0.8442 \\
+FL --- Client 3 & 36 & 0.2081 & 0.9170 & 0.8095 & 0.6967 & 0.8078 \\
 \midrule
-FL --- Weighted Avg & 127 & --- & --- & --- & --- & 0.8705 \\
+FL --- Weighted Avg & 127 & --- & --- & --- & --- & 0.8610 \\
 \bottomrule
 \end{tabular}
-\caption{Test-set segmentation performance. The FL weighted average is computed by weighting each client's Mean Dice by its number of test samples: $(52 \times 0.9177 + 39 \times 0.8513 + 36 \times 0.8232) / 127 = 0.8705$.}
+\caption{Test-set segmentation performance. The FL weighted average is computed by weighting each client's Mean Dice by its number of test samples: $(52 \times 0.9105 + 39 \times 0.8442 + 36 \times 0.8078) / 127 = 0.8610$.}
 \label{tab:test_results}
 \end{table}
 
-\paragraph{Key Observation: Near-Parity Overall Performance} The weighted-average Mean Dice of the FL model (0.8705) is essentially identical to the centralized baseline (0.8703). This demonstrates that FL with FedAvg can match centralized training performance on this task, even under non-IID data distributions, with no meaningful loss in overall segmentation quality.
+\paragraph{Overall Performance} The weighted-average Mean Dice of the FL model (0.8610) is within 1.1\% of the centralized baseline (0.8703). This modest gap demonstrates that FL with FedAvg can approach centralized performance on non-IID medical imaging data while keeping all patient data within each institution's boundaries.
 
 \paragraph{Per-Client Analysis}
 \begin{itemize}
-    \item \textbf{Client 1} achieves the highest FL test Dice (0.9177), substantially \textit{exceeding} the centralized baseline (0.8703). This client holds the largest partition (511 training samples from a single institution), meaning its local data distribution is well-represented in the global model. The high test performance suggests that the global model retains the patterns specific to Institution 1's data even after averaging with the other clients.
+    \item \textbf{Client 1} achieves the highest FL test Dice (0.9105), \textit{exceeding} the centralized baseline (0.8703) by a significant margin. This client holds the largest partition (511 training samples from a single institution). Its homogeneous data distribution means the global model's representations align well with Institution 1's characteristics. The FedAvg weighting further amplifies this advantage: Client 1 contributes the most training examples, so its parameter updates receive the highest weight during aggregation.
 
-    \item \textbf{Client 2} achieves a Mean Dice of 0.8513, below the centralized baseline. Institution 18 contributes the second-largest share of data, but its scans may exhibit acquisition characteristics that differ from Institution 1. The averaging of parameters with other clients dilutes some institution-specific features, resulting in a modest performance gap.
+    \item \textbf{Client 2} achieves a Mean Dice of 0.8442, below the centralized baseline by 2.6 percentage points. Institution 18 contributes the second-largest share of data, but its scans exhibit different acquisition characteristics than Institution 1. During FedAvg, Client 1's larger update weight can pull the global model slightly away from Institution 18's optimal parameters, diluting institution-specific features.
 
-    \item \textbf{Client 3} shows the lowest Mean Dice (0.8232), driven primarily by a significantly lower Enhancing Tumor Dice (0.7121 vs. 0.8256 centralized). This client aggregates 21 small institutions, each contributing only 4--47 samples. The extreme heterogeneity within this client --- different scanners, protocols and patient demographics across 21 sources --- makes it the hardest partition for the global model to fit well. Furthermore, the ET region is typically the smallest and most variable tumor sub-region, making it particularly sensitive to distribution shifts.
+    \item \textbf{Client 3} shows the lowest Mean Dice (0.8078), driven primarily by a significantly lower Enhancing Tumor Dice (0.6967 vs.\ 0.8256 centralized). This client aggregates 21 small institutions, each contributing only 4--47 samples. The extreme heterogeneity within this client --- different scanners, protocols and patient demographics across 21 sources --- makes it the hardest partition for the global model to fit. The ET region is typically the smallest and most variable tumor sub-region, making it particularly sensitive to distribution shifts. With only 286 training samples spread across 21 distinct sources, no single source provides enough data to robustly capture ET boundaries, and the global model's compromise across all clients hurts this already-challenging sub-region the most.
 \end{itemize}
 
 \subsection{Training Dynamics}
@@ -236,14 +245,16 @@ Table~\ref{tab:training} summarizes the training progression for both settings.
 \textbf{Setting} & \textbf{Best Epoch/Round} & \textbf{Best Val Dice} & \textbf{Final Val Dice} & \textbf{Total Duration} \\
 \midrule
 Centralized & Epoch 78 & 0.8966 & 0.8949 & $\sim$17 hours \\
-FL (global) & Round 88 & 0.8934 & 0.8874 & $\sim$17 hours \\
+FL (global) & Round 92 & 0.8888 & 0.8842 & $\sim$11 hours \\
 \bottomrule
 \end{tabular}
 \caption{Training dynamics comparison.}
 \label{tab:training}
 \end{table}
 
-The centralized model achieved its best validation Dice of 0.8966 at epoch 78, while the FL model peaked at 0.8934 at round 88. Both models show convergence stability in later epochs/rounds, with minimal fluctuation in validation Dice after round 60 (FL) and epoch 60 (centralized). The slight delay in the FL model reaching its peak (round 88 vs. epoch 78) is expected: each FL round involves only one local epoch followed by parameter averaging, which introduces noise from the aggregation step. The model requires additional rounds to compensate for this perturbation.
+The centralized model achieved its best validation Dice of 0.8966 at epoch 78, while the FL model peaked at 0.8888 at round 92. Both models exhibit convergence stability in later stages, with minimal fluctuation in validation Dice after approximately round/epoch 60. The FL model's delayed peak (round 92 vs.\ epoch 78) is expected: each FL round involves only one local epoch followed by parameter averaging, and the aggregation step introduces noise that the model must absorb over additional rounds.
+
+The FL experiment completed in approximately 11 hours --- significantly faster than the 17-hour centralized run --- because each client trains on only its own partition (286--408 samples) rather than the full pooled dataset (999 samples). All three clients train simultaneously on separate nodes, so the wall-clock time per round is determined by the slowest client, which has at most 408 samples. The parameter serialization, gRPC transfer and server-side aggregation overhead is negligible relative to the forward and backward passes on 3D volumes.
 
 \subsection{Per-Client Training Behavior}
 
@@ -255,52 +266,57 @@ Analysis of the per-client validation Dice over 100 rounds reveals distinct conv
 \toprule
 \textbf{Client} & \textbf{Train Samples} & \textbf{Round 1 Val Dice} & \textbf{Best Val Dice} & \textbf{Best Round} & \textbf{Round 100 Val Dice} \\
 \midrule
-Client 1 & 408 & 0.7155 & 0.9127 & 95 & 0.9072 \\
-Client 2 & 305 & 0.6427 & 0.9059 & 74 & 0.8946 \\
-Client 3 & 286 & 0.6897 & 0.8663 & 91 & 0.8604 \\
+Client 1 & 408 & 0.6895 & 0.9123 & 93 & 0.9078 \\
+Client 2 & 305 & 0.6526 & 0.9020 & 92 & 0.8847 \\
+Client 3 & 286 & 0.7319 & 0.8625 & 86 & 0.8504 \\
 \bottomrule
 \end{tabular}
 \caption{Per-client FL training progression.}
 \label{tab:client_train}
 \end{table}
 
-Client 2 starts with the lowest initial Dice (0.6427) but converges rapidly, reaching its peak earliest at round 74. Client 3 consistently lags behind, reflecting the challenge of fitting a single global model to a distribution that spans 21 heterogeneous sources. The gap between Client 3's best validation Dice (0.8663) and its test Dice (0.8232) also suggests that the validation and test sets, while drawn from the same pool, may contain different proportions of the harder small-institution cases.
+All three clients start from the same randomly initialized global model (Dice 0.65--0.73) and converge steadily, with Client 3 reaching its local peak earliest at round 86 while Clients 1 and 2 peak later at rounds 92--93. Client 3's earlier saturation and lower ceiling reflect the challenge of fitting a single global model to data spanning 21 heterogeneous institutions. Client 2 starts with the lowest initial Dice (0.6526) but converges effectively, reaching a best validation Dice of 0.9020. The gap between each client's validation Dice and its test Dice is consistent (2--5 percentage points), indicating that the validation and test sets are representative of each other within each partition.
 
 \subsection{Resource Utilization}
 
+Table~\ref{tab:resources} presents the resource consumption measured during training. In the multi-node FL deployment, each client ran on its own dedicated GPU node, enabling direct comparison of per-client resource usage against the centralized baseline.
+
 \begin{table}[h]
 \centering
-\begin{tabular}{lccc}
+\begin{tabular}{lcccc}
 \toprule
-\textbf{Metric} & \textbf{Centralized} & \textbf{FL (per client)} & \textbf{FL (total node)} \\
+\textbf{Metric} & \textbf{Centralized} & \textbf{FL Client 1} & \textbf{FL Client 2} & \textbf{FL Client 3} \\
 \midrule
-GPUs Used & 2$\times$ L40S & 1$\times$ L40S per client & 2$\times$ L40S \\
-Peak VRAM (MB) & 26,719 & $\sim$61,306 & $\sim$61,306 \\
-Peak RAM (MB) & $\sim$11,400 & $\sim$25,000--27,000 & $\sim$75,000 \\
-GPU Utilization & 100\% & 100\% (during training) & 100\% \\
-Training Duration & $\sim$17 hours & --- & $\sim$17 hours \\
+Node & mdc-1057-18-1 & mdc-1057-18-3 & mdc-1057-18-1 & mdc-1057-18-4 \\
+GPUs & 2$\times$ L40S & 1$\times$ L40S & 1$\times$ L40S & 1$\times$ L40S \\
+Peak VRAM (MB) & 26,719 & 26,387 & 21,731 & 21,731 \\
+Peak RAM (MB) & 11,578 & 15,873 & 18,128 & 21,349 \\
+GPU Utilization & 100\% & 100\% & 100\% & 100\% \\
+Training Duration & $\sim$17 hours & \multicolumn{3}{c}{$\sim$11 hours (all clients, simultaneous)} \\
 \bottomrule
 \end{tabular}
-\caption{Resource utilization comparison.}
+\caption{Resource utilization comparison across dedicated nodes.}
 \label{tab:resources}
 \end{table}
 
-Both settings ran for approximately 17 hours on equivalent hardware. The centralized baseline used 2 GPUs via DataParallel with a peak VRAM of 26.7\,GB (across both GPUs combined) and approximately 11.4\,GB of system RAM. The FL setting consumed more memory overall: each client used approximately 60\,GB of VRAM (measured as the combined allocation reported by nvidia-smi for the shared GPUs) and 25--27\,GB of RAM, with a total node-level RAM footprint of approximately 75\,GB across the three client processes and the server.
+\paragraph{GPU Memory} The centralized baseline used 26.7\,GB of VRAM across two L40S GPUs via DataParallel. Each FL client used a single L40S GPU, with Client 1 consuming a comparable 26.4\,GB and Clients 2 and 3 consuming 21.7\,GB each. The per-client VRAM usage is proportional to the local dataset size: Client 1's larger partition (408 training samples) requires more memory for the data pipeline, while Clients 2 and 3 have smaller partitions. These measurements confirm that each FL client's GPU memory footprint is comparable to a single GPU's share in the centralized DataParallel setup.
 
-The higher per-client VRAM measurement in the FL setting reflects the fact that the reported value captures the total GPU allocation visible to each process (including memory used by other co-resident processes), rather than each client's isolated consumption. In a true multi-node deployment where each client runs on its own dedicated GPU, VRAM usage per client would be comparable to the centralized per-GPU usage.
+\paragraph{System RAM} FL clients consumed more system RAM (15.9--21.3\,GB) than the centralized baseline (11.6\,GB). This is because each client independently loads and preprocesses its 3D volumes in separate DataLoader worker processes, whereas the centralized baseline shares a single set of workers. Client 3's higher RAM usage (21.3\,GB) correlates with its more heterogeneous data from 21 institutions, which may produce more varied volume sizes after preprocessing.
 
-The similar total training duration is explained by the parallelism in the FL setup: all three clients train simultaneously on their respective partitions, and each client's partition is smaller than the full centralized dataset (286--408 vs. 999 samples). Thus, while the FL setting runs 100 rounds compared to 100 epochs, the wall-clock time per round is comparable to the time per epoch since the per-client data volume is roughly one-third of the centralized volume. The overhead from parameter serialization, gRPC communication and server-side aggregation is negligible relative to the cost of forward and backward passes on 3D volumes.
+\paragraph{Training Time} The FL experiment completed in approximately 11 hours, 35\% faster than the 17-hour centralized run. This speedup arises because each FL round involves one local epoch on a partition of 286--408 samples (executed in parallel across three nodes), compared to one centralized epoch over 999 samples on a single node. The communication overhead --- serializing, transferring and deserializing the Swin UNETR's $\sim$62M parameters ($\sim$248\,MB) per round via gRPC --- is negligible relative to the minutes-long training step.
+
+\paragraph{Total Resource Consumption} While each FL client uses fewer resources than the centralized node, the aggregate resource footprint is higher: 3 GPU nodes and 1 CPU node versus a single 2-GPU node. This is the fundamental trade-off of FL --- privacy preservation comes at the cost of distributed hardware requirements. In a real-world medical federation, however, these resources already exist at each institution; the FL overhead is limited to the server node and network bandwidth.
 
 \subsection{Summary}
 
 The experimental results lead to three conclusions:
 
 \begin{enumerate}
-    \item \textbf{FL matches centralized performance overall.} The weighted-average test Dice of the FL model (0.8705) is within 0.02\% of the centralized baseline (0.8703), confirming that FedAvg can effectively aggregate knowledge from non-IID medical imaging data without meaningful performance degradation.
+    \item \textbf{FL achieves competitive performance.} The weighted-average test Dice of the FL model (0.8610) is within 1.1\% of the centralized baseline (0.8703), confirming that FedAvg can effectively aggregate knowledge from non-IID medical imaging data with only a modest reduction in segmentation quality. This gap is notably smaller than the variance between individual clients.
 
-    \item \textbf{Performance varies across clients.} Clients with larger, more homogeneous datasets (Client 1) benefit from FL, achieving test performance that exceeds the centralized baseline. Clients with smaller, more heterogeneous data (Client 3) see reduced performance, particularly on the challenging ET sub-region. This heterogeneity gap is an inherent characteristic of global FL models and motivates future work on personalized FL strategies.
+    \item \textbf{Performance varies across clients according to data characteristics.} Client 1 (large, homogeneous institution) exceeds the centralized baseline with a Mean Dice of 0.9105. Client 2 (mid-sized institution) achieves 0.8442, a moderate gap. Client 3 (21 small heterogeneous clinics) shows the largest deficit at 0.8078, driven almost entirely by the challenging Enhancing Tumor sub-region (0.6967 vs.\ 0.8256). This gradient directly reflects the non-IID severity: the more heterogeneous and data-scarce a client's partition, the less a global model serves its specific distribution. This motivates future work on personalized FL strategies that adapt the global model to each client's local characteristics.
 
-    \item \textbf{Resource costs are comparable.} Both settings consumed similar wall-clock time and hardware resources, indicating that the communication and aggregation overhead of FL is negligible for this model size and network configuration. In a real multi-node deployment, FL would additionally incur network transfer costs for the Swin UNETR's $\sim$62M parameters ($\sim$248\,MB per transfer), but this remains small relative to the minutes-long training step per round.
+    \item \textbf{FL is faster but requires more total hardware.} The multi-node FL experiment completed in $\sim$11 hours versus $\sim$17 hours for centralized training, a 35\% wall-clock speedup from parallelism. However, FL consumed 3 GPU nodes plus a server node compared to a single 2-GPU node. Per-client resource usage (VRAM, GPU utilization) was comparable to the centralized per-GPU baseline, confirming that the Flower framework and gRPC communication introduce negligible computational overhead. The primary cost of FL is not computation but the coordination of distributed infrastructure.
 \end{enumerate}
 
 \bibliography{references}

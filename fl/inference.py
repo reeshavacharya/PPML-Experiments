@@ -86,9 +86,6 @@ def main():
     checkpoint_dir = os.path.join(project_root, "checkpoint")
     best_path = os.path.join(checkpoint_dir, "swin_unetr_fl_best.pth")
     if not os.path.exists(best_path):
-        # Fallback to round 88 (known best from first training run)
-        best_path = os.path.join(checkpoint_dir, "swin_unetr_fl_round_88.pth")
-    if not os.path.exists(best_path):
         print(f"Error: No FL checkpoint found in {checkpoint_dir}")
         return
 
