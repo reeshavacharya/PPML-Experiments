@@ -4,3 +4,4 @@ clara-train-examples/
 checkpoint/
 papers/
 core.*
+*.log

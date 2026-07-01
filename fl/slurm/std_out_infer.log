@@ -1,91 +1,377 @@
-=== FL Inference starting on mdc-1057-13-8.rc.usf.edu at Fri Jun 26 13:08:52 EDT 2026 ===
+=== FL Inference starting on mdc-1057-18-1.rc.usf.edu at Mon Jun 29 12:10:50 EDT 2026 ===
 ==================================================
-System Information for: FL Inference
-Node Name: mdc-1057-13-8.rc.usf.edu
+System Information for: FL Inference (FedPIDAvg)
+Node Name: mdc-1057-18-1.rc.usf.edu
 OS Platform: Linux-3.10.0-1160.2.1.el7.x86_64-x86_64-with-glibc2.17
-CPU: 32 physical cores, 32 logical cores
-Total RAM: 251.09 GB
+CPU: 32 physical cores, 64 logical cores
+Total RAM: 251.21 GB
 GPUs Available: 1
-  GPU 0: NVIDIA RTX A6000 (VRAM: 47.54 GB)
+  GPU 0: NVIDIA L40S (VRAM: 44.53 GB)
 ==================================================
 Using device: cuda
 Loading checkpoint: /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_best.pth
 
 [Client 1] Test set: 52 samples
-  [Client 1] Testing: 9% (5/52)
-  [Client 1] Testing: 19% (10/52)
-  [Client 1] Testing: 28% (15/52)
-  [Client 1] Testing: 38% (20/52)
-  [Client 1] Testing: 48% (25/52)
-  [Client 1] Testing: 57% (30/52)
-  [Client 1] Testing: 67% (35/52)
-  [Client 1] Testing: 76% (40/52)
-  [Client 1] Testing: 86% (45/52)
-  [Client 1] Testing: 96% (50/52)
-  [Client 1] Testing: 100% (52/52)
+  [Client 1] 19% (10/52)
+  [Client 1] 38% (20/52)
+  [Client 1] 57% (30/52)
+  [Client 1] 76% (40/52)
+  [Client 1] 96% (50/52)
+  [Client 1] 100% (52/52)
 
-========================================
-Client 1 Test Results
-========================================
+==================================================
+Client 1 (Institution 1)
+==================================================
   Samples     : 52
-  Test Loss   : 0.0928
-  Dice WT     : 0.928
-  Dice TC     : 0.9217
-  Dice ET     : 0.8819
-  Mean Dice   : 0.9105
-========================================
-Saved to /work/r/reeshav/PPML-Experiments-FL/fl/slurm/client_1_results.json
+  Test Loss   : 0.2936
+  Mean Dice   : 0.8219
+  WT: Dice=0.8664±0.1125  HD95=14.28±21.80
+  TC: Dice=0.7709±0.1707  HD95=16.23±23.80
+  ET: Dice=0.8284±0.1441  HD95=10.12±20.93
+==================================================
 
-[Client 2] Test set: 39 samples
-  [Client 2] Testing: 7% (3/39)
-  [Client 2] Testing: 15% (6/39)
-  [Client 2] Testing: 23% (9/39)
-  [Client 2] Testing: 30% (12/39)
-  [Client 2] Testing: 38% (15/39)
-  [Client 2] Testing: 46% (18/39)
-  [Client 2] Testing: 53% (21/39)
-  [Client 2] Testing: 61% (24/39)
-  [Client 2] Testing: 69% (27/39)
-  [Client 2] Testing: 76% (30/39)
-  [Client 2] Testing: 84% (33/39)
-  [Client 2] Testing: 92% (36/39)
-  [Client 2] Testing: 100% (39/39)
+[Client 2] Test set: 1 samples
+  [Client 2] 100% (1/1)
 
-========================================
-Client 2 Test Results
-========================================
+==================================================
+Client 2 (Institution 2)
+==================================================
+  Samples     : 1
+  Test Loss   : 0.196
+  Mean Dice   : 0.8622
+  WT: Dice=0.9289±0.0000  HD95=2.83±0.00
+  TC: Dice=0.8617±0.0000  HD95=7.00±0.00
+  ET: Dice=0.7961±0.0000  HD95=8.25±0.00
+==================================================
+
+[Client 3] Test set: 2 samples
+  [Client 3] 50% (1/2)
+  [Client 3] 100% (2/2)
+
+==================================================
+Client 3 (Institution 3)
+==================================================
+  Samples     : 2
+  Test Loss   : 0.5049
+  Mean Dice   : 0.55
+  WT: Dice=0.6571±0.2318  HD95=34.30±29.40
+  TC: Dice=0.5639±0.3060  HD95=35.05±28.37
+  ET: Dice=0.4290±0.3773  HD95=33.32±30.32
+==================================================
+
+[Client 4] Test set: 5 samples
+  [Client 4] 20% (1/5)
+  [Client 4] 40% (2/5)
+  [Client 4] 60% (3/5)
+  [Client 4] 80% (4/5)
+  [Client 4] 100% (5/5)
+
+==================================================
+Client 4 (Institution 4)
+==================================================
+  Samples     : 5
+  Test Loss   : 0.3322
+  Mean Dice   : 0.7665
+  WT: Dice=0.8414±0.0987  HD95=5.32±3.75
+  TC: Dice=0.5906±0.3854  HD95=10.04±12.44
+  ET: Dice=0.8674±0.1217  HD95=6.73±7.78
+==================================================
+
+[Client 5] Test set: 3 samples
+  [Client 5] 33% (1/3)
+  [Client 5] 66% (2/3)
+  [Client 5] 100% (3/3)
+
+==================================================
+Client 5 (Institution 5)
+==================================================
+  Samples     : 3
+  Test Loss   : 0.199
+  Mean Dice   : 0.8655
+  WT: Dice=0.8698±0.0595  HD95=4.02±2.04
+  TC: Dice=0.8462±0.1290  HD95=6.65±7.40
+  ET: Dice=0.8805±0.0590  HD95=3.84±3.73
+==================================================
+
+[Client 6] Test set: 4 samples
+  [Client 6] 25% (1/4)
+  [Client 6] 50% (2/4)
+  [Client 6] 75% (3/4)
+  [Client 6] 100% (4/4)
+
+==================================================
+Client 6 (Institution 6)
+==================================================
+  Samples     : 4
+  Test Loss   : 0.2201
+  Mean Dice   : 0.8602
+  WT: Dice=0.8723±0.0505  HD95=27.96±15.96
+  TC: Dice=0.8546±0.0962  HD95=16.65±23.37
+  ET: Dice=0.8537±0.0855  HD95=16.23±25.90
+==================================================
+
+[Client 7] Test set: 2 samples
+  [Client 7] 50% (1/2)
+  [Client 7] 100% (2/2)
+
+==================================================
+Client 7 (Institution 7)
+==================================================
+  Samples     : 2
+  Test Loss   : 0.1602
+  Mean Dice   : 0.9097
+  WT: Dice=0.9614±0.0048  HD95=1.41±0.00
+  TC: Dice=0.8284±0.1024  HD95=9.20±7.20
+  ET: Dice=0.9394±0.0078  HD95=1.00±0.00
+==================================================
+
+[Client 8] Test set: 1 samples
+  [Client 8] 100% (1/1)
+
+==================================================
+Client 8 (Institution 8)
+==================================================
+  Samples     : 1
+  Test Loss   : 0.4425
+  Mean Dice   : 0.6625
+  WT: Dice=0.8147±0.0000  HD95=6.48±0.00
+  TC: Dice=0.5563±0.0000  HD95=24.78±0.00
+  ET: Dice=0.6164±0.0000  HD95=24.68±0.00
+==================================================
+
+[Client 9] Test set: 1 samples
+  [Client 9] 100% (1/1)
+
+==================================================
+Client 9 (Institution 9)
+==================================================
+  Samples     : 1
+  Test Loss   : 0.2354
+  Mean Dice   : 0.8561
+  WT: Dice=0.9090±0.0000  HD95=2.83±0.00
+  TC: Dice=0.8632±0.0000  HD95=5.00±0.00
+  ET: Dice=0.7960±0.0000  HD95=6.32±0.00
+==================================================
+
+[Client 10] Test set: 1 samples
+  [Client 10] 100% (1/1)
+
+==================================================
+Client 10 (Institution 10)
+==================================================
+  Samples     : 1
+  Test Loss   : 0.2845
+  Mean Dice   : 0.7771
+  WT: Dice=0.9171±0.0000  HD95=4.00±0.00
+  TC: Dice=0.7231±0.0000  HD95=6.40±0.00
+  ET: Dice=0.6910±0.0000  HD95=3.16±0.00
+==================================================
+
+[Client 11] Test set: 2 samples
+  [Client 11] 50% (1/2)
+  [Client 11] 100% (2/2)
+
+==================================================
+Client 11 (Institution 11)
+==================================================
+  Samples     : 2
+  Test Loss   : 0.1546
+  Mean Dice   : 0.9259
+  WT: Dice=0.9368±0.0280  HD95=2.79±1.79
+  TC: Dice=0.9325±0.0135  HD95=1.57±0.16
+  ET: Dice=0.9085±0.0021  HD95=1.21±0.21
+==================================================
+
+[Client 12] Test set: 2 samples
+  [Client 12] 50% (1/2)
+  [Client 12] 100% (2/2)
+
+==================================================
+Client 12 (Institution 12)
+==================================================
+  Samples     : 2
+  Test Loss   : 0.716
+  Mean Dice   : 0.3056
+  WT: Dice=0.6100±0.2598  HD95=58.54±52.80
+  TC: Dice=0.2779±0.2332  HD95=65.68±50.12
+  ET: Dice=0.0289±0.0289  HD95=114.20±0.00
+==================================================
+
+[Client 13] Test set: 4 samples
+  [Client 13] 25% (1/4)
+  [Client 13] 50% (2/4)
+  [Client 13] 75% (3/4)
+  [Client 13] 100% (4/4)
+
+==================================================
+Client 13 (Institution 13)
+==================================================
+  Samples     : 4
+  Test Loss   : 0.4529
+  Mean Dice   : 0.6375
+  WT: Dice=0.9014±0.0366  HD95=19.98±28.51
+  TC: Dice=0.7553±0.1046  HD95=26.28±34.60
+  ET: Dice=0.2557±0.2589  HD95=23.34±7.47
+==================================================
+
+[Client 14] Test set: 1 samples
+  [Client 14] 100% (1/1)
+
+==================================================
+Client 14 (Institution 14)
+==================================================
+  Samples     : 1
+  Test Loss   : 0.574
+  Mean Dice   : 0.6057
+  WT: Dice=0.8267±0.0000  HD95=13.15±0.00
+  TC: Dice=0.4919±0.0000  HD95=20.02±0.00
+  ET: Dice=0.4985±0.0000  HD95=14.02±0.00
+==================================================
+
+[Client 15] Test set: 2 samples
+  [Client 15] 50% (1/2)
+  [Client 15] 100% (2/2)
+
+==================================================
+Client 15 (Institution 15)
+==================================================
+  Samples     : 2
+  Test Loss   : 0.4751
+  Mean Dice   : 0.5866
+  WT: Dice=0.8758±0.0103  HD95=4.37±0.63
+  TC: Dice=0.6314±0.1819  HD95=12.67±5.05
+  ET: Dice=0.2526±0.2522  HD95=35.64±8.42
+==================================================
+
+[Client 16] Test set: 3 samples
+  [Client 16] 33% (1/3)
+  [Client 16] 66% (2/3)
+  [Client 16] 100% (3/3)
+
+==================================================
+Client 16 (Institution 16)
+==================================================
+  Samples     : 3
+  Test Loss   : 0.2221
+  Mean Dice   : 0.8567
+  WT: Dice=0.9197±0.0477  HD95=24.24±32.28
+  TC: Dice=0.7748±0.1337  HD95=34.55±42.22
+  ET: Dice=0.8755±0.0795  HD95=32.07±43.64
+==================================================
+
+[Client 17] Test set: 1 samples
+  [Client 17] 100% (1/1)
+
+==================================================
+Client 17 (Institution 17)
+==================================================
+  Samples     : 1
+  Test Loss   : 0.4018
+  Mean Dice   : 0.8518
+  WT: Dice=0.8323±0.0000  HD95=3.61±0.00
+  TC: Dice=0.8589±0.0000  HD95=1.73±0.00
+  ET: Dice=0.8641±0.0000  HD95=1.00±0.00
+==================================================
+
+[Client 18] Test set: 39 samples
+  [Client 18] 17% (7/39)
+  [Client 18] 35% (14/39)
+  [Client 18] 53% (21/39)
+  [Client 18] 71% (28/39)
+  [Client 18] 89% (35/39)
+  [Client 18] 100% (39/39)
+
+==================================================
+Client 18 (Institution 18)
+==================================================
   Samples     : 39
-  Test Loss   : 0.1588
-  Dice WT     : 0.8726
-  Dice TC     : 0.8311
-  Dice ET     : 0.8288
-  Mean Dice   : 0.8442
-========================================
-Saved to /work/r/reeshav/PPML-Experiments-FL/fl/slurm/client_2_results.json
+  Test Loss   : 0.3801
+  Mean Dice   : 0.7286
+  WT: Dice=0.7893±0.2050  HD95=17.32±23.17
+  TC: Dice=0.6681±0.3060  HD95=17.21±22.09
+  ET: Dice=0.7284±0.2819  HD95=13.39±22.66
+==================================================
 
-[Client 3] Test set: 36 samples
-  [Client 3] Testing: 8% (3/36)
-  [Client 3] Testing: 16% (6/36)
-  [Client 3] Testing: 25% (9/36)
-  [Client 3] Testing: 33% (12/36)
-  [Client 3] Testing: 41% (15/36)
-  [Client 3] Testing: 50% (18/36)
-  [Client 3] Testing: 58% (21/36)
-  [Client 3] Testing: 66% (24/36)
-  [Client 3] Testing: 75% (27/36)
-  [Client 3] Testing: 83% (30/36)
-  [Client 3] Testing: 91% (33/36)
-  [Client 3] Testing: 100% (36/36)
+[Client 19] Test set: 1 samples
+  [Client 19] 100% (1/1)
 
-========================================
-Client 3 Test Results
-========================================
-  Samples     : 36
-  Test Loss   : 0.2081
-  Dice WT     : 0.917
-  Dice TC     : 0.8095
-  Dice ET     : 0.6967
-  Mean Dice   : 0.8078
-========================================
-Saved to /work/r/reeshav/PPML-Experiments-FL/fl/slurm/client_3_results.json
-=== FL Inference finished at Fri Jun 26 13:13:00 EDT 2026 ===
+==================================================
+Client 19 (Institution 19)
+==================================================
+  Samples     : 1
+  Test Loss   : 0.2607
+  Mean Dice   : 0.8852
+  WT: Dice=0.8431±0.0000  HD95=55.19±0.00
+  TC: Dice=0.9299±0.0000  HD95=1.73±0.00
+  ET: Dice=0.8825±0.0000  HD95=1.00±0.00
+==================================================
+
+[Client 20] Test set: 4 samples
+  [Client 20] 25% (1/4)
+  [Client 20] 50% (2/4)
+  [Client 20] 75% (3/4)
+  [Client 20] 100% (4/4)
+
+==================================================
+Client 20 (Institution 20)
+==================================================
+  Samples     : 4
+  Test Loss   : 0.202
+  Mean Dice   : 0.887
+  WT: Dice=0.9571±0.0127  HD95=10.40±15.80
+  TC: Dice=0.7949±0.0793  HD95=9.65±5.21
+  ET: Dice=0.9091±0.0319  HD95=2.23±1.26
+==================================================
+
+[Client 21] Test set: 4 samples
+  [Client 21] 25% (1/4)
+  [Client 21] 50% (2/4)
+  [Client 21] 75% (3/4)
+  [Client 21] 100% (4/4)
+
+==================================================
+Client 21 (Institution 21)
+==================================================
+  Samples     : 4
+  Test Loss   : 0.1555
+  Mean Dice   : 0.903
+  WT: Dice=0.9468±0.0365  HD95=2.58±2.26
+  TC: Dice=0.8495±0.0701  HD95=10.76±7.46
+  ET: Dice=0.9127±0.0265  HD95=1.47±0.59
+==================================================
+
+[Client 22] Test set: 1 samples
+  [Client 22] 100% (1/1)
+
+==================================================
+Client 22 (Institution 22)
+==================================================
+  Samples     : 1
+  Test Loss   : 0.1492
+  Mean Dice   : 0.9328
+  WT: Dice=0.9573±0.0000  HD95=1.41±0.00
+  TC: Dice=0.9283±0.0000  HD95=2.00±0.00
+  ET: Dice=0.9127±0.0000  HD95=1.00±0.00
+==================================================
+
+[Client 23] Test set: 1 samples
+  [Client 23] 100% (1/1)
+
+==================================================
+Client 23 (Institution 23)
+==================================================
+  Samples     : 1
+  Test Loss   : 0.3308
+  Mean Dice   : 0.8814
+  WT: Dice=0.8199±0.0000  HD95=7.68±0.00
+  TC: Dice=0.9057±0.0000  HD95=1.00±0.00
+  ET: Dice=0.9188±0.0000  HD95=1.00±0.00
+==================================================
+
+==================================================
+Global Summary (across {len(all_results)} institutions)
+==================================================
+  Mean Dice: {'mean': 0.7791, 'std': 0.152, 'median': 0.8561, 'q25': 0.6956, 'q75': 0.8833}
+  Mean HD95: {'mean': 14.4977, 'std': 15.3891, 'median': 7.4262, 'q25': 4.6197, 'q75': 18.9761}
+  Saved to /work/r/reeshav/PPML-Experiments-FL/fl/slurm/global_results.json
+=== FL Inference finished at Mon Jun 29 12:20:01 EDT 2026 ===

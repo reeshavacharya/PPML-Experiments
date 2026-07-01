@@ -9,7 +9,11 @@ sys.path.append(project_root)
 
 from data_loader.fets_dataset import create_data_loaders
 from models.swin_unetr import get_model
-from utils.metrics_utils import convert_to_brats_regions, compute_dice, log_system_info
+from utils.metrics_utils import (
+    convert_to_brats_regions, compute_dice, compute_hausdorff95,
+    compute_sensitivity, compute_specificity, compute_precision_metric,
+    log_system_info,
+)
 from monai.losses import DiceCELoss
 
 
@@ -48,7 +52,6 @@ def test(data_dir="data/FeTS2022"):
     else:
         state_dict = checkpoint
 
-    # Strip DataParallel 'module.' prefix if present
     cleaned = {}
     for k, v in state_dict.items():
         cleaned[k.removeprefix("module.")] = v
@@ -61,7 +64,11 @@ def test(data_dir="data/FeTS2022"):
 
     test_loss = 0.0
     test_steps = 0
-    wt_dice_list, tc_dice_list, et_dice_list = [], [], []
+    dice_lists = [[], [], []]
+    hd95_lists = [[], [], []]
+    sens_lists = [[], [], []]
+    spec_lists = [[], [], []]
+    prec_lists = [[], [], []]
 
     total = len(test_loader)
     log_interval = max(1, total // 10)
@@ -78,42 +85,66 @@ def test(data_dir="data/FeTS2022"):
             test_steps += 1
 
             outputs_binary = (torch.sigmoid(outputs) > 0.5).float()
-            dice_scores = compute_dice(outputs_binary, labels_converted)
-            mean_dice = dice_scores.mean(dim=0).cpu().numpy()
-            wt_dice_list.append(float(mean_dice[0]))
-            tc_dice_list.append(float(mean_dice[1]))
-            et_dice_list.append(float(mean_dice[2]))
+
+            dice = compute_dice(outputs_binary, labels_converted).mean(dim=0).cpu().numpy()
+            sens = compute_sensitivity(outputs_binary, labels_converted).mean(dim=0).cpu().numpy()
+            spec = compute_specificity(outputs_binary, labels_converted).mean(dim=0).cpu().numpy()
+            prec = compute_precision_metric(outputs_binary, labels_converted).mean(dim=0).cpu().numpy()
+            hd95 = compute_hausdorff95(
+                outputs_binary[0].cpu().numpy(),
+                labels_converted[0].cpu().numpy(),
+            )
+
+            for c in range(3):
+                dice_lists[c].append(float(dice[c]))
+                sens_lists[c].append(float(sens[c]))
+                spec_lists[c].append(float(spec[c]))
+                prec_lists[c].append(float(prec[c]))
+                if not np.isnan(hd95[c]):
+                    hd95_lists[c].append(float(hd95[c]))
 
             if (i + 1) % log_interval == 0 or (i + 1) == total:
                 pct = int(100 * (i + 1) / total)
                 print(f"  Testing: {pct}% ({i + 1}/{total})", flush=True)
 
     avg_test_loss = test_loss / test_steps
-    avg_wt = np.mean(wt_dice_list)
-    avg_tc = np.mean(tc_dice_list)
-    avg_et = np.mean(et_dice_list)
-    mean_dice = (avg_wt + avg_tc + avg_et) / 3.0
+    avg_dice = [np.mean(d) if d else 0 for d in dice_lists]
+    avg_hd95 = [np.mean(h) if h else 0 for h in hd95_lists]
+    avg_sens = [np.mean(s) if s else 0 for s in sens_lists]
+    avg_spec = [np.mean(s) if s else 0 for s in spec_lists]
+    avg_prec = [np.mean(p) if p else 0 for p in prec_lists]
+    mean_dice = sum(avg_dice) / 3.0
+    mean_hd95 = sum(avg_hd95) / 3.0
+    region_names = ["wt", "tc", "et"]
 
     results = {
         "model": "swin_unetr_centralized",
         "checkpoint": best_model_path,
         "num_test_samples": len(test_loader.dataset),
         "test_loss": round(float(avg_test_loss), 4),
-        "dice_wt": round(float(avg_wt), 4),
-        "dice_tc": round(float(avg_tc), 4),
-        "dice_et": round(float(avg_et), 4),
         "mean_dice": round(float(mean_dice), 4),
+        "mean_hd95": round(float(mean_hd95), 2),
     }
+    for i, r in enumerate(region_names):
+        results[f"dice_{r}"] = round(float(avg_dice[i]), 4)
+        results[f"hd95_{r}"] = round(float(avg_hd95[i]), 2)
+        results[f"sensitivity_{r}"] = round(float(avg_sens[i]), 4)
+        results[f"specificity_{r}"] = round(float(avg_spec[i]), 4)
+        results[f"precision_{r}"] = round(float(avg_prec[i]), 4)
 
-    print("\n" + "=" * 40)
+    print("\n" + "=" * 50)
     print("Centralized Baseline Test Results")
-    print("=" * 40)
-    print(f"  Test Loss   : {results['test_loss']}")
-    print(f"  Dice WT     : {results['dice_wt']}")
-    print(f"  Dice TC     : {results['dice_tc']}")
-    print(f"  Dice ET     : {results['dice_et']}")
-    print(f"  Mean Dice   : {results['mean_dice']}")
-    print("=" * 40)
+    print("=" * 50)
+    print(f"  Samples       : {results['num_test_samples']}")
+    print(f"  Test Loss     : {results['test_loss']}")
+    print(f"  Mean Dice     : {results['mean_dice']}")
+    print(f"    WT={results['dice_wt']}  TC={results['dice_tc']}  ET={results['dice_et']}")
+    print(f"  Mean HD95     : {results['mean_hd95']}")
+    print(f"    WT={results['hd95_wt']}  TC={results['hd95_tc']}  ET={results['hd95_et']}")
+    print(f"  Sensitivity   : WT={results['sensitivity_wt']}  TC={results['sensitivity_tc']}  ET={results['sensitivity_et']}")
+    print(f"  Specificity   : WT={results['specificity_wt']}  TC={results['specificity_tc']}  ET={results['specificity_et']}")
+    print(f"  Precision     : WT={results['precision_wt']}  TC={results['precision_tc']}  ET={results['precision_et']}")
+    print("=" * 50)
 
     output_path = os.path.join(project_root, "test", "centralized_baseline_results.json")
     with open(output_path, "w") as f:

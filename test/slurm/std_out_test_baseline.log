@@ -9,28 +9,32 @@ GPUs Available: 2
   GPU 1: NVIDIA L40S (VRAM: 44.53 GB)
 ==================================================
 Using device: cuda
-Test set size: 127 samples
+Test set size: 137 samples
 Loading checkpoint from /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_centralized_best.pth...
-  Testing: 9% (12/127)
-  Testing: 18% (24/127)
-  Testing: 28% (36/127)
-  Testing: 37% (48/127)
-  Testing: 47% (60/127)
-  Testing: 56% (72/127)
-  Testing: 66% (84/127)
-  Testing: 75% (96/127)
-  Testing: 85% (108/127)
-  Testing: 94% (120/127)
-  Testing: 100% (127/127)
+  Testing: 9% (13/137)
+  Testing: 18% (26/137)
+  Testing: 28% (39/137)
+  Testing: 37% (52/137)
+  Testing: 47% (65/137)
+  Testing: 56% (78/137)
+  Testing: 66% (91/137)
+  Testing: 75% (104/137)
+  Testing: 85% (117/137)
+  Testing: 94% (130/137)
+  Testing: 100% (137/137)
 
-========================================
+==================================================
 Centralized Baseline Test Results
-========================================
-  Test Loss   : 0.1364
-  Dice WT     : 0.9051
-  Dice TC     : 0.8803
-  Dice ET     : 0.8256
-  Mean Dice   : 0.8703
-========================================
+==================================================
+  Samples       : 137
+  Test Loss     : 0.1376
+  Mean Dice     : 0.8714
+    WT=0.9124  TC=0.8743  ET=0.8273
+  Mean HD95     : 5.04
+    WT=6.52  TC=4.28  ET=4.31
+  Sensitivity   : WT=0.9275  TC=0.9314  ET=0.913
+  Specificity   : WT=0.9985  TC=0.9992  ET=0.9995
+  Precision     : WT=0.9125  TC=0.8663  ET=0.8134
+==================================================
 
 Results saved to /work/r/reeshav/PPML-Experiments-FL/test/centralized_baseline_results.json

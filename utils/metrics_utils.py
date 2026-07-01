@@ -7,6 +7,7 @@ import time
 import subprocess
 import numpy as np
 import platform
+from scipy.ndimage import distance_transform_edt, binary_erosion, generate_binary_structure
 
 def log_system_info(client_id="Centralized"):
     print("="*50)
@@ -122,17 +123,98 @@ def compute_dice(y_pred, y_true, epsilon=1e-5):
     dice = (2. * intersection + epsilon) / (denominator + epsilon)
     return dice
 
+def compute_sensitivity(y_pred, y_true, epsilon=1e-5):
+    """TP / (TP + FN). Input: B, C, ... (binary). Returns: B, C."""
+    y_pred = y_pred.view(y_pred.size(0), y_pred.size(1), -1)
+    y_true = y_true.view(y_true.size(0), y_true.size(1), -1)
+    tp = (y_pred * y_true).sum(-1)
+    fn = ((1 - y_pred) * y_true).sum(-1)
+    return (tp + epsilon) / (tp + fn + epsilon)
+
+
+def compute_specificity(y_pred, y_true, epsilon=1e-5):
+    """TN / (TN + FP). Input: B, C, ... (binary). Returns: B, C."""
+    y_pred = y_pred.view(y_pred.size(0), y_pred.size(1), -1)
+    y_true = y_true.view(y_true.size(0), y_true.size(1), -1)
+    tn = ((1 - y_pred) * (1 - y_true)).sum(-1)
+    fp = (y_pred * (1 - y_true)).sum(-1)
+    return (tn + epsilon) / (tn + fp + epsilon)
+
+
+def compute_precision_metric(y_pred, y_true, epsilon=1e-5):
+    """TP / (TP + FP). Input: B, C, ... (binary). Returns: B, C."""
+    y_pred = y_pred.view(y_pred.size(0), y_pred.size(1), -1)
+    y_true = y_true.view(y_true.size(0), y_true.size(1), -1)
+    tp = (y_pred * y_true).sum(-1)
+    fp = (y_pred * (1 - y_true)).sum(-1)
+    return (tp + epsilon) / (tp + fp + epsilon)
+
+
+def compute_hausdorff95(y_pred_np, y_true_np):
+    """
+    95th percentile Hausdorff Distance per channel.
+    y_pred_np, y_true_np: numpy arrays of shape (C, H, W, D), binary.
+    Returns: numpy array of shape (C,).
+    """
+    num_channels = y_pred_np.shape[0]
+    hd95 = np.zeros(num_channels)
+    conn = generate_binary_structure(3, 1)
+
+    for c in range(num_channels):
+        pred = y_pred_np[c].astype(bool)
+        true = y_true_np[c].astype(bool)
+
+        if not pred.any() and not true.any():
+            hd95[c] = 0.0
+            continue
+        if not pred.any() or not true.any():
+            hd95[c] = np.nan
+            continue
+
+        pred_border = np.logical_xor(pred, binary_erosion(pred, structure=conn))
+        true_border = np.logical_xor(true, binary_erosion(true, structure=conn))
+
+        if not pred_border.any() or not true_border.any():
+            hd95[c] = 0.0
+            continue
+
+        dt_true = distance_transform_edt(~true)
+        dt_pred = distance_transform_edt(~pred)
+
+        dists = np.concatenate([dt_true[pred_border], dt_pred[true_border]])
+        hd95[c] = np.percentile(dists, 95)
+
+    return hd95
+
+
+def compute_metric_statistics(values):
+    """Compute mean, std, median, 25th and 75th percentile for a list of values."""
+    if not values:
+        return {"mean": 0.0, "std": 0.0, "median": 0.0, "q25": 0.0, "q75": 0.0}
+    arr = np.array(values, dtype=float)
+    return {
+        "mean": round(float(np.mean(arr)), 4),
+        "std": round(float(np.std(arr)), 4),
+        "median": round(float(np.median(arr)), 4),
+        "q25": round(float(np.percentile(arr, 25)), 4),
+        "q75": round(float(np.percentile(arr, 75)), 4),
+    }
+
+
 def init_metrics_csv(filepath, extra_cols=None):
     if extra_cols is None:
         extra_cols = []
-    
+
     headers = [
-        "Round/Epoch", 
-        "Train Loss", "Val Loss", 
+        "Round/Epoch",
+        "Train Loss", "SGD Steps", "Val Loss",
         "Val Dice WT", "Val Dice TC", "Val Dice ET", "Val Mean Dice",
-        "Peak RAM (MB)", "Peak VRAM (MB)", "Peak GPU Util (%)"
+        "Val HD95 WT", "Val HD95 TC", "Val HD95 ET", "Val Mean HD95",
+        "Val Sensitivity WT", "Val Sensitivity TC", "Val Sensitivity ET",
+        "Val Specificity WT", "Val Specificity TC", "Val Specificity ET",
+        "Val Precision WT", "Val Precision TC", "Val Precision ET",
     ] + extra_cols
-    
+
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
     with open(filepath, mode='w', newline='') as f:
         writer = csv.writer(f)

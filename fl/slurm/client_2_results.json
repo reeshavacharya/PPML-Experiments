@@ -1,11 +1,126 @@
 {
   "client_id": 2,
-  "num_test_samples": 39,
-  "test_loss": 0.1588,
-  "dice_wt": 0.8726,
-  "dice_tc": 0.8311,
-  "dice_et": 0.8288,
-  "mean_dice": 0.8442,
-  "model": "swin_unetr_fl",
+  "num_test_samples": 1,
+  "test_loss": 0.196,
+  "dice_wt": {
+    "mean": 0.9289,
+    "std": 0.0,
+    "median": 0.9289,
+    "q25": 0.9289,
+    "q75": 0.9289
+  },
+  "dice_tc": {
+    "mean": 0.8617,
+    "std": 0.0,
+    "median": 0.8617,
+    "q25": 0.8617,
+    "q75": 0.8617
+  },
+  "dice_et": {
+    "mean": 0.7961,
+    "std": 0.0,
+    "median": 0.7961,
+    "q25": 0.7961,
+    "q75": 0.7961
+  },
+  "hd95_wt": {
+    "mean": 2.8284,
+    "std": 0.0,
+    "median": 2.8284,
+    "q25": 2.8284,
+    "q75": 2.8284
+  },
+  "hd95_tc": {
+    "mean": 7.0,
+    "std": 0.0,
+    "median": 7.0,
+    "q25": 7.0,
+    "q75": 7.0
+  },
+  "hd95_et": {
+    "mean": 8.2462,
+    "std": 0.0,
+    "median": 8.2462,
+    "q25": 8.2462,
+    "q75": 8.2462
+  },
+  "sens_wt": {
+    "mean": 0.9073,
+    "std": 0.0,
+    "median": 0.9073,
+    "q25": 0.9073,
+    "q75": 0.9073
+  },
+  "sens_tc": {
+    "mean": 0.8896,
+    "std": 0.0,
+    "median": 0.8896,
+    "q25": 0.8896,
+    "q75": 0.8896
+  },
+  "sens_et": {
+    "mean": 0.949,
+    "std": 0.0,
+    "median": 0.949,
+    "q25": 0.949,
+    "q75": 0.949
+  },
+  "spec_wt": {
+    "mean": 0.9979,
+    "std": 0.0,
+    "median": 0.9979,
+    "q25": 0.9979,
+    "q75": 0.9979
+  },
+  "spec_tc": {
+    "mean": 0.9961,
+    "std": 0.0,
+    "median": 0.9961,
+    "q25": 0.9961,
+    "q75": 0.9961
+  },
+  "spec_et": {
+    "mean": 0.9961,
+    "std": 0.0,
+    "median": 0.9961,
+    "q25": 0.9961,
+    "q75": 0.9961
+  },
+  "prec_wt": {
+    "mean": 0.9515,
+    "std": 0.0,
+    "median": 0.9515,
+    "q25": 0.9515,
+    "q75": 0.9515
+  },
+  "prec_tc": {
+    "mean": 0.8355,
+    "std": 0.0,
+    "median": 0.8355,
+    "q25": 0.8355,
+    "q75": 0.8355
+  },
+  "prec_et": {
+    "mean": 0.6857,
+    "std": 0.0,
+    "median": 0.6857,
+    "q25": 0.6857,
+    "q75": 0.6857
+  },
+  "mean_dice": {
+    "mean": 0.8622,
+    "std": 0.0542,
+    "median": 0.8617,
+    "q25": 0.8289,
+    "q75": 0.8953
+  },
+  "mean_hd95": {
+    "mean": 6.0249,
+    "std": 2.3168,
+    "median": 7.0,
+    "q25": 4.9142,
+    "q75": 7.6231
+  },
+  "model": "swin_unetr_fl_fedpidavg",
   "checkpoint": "/work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unetr_fl_best.pth"
 }

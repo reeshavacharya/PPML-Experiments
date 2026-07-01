@@ -1,0 +1,169 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+
+\title{System Model and Adversary Model}
+\author{Reeshav Acharya}
+\date{June 30, 2026}
+\bibliographystyle{IEEEtran}
+
+\begin{document}
+
+\maketitle
+
+\section{System Model}
+
+\textbf{Setting.} We consider a cross-silo federated learning system for privacy-preserving brain tumor segmentation across geographically distributed medical institutions. The system is designed to enable collaborative model training on sensitive neuroimaging data without requiring any institution to share raw patient scans --- a prerequisite for multi-site clinical decision support under regulations such as HIPAA and GDPR.
+
+\subsection{Participants}
+
+The system comprises a central \textit{aggregation server} $\mathcal{S}$ and a fixed set of $K = 23$ institutional \textit{clients} $\mathcal{C} = \{C_1, \ldots, C_{23}\}$. Each client $C_k$ represents an autonomous clinical site that holds a private, non-overlapping partition of multi-modal brain MRI studies from the FeTS 2022 dataset \cite{pati_federated_2025}. Each client $C_k$ holds exactly the patients assigned Partition ID $k$ in \texttt{partitioning\_1.csv}, directly preserving the original institutional provenance.
+
+The 23 institutions vary substantially in size: Institutions 1 ($n=511$) and 18 ($n=382$) together account for 71\% of the 1,251 total samples, while 9 institutions have fewer than 10 samples each. For institutions with $\geq 10$ samples, an 80/10/10 train/validation/test split is applied (deterministic seed 42). For the 9 smaller institutions, 1 mandatory validation and 1 mandatory test sample are reserved, with all remaining samples used for training. Two institutions are designated \textit{Poisson outliers} (see Section~\ref{sec:protocol}) based on their sample counts exceeding $2\lambda = 108.8$, where $\lambda = 1251/23 \approx 54.4$ is the mean institution size.
+
+This partitioning induces \textbf{extreme natural non-IID heterogeneity}: each institution's data reflects its own scanner hardware, acquisition protocols, patient demographics, and annotation conventions. The dataset size imbalance (ranging from 4 to 511 samples per institution) is itself a defining challenge for both FL algorithm design and privacy analysis.
+
+\subsection{Data and Task}
+
+Each patient study consists of four co-registered MRI modalities (FLAIR, T1, T1ce, T2) as 3D NIfTI volumes (native resolution $240 \times 240 \times 155$ voxels). The segmentation task targets three hierarchical BraTS tumor sub-regions: Whole Tumor (WT), Tumor Core (TC), and Enhancing Tumor (ET). The combined test set across all 23 institutions comprises 137 samples, with the split sizes per institution determined as described above (80/10/10 for large institutions, forced 1-val/1-test for small ones).
+
+\subsection{Model Architecture}
+
+All clients share an identical Swin UNETR architecture \cite{hatamizadeh_swin_2022} instantiated via MONAI, with 4 input channels, 3 output channels, and feature size 48 ($\sim$62M parameters). Training operates on randomly cropped $128 \times 128 \times 128$ patches with standard augmentations (random flips, 90-degree rotations, intensity shifts). The loss function is a composite Dice-Cross-Entropy loss; optimization uses AdamW ($\text{lr} = 3 \times 10^{-4}$, weight decay $= 10^{-5}$).
+
+\subsection{Federated Protocol}
+\label{sec:protocol}
+
+Training follows the FedPIDAvg algorithm \cite{hatamizadeh_swin_2022_fedpidavg} implemented via the Flower framework over $T = 100$ communication rounds. FedPIDAvg extends FedAvg \cite{mcmahan_communication-efficient_2017} with two components: PID-controller-inspired aggregation weights and Poisson-based client selection.
+
+\paragraph{Poisson client selection.} At each round $t$, the set of participating clients $\mathcal{C}^t \subseteq \mathcal{C}$ is determined as follows. Institutions whose sample count exceeds $2\lambda = 108.8$ (Institutions 1 and 18) are classified as \textit{outliers}. With probability $p_{\text{include}} = 0.1$ they are included in $\mathcal{C}^t$; otherwise they are excluded from both training and evaluation in that round. All remaining 21 institutions always participate. This means $|\mathcal{C}^t| = 21$ in approximately 90\% of rounds and $|\mathcal{C}^t| = 23$ in the remaining 10\%.
+
+\paragraph{Round structure.} Each round proceeds as:
+
+\begin{enumerate}
+    \item \textbf{Selection:} The server determines $\mathcal{C}^t$ via the Poisson rule above.
+    \item \textbf{Broadcast:} The server transmits the current global model parameters $\theta^t$ to each $C_k \in \mathcal{C}^t$.
+    \item \textbf{Local Training:} Each selected client $C_k$ initializes from $\theta^t$ and performs $E = 1$ local epoch over its private training set, producing updated parameters $\theta_k^{t+1}$ and reporting its training cost $c_k^t$.
+    \item \textbf{Upload:} Each $C_k \in \mathcal{C}^t$ transmits $\theta_k^{t+1}$ and $c_k^t$ to the server.
+    \item \textbf{PID Aggregation:} The server computes client weights $w_k^t = \alpha \frac{s_k}{S} + \beta \frac{k_k}{K} + \gamma \frac{m_k}{I}$, where the P-term $s_k/S$ is proportional to dataset size, the D-term $k_k/K$ reflects cost decrease from the previous round, and the I-term $m_k/I$ is the cumulative cost over the last $L=5$ rounds ($\alpha=0.45$, $\beta=0.45$, $\gamma=0.1$). The global model is then:
+    \begin{equation}
+        \theta^{t+1} = \sum_{k \in \mathcal{C}^t} w_k^t \, \theta_k^{t+1}
+    \end{equation}
+    \item \textbf{Evaluation:} The server distributes $\theta^{t+1}$ to the same set $\mathcal{C}^t$ for local validation. The model achieving the highest weighted-average validation Dice across selected clients is checkpointed.
+\end{enumerate}
+
+\subsection{Communication and Infrastructure}
+
+Client-server communication uses gRPC (Flower's default transport) over a private institutional cluster network. The server runs on a CPU-only node (16 CPU cores, 128\,GB RAM). The 23 clients are grouped into 7 SLURM array jobs, each running on a dedicated GPU node (1$\times$ NVIDIA L40S, 16 CPUs, 64\,GB RAM); within each node, 3--4 client processes share the GPU via a file-based lock (\texttt{fcntl.flock}) that serializes GPU access, ensuring only one client's model occupies VRAM at a time. All nodes are co-located within a single SLURM-managed HPC cluster (muma\_2021 partition), connected via a private high-bandwidth interconnect.
+
+The protocol is \textit{semi-synchronous}: the server waits only for the clients it selected in the current round ($\mathcal{C}^t$), not all $K = 23$. Clients not selected in round $t$ remain connected but idle. The minimum number of fit results required before aggregation proceeds is set to 1, allowing the server to tolerate individual client failures without blocking the entire federation.
+
+\subsection{Trust Assumptions}
+
+The server is assumed to be \textit{honest-but-curious} --- it faithfully executes the aggregation protocol but may attempt to infer information from the model updates it receives. Clients are assumed to be \textit{honest} --- they follow the prescribed training procedure and do not tamper with their local updates. Raw patient data never leaves the institutional boundary of any client; only model parameters (numerical weight tensors) are communicated. No additional privacy-enhancing technologies (differential privacy, secure aggregation, homomorphic encryption) are applied in this baseline configuration.
+
+\section{Adversary Model}
+
+We define the adversary model with respect to the threat landscape of cross-silo federated learning in healthcare, specifying the adversary's \textbf{identity}, \textbf{capabilities}, \textbf{goals}, and \textbf{knowledge}.
+
+\subsection{Adversary Identity}
+
+We consider two classes of adversaries:
+
+\begin{itemize}
+    \item \textbf{A1 --- Compromised Aggregation Server.} An honest-but-curious server that faithfully performs FedPIDAvg aggregation but attempts to extract private patient information from the model updates it observes. This is the primary threat model, as the server sees all participating clients' parameter updates in plaintext at every round $t \in [1, T]$, along with each client's reported training cost $c_k^t$ used to compute PID weights.
+
+    \item \textbf{A2 --- Compromised Client (Insider Threat).} An honest-but-curious client $C_j$ that participates correctly in the protocol but attempts to infer information about the private data of other clients $C_{k \neq j}$ from the global model parameters it receives.
+\end{itemize}
+
+\subsection{Adversary Capabilities}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\toprule
+\textbf{Capability} & \textbf{A1 (Server)} & \textbf{A2 (Client)} \\
+\midrule
+Observe global model $\theta^t$ at each round & Yes & Yes \\
+Observe individual client updates $\theta_k^{t+1}$ & Yes, all selected $k \in \mathcal{C}^t$ & No (only $\theta^{t+1}$ after aggregation) \\
+Compute gradient residuals $\Delta_k^t = \theta_k^{t+1} - \theta^t$ & Yes & No \\
+Observe per-client training costs $c_k^t$ & Yes & No \\
+Access auxiliary data from same domain & Possible & Yes (own training data) \\
+Modify the aggregation protocol & No (honest-but-curious) & N/A \\
+Inject malicious updates & N/A & No (honest) \\
+Access the communication channel (eavesdropping) & Inherent & No (private cluster network) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Adversary Goals}
+
+The adversary's objectives are information-theoretic rather than disruptive:
+
+\begin{enumerate}
+    \item \textbf{Membership Inference.} Determine whether a specific patient's MRI study was part of a particular client's training set --- a direct HIPAA/GDPR concern in multi-site clinical collaborations.
+
+    \item \textbf{Property Inference.} Infer sensitive aggregate properties of a client's data distribution, such as institutional demographics, tumor subtype prevalence, or scanner characteristics, from the structure of model updates.
+
+    \item \textbf{Data Reconstruction.} Recover (approximate) raw MRI volumes from observed gradient updates, e.g., via gradient inversion attacks \cite{zhu_deep_2019}. For 3D medical volumes with 4 modalities at $128^3$ resolution ($\sim$8.4M voxels per sample), this represents a high-dimensional reconstruction problem.
+\end{enumerate}
+
+\subsection{Adversary Knowledge}
+
+The adversary is assumed to know:
+
+\begin{itemize}
+    \item The model architecture (Swin UNETR), hyperparameters, and loss function (public information).
+    \item The federated protocol (FedPIDAvg with $E = 1$, $T = 100$, $\alpha=0.45$, $\beta=0.45$, $\gamma=0.1$, Poisson $\lambda \approx 54.4$).
+    \item The dataset provenance (FeTS 2022) and partitioning scheme (23 institutions, Partition IDs 1--23).
+    \item The number of clients ($K=23$) and their approximate dataset sizes, including the identity of the two Poisson outlier institutions.
+\end{itemize}
+
+The adversary does \textbf{not} know:
+
+\begin{itemize}
+    \item The raw imaging data at any client (the asset being protected).
+    \item The exact sample-level composition of any client's train/val/test split.
+    \item Per-sample gradients (only the aggregated update after a full local epoch is visible to A1).
+\end{itemize}
+
+\subsection{Security Analysis of the Current Configuration}
+
+The current system provides \textbf{privacy-by-architecture} (data never leaves institutional boundaries) but does not employ formal privacy guarantees. Specifically:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{Privacy Mechanism} & \textbf{Status} & \textbf{Implication} \\
+\midrule
+Data locality & \textbf{Active} & Raw MRI data never transmitted; only $\sim$62M \\
+ & & float32 parameters exchanged per round \\
+Differential Privacy (DP) & Not applied & Model updates may leak information \\
+ & & about individual training samples \\
+Secure Aggregation & Not applied & Server A1 observes individual client \\
+ & & updates in plaintext \\
+Communication Encryption (TLS) & Not enforced at & gRPC over private cluster network; \\
+ & application layer & relies on network-level isolation \\
+Gradient Compression/Sparsification & Not applied & Full model parameters transmitted, \\
+ & & maximizing information available to adversary \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Practical risk assessment.} The single local epoch ($E = 1$) with batch size 1 means each client's update aggregates gradients over its entire private training set before transmission, providing empirical privacy amplification relative to per-batch gradient sharing. The high dimensionality of 3D medical volumes ($>$8M voxels) and the large transformer model ($\sim$62M parameters) further increase the difficulty of exact data reconstruction attacks. However, without formal DP guarantees ($\epsilon$-differential privacy), no provable bound on information leakage can be stated.
+
+FedPIDAvg introduces an additional information channel not present in FedAvg: the per-round training cost $c_k^t$ transmitted by each client alongside its model update. This scalar value encodes information about the client's data distribution (e.g., a consistently high cost may reveal a small or out-of-distribution dataset). In a 23-client setting, the server observes a per-client cost sequence over 100 rounds, from which it could potentially infer institutional characteristics (tumor subtype mix, dataset size, imaging protocol) through property inference attacks. Securing this side-channel would require extending the privacy mechanism to cover auxiliary metrics, not only model parameters.
+
+The Poisson exclusion of outlier institutions (1 and 18 participate in only $\sim$10\% of rounds) also affects the privacy surface: the server can infer from the absence of their updates whether the current round excluded them, and can correlate the cost signal from outlier rounds against non-outlier rounds to amplify property inference.
+
+This baseline configuration establishes the performance-privacy frontier against which future enhancements (e.g., local DP with Gaussian noise, secure aggregation via secret sharing, or cost privatization) can be quantitatively evaluated in terms of their Dice score degradation versus formal privacy guarantees.
+
+\bibliography{references}
+
+\end{document}

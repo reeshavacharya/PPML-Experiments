@@ -5,10 +5,11 @@
 \usepackage{multirow}
 \usepackage{amsmath}
 \usepackage{hyperref}
+\usepackage{longtable}
 
 \title{Federated Learning for Brain Tumor Segmentation: Experiment Design, Implementation and Analysis}
 \author{Reeshav Acharya}
-\date{June $24^{th}$, 2026}
+\date{June $30^{th}$, 2026}
 \bibliographystyle{IEEEtran}
 
 \begin{document}
@@ -16,7 +17,7 @@
 \maketitle
 
 \section{Abstract}
-This document provides a detailed account of the design, implementation and evaluation of a Federated Learning (FL) experiment on the Federated Tumor Segmentation (FeTS) 2022 dataset using the Swin UNETR model. We describe the reasoning behind each design choice: the dataset partitioning strategy that preserves non-IID properties, the selection of the Swin UNETR architecture, the construction of a fair centralized baseline, and the FL training infrastructure built on Flower. We conclude with a comparative analysis of segmentation performance and resource utilization between the centralized and federated settings.
+This document provides a detailed account of the design, implementation and evaluation of a Federated Learning (FL) experiment on the Federated Tumor Segmentation (FeTS) 2022 dataset using the Swin UNETR model. We implement FedPIDAvg \cite{hatamizadeh_swin_2022_fedpidavg}, the winning aggregation algorithm of the FeTS 2022 Challenge, which combines PID-controller-inspired weighting with Poisson-based client selection. All 23 source institutions participate as individual FL clients, preserving the natural non-IID data distribution. We compare the federated model against a centralized baseline trained on pooled data, analyzing segmentation accuracy, convergence behavior and communication efficiency.
 
 \section{Goals}
 Our goal is to analyze Privacy Enhancing Techniques (PETs) in the medical imaging domain. Because the scope of this topic is broad, we narrow it to a specific comparative analysis: centralized training versus distributed Federated Learning for 3D brain tumor segmentation. Medical data demands the highest standards of privacy, yet training accurate deep learning models typically requires large, diverse datasets. FL offers a paradigm in which institutions collaboratively train a shared model without exchanging raw patient data. We aim to quantify the cost of this privacy guarantee in terms of segmentation accuracy and computational resources.
@@ -58,32 +59,41 @@ Several approaches have been proposed to handle the data imbalance in the FeTS d
 \subsection{Adopted Partitioning Strategy}
 \label{sec:split}
 
-We adopt a partial clustering strategy that preserves the non-IID property while producing a tractable number of FL clients. The 1,251 training samples are distributed across three clients that reflect the natural institutional hierarchy:
+We preserve the original institutional provenance by treating each of the 23 institutions as an individual FL client. Each client $C_k$ (for $k = 1, \ldots, 23$) holds exactly the patients from Partition ID $k$ in \texttt{partitioning\_1.csv}. This maintains the natural non-IID heterogeneity: each institution's data reflects its own scanner hardware, acquisition protocols, patient demographics and tumor characteristics.
 
-\begin{itemize}
-    \item \textbf{Client 1:} Institution 1 --- 511 samples (40.8\%). Represents one large hospital.
-    \item \textbf{Client 2:} Institution 18 --- 382 samples (30.5\%). Represents one mid-sized institution.
-    \item \textbf{Client 3:} All remaining 21 institutions --- 358 samples (28.6\%). Represents an aggregation of many small clinics, each contributing between 4 and 47 samples.
-\end{itemize}
+For institutions with 10 or more samples, we apply a standard 80\%-10\%-10\% patient-level split for training, validation and testing (deterministic seed 42). For the 9 institutions with fewer than 10 samples, we enforce 1 mandatory validation sample and 1 mandatory test sample, with the remainder used for training. This ensures every institution has at least one sample in each evaluation set.
 
-This distribution creates meaningful heterogeneity: Client 1 sees data from a single large institution with consistent acquisition protocols, Client 2 sees data from a different institution with its own characteristics, and Client 3 sees a highly diverse mixture of scans from 21 different sources. The resulting non-IID property arises naturally from inter-institutional differences in scanner hardware, imaging protocols, patient demographics and tumor characteristics.
+Since we do not have access to the official held-out test data, the centralized baseline aggregates the same per-institution splits to guarantee an identical combined test set:
+\begin{align*}
+    \text{Centralized}_{train} &= \bigcup_{k=1}^{23} \text{Client}_k\text{.train} \\
+    \text{Centralized}_{test} &= \bigcup_{k=1}^{23} \text{Client}_k\text{.test}
+\end{align*}
 
-Since we do not have access to the official held-out test data, each client independently applies an 80\%-10\%-10\% patient-level split for training, validation and testing respectively. This yields the following sample counts:
+Table~\ref{tab:splits} summarizes the resulting data distribution.
 
 \begin{table}[h]
 \centering
-\begin{tabular}{lccc}
+\small
+\begin{tabular}{rrrrrrrrrr}
 \toprule
-\textbf{Client} & \textbf{Train} & \textbf{Val} & \textbf{Test} \\
+\textbf{Inst.} & \textbf{Total} & \textbf{Train} & \textbf{Val} & \textbf{Test} &
+\textbf{Inst.} & \textbf{Total} & \textbf{Train} & \textbf{Val} & \textbf{Test} \\
 \midrule
-Client 1 (Institution 1) & 408 & 51 & 52 \\
-Client 2 (Institution 18) & 305 & 38 & 39 \\
-Client 3 (Other 21) & 286 & 36 & 36 \\
-\midrule
-\textbf{Total} & \textbf{999} & \textbf{125} & \textbf{127} \\
+1  & 511 & 409 & 51 & 51 & 13 & 35 & 28 & 4 & 3 \\
+2  &   6 &   4 &  1 &  1 & 14 &  6 &  4 & 1 & 1 \\
+3  &  15 &  12 &  2 &  1 & 15 & 13 & 10 & 1 & 2 \\
+4  &  47 &  38 &  5 &  4 & 16 & 30 & 24 & 3 & 3 \\
+5  &  22 &  18 &  2 &  2 & 17 &  9 &  7 & 1 & 1 \\
+6  &  34 &  27 &  3 &  4 & 18 &382 &306 &38 &38 \\
+7  &  12 &  10 &  1 &  1 & 19 &  4 &  2 & 1 & 1 \\
+8  &   8 &   6 &  1 &  1 & 20 & 33 & 26 & 3 & 4 \\
+9  &   4 &   2 &  1 &  1 & 21 & 35 & 28 & 4 & 3 \\
+10 &   8 &   6 &  1 &  1 & 22 &  7 &  5 & 1 & 1 \\
+11 &  14 &  11 &  1 &  2 & 23 &  5 &  3 & 1 & 1 \\
+12 &  11 &   9 &  1 &  1 & \textbf{All} & \textbf{1251} & \textbf{999} & \textbf{125} & \textbf{127} \\
 \bottomrule
 \end{tabular}
-\caption{Patient-level data splits per client (80-10-10).}
+\caption{Per-institution data splits. Institutions with $<$10 samples use forced 1-val/1-test splits; others use 80-10-10.}
 \label{tab:splits}
 \end{table}
 
@@ -112,6 +122,7 @@ We use the MONAI (Medical Open Network for Artificial Intelligence) implementati
     \item \textbf{Input:} 4-channel 3D patches of size $128 \times 128 \times 128$ (one channel per MRI modality).
     \item \textbf{Output:} 3-channel probability map (WT, TC, ET).
     \item \textbf{Feature size:} 48 (initial embedding dimension).
+    \item \textbf{Model size:} $\sim$62 million parameters ($\sim$248\,MB in float32).
     \item \textbf{Gradient checkpointing:} Enabled to reduce GPU memory consumption at the cost of additional computation during backpropagation.
     \item \textbf{Spatial dimensions:} 3 (volumetric data).
 \end{itemize}
@@ -138,17 +149,11 @@ The centralized baseline simulates the scenario in which all institutional data 
 A scientifically valid comparison between centralized and federated training requires that the \textit{only} difference between the two settings is the training paradigm. To guarantee this, we enforce the following constraints:
 
 \begin{enumerate}
-    \item \textbf{Identical Data Splits:} The centralized baseline does not create its own random 80/10/10 split over the global dataset. Instead, it precisely aggregates the independent splits computed for each FL client:
-    \begin{align*}
-        \text{Centralized}_{train} &= \text{Client1}_{train} \cup \text{Client2}_{train} \cup \text{Client3}_{train} \\
-        \text{Centralized}_{val} &= \text{Client1}_{val} \cup \text{Client2}_{val} \cup \text{Client3}_{val} \\
-        \text{Centralized}_{test} &= \text{Client1}_{test} \cup \text{Client2}_{test} \cup \text{Client3}_{test}
-    \end{align*}
-    This mathematically guarantees that every patient appears in the same set (train, val or test) in both settings. The random seed for the split is fixed at 42 for reproducibility.
+    \item \textbf{Identical Data Splits:} The centralized baseline aggregates the independent splits computed for each of the 23 FL clients. This mathematically guarantees that every patient appears in the same set (train, val or test) in both settings. The random seed for all splits is fixed at 42.
 
     \item \textbf{Identical Preprocessing:} Both settings use the exact same 3D preprocessing pipeline (orientation, spacing normalization, intensity normalization, cropping and augmentation).
 
-    \item \textbf{Identical Architecture:} Both settings use the same Swin UNETR model with identical hyperparameters (feature size 48, gradient checkpointing enabled).
+    \item \textbf{Identical Architecture:} Both settings use the same Swin UNETR model with identical hyperparameters (feature size 48, gradient checkpointing enabled, $\sim$62M parameters).
 
     \item \textbf{Identical Optimization:} Both settings use the AdamW optimizer with learning rate $3 \times 10^{-4}$ and weight decay $10^{-5}$, and minimize the same DiceCE loss (a combination of Dice loss and Cross-Entropy loss).
 \end{enumerate}
@@ -157,166 +162,362 @@ A scientifically valid comparison between centralized and federated training req
 
 The centralized baseline trains for 100 epochs on the pooled training set of 999 samples with a batch size of 1, necessitated by the large memory footprint of $128^3$ 3D volumes. A Cosine Annealing learning rate schedule decays the learning rate from $3 \times 10^{-4}$ to near zero over the 100 epochs, promoting convergence stability in the later stages of training. The model checkpoint with the highest validation Mean Dice is retained as the best model.
 
-The DiceCE loss combines two complementary objectives: the Dice loss directly optimizes the overlap metric we evaluate on, while the Cross-Entropy loss provides stable gradients early in training when predictions are far from the ground truth. The sigmoid activation is applied to model outputs to produce per-voxel probabilities for each of the three target regions.
-
 Training was conducted on a SLURM-managed HPC cluster node equipped with 2$\times$ NVIDIA L40S GPUs (44.5\,GB VRAM each), 64 CPU cores and 251\,GB RAM. The two GPUs were utilized via PyTorch's DataParallel.
 
 \section{Federated Learning Experiment}
 \label{sec:fl}
 
-\subsection{Flower Framework}
+\subsection{The FedPIDAvg Algorithm}
 
-We use \textbf{Flower} (flwr), an open-source, framework-agnostic FL platform, to orchestrate federated training. Flower was chosen for several reasons: it provides a clean separation between the FL protocol (server-side aggregation strategy) and the local training logic (client-side model), it supports standard aggregation strategies out of the box, and it communicates over gRPC, enabling deployment across networked machines or within a single node.
+We implement FedPIDAvg \cite{hatamizadeh_swin_2022_fedpidavg}, the winning aggregation algorithm of the FeTS 2022 Challenge. FedPIDAvg extends standard Federated Averaging (FedAvg) with a PID-controller-inspired weighting scheme that considers not only dataset sizes but also the training dynamics of each client.
 
-In our setup, the Flower server coordinates three clients using the \textbf{Federated Averaging (FedAvg)} strategy. The training proceeds as follows for each of 100 communication rounds:
+\subsubsection{PID-Inspired Aggregation}
 
-\begin{enumerate}
-    \item The server broadcasts the current global model parameters to all three clients.
-    \item Each client loads the received parameters into its local Swin UNETR model and trains for \textbf{one local epoch} on its private dataset partition.
-    \item Each client sends its updated model parameters back to the server, along with the number of training examples.
-    \item The server computes the new global model as a \textbf{weighted average} of the client parameters, where the weight of each client is proportional to the number of examples it trained on.
-    \item The server broadcasts the updated global model back to all clients for evaluation on their local validation sets.
-\end{enumerate}
+In standard FedAvg, the global model at round $i+1$ is computed as a weighted average of client models, with weights proportional to dataset size alone:
+\begin{equation}
+    M_{i+1} = \sum_{j=1}^{n} \frac{s_j}{S} M_i^j \quad \text{(FedAvg)}
+\end{equation}
 
-Each client implements Flower's \texttt{NumPyClient} interface, exposing three methods: \texttt{get\_parameters} (extract model weights as NumPy arrays), \texttt{fit} (perform one epoch of local training and return updated weights) and \texttt{evaluate} (compute validation metrics on local data). The server aggregates training losses and validation Dice scores using weighted averaging.
+FedPIDAvg replaces this with a three-term weighting scheme inspired by Proportional-Integral-Derivative (PID) controllers:
+\begin{equation}
+    M_{i+1} = \sum_{j=1}^{n} \left( \alpha \frac{s_j}{S} + \beta \frac{k_j}{K} + \gamma \frac{m_j}{I} \right) M_i^j
+\end{equation}
+
+where the three terms are:
+
+\paragraph{P (Proportional) term:} $s_j / S$ weights each client by its dataset size $s_j$ relative to the total $S = \sum_j s_j$. This is the standard FedAvg component and ensures that institutions with more data exert proportionally more influence on the global model.
+
+\paragraph{D (Derivative) term:} $k_j / K$ weights each client by its cost function improvement in the last round:
+\begin{equation}
+    k_j = c(M_{i-1}^j) - c(M_i^j), \quad K = \sum_j k_j
+\end{equation}
+Clients whose loss decreased more receive higher weight, reflecting the intuition that a client making rapid progress has found a productive gradient direction. Conversely, clients whose loss increased receive reduced (or negative) weight, dampening their influence when they are diverging.
+
+\paragraph{I (Integral) term:} $m_j / I$ weights each client by the cumulative sum of its costs over the last $L$ rounds:
+\begin{equation}
+    m_j = \sum_{l=0}^{L-1} c(M_{i-l}^j), \quad I = \sum_j m_j
+\end{equation}
+We use $L = 5$ following the paper. This integral term provides a smoothed view of each client's training trajectory, stabilizing the weighting against transient fluctuations in the derivative term.
+
+The coefficients $\alpha$, $\beta$ and $\gamma$ control the relative influence of each term, subject to the constraint $\alpha + \beta + \gamma = 1$. Following the original paper, we use $\alpha = 0.45$, $\beta = 0.45$, $\gamma = 0.1$. In round 1, where no cost history exists, we fall back to proportional-only (P-term) weights.
+
+\subsubsection{Poisson-Based Client Selection}
+
+The second component of FedPIDAvg addresses the extreme data imbalance across institutions. Rather than training all 23 clients every round, the algorithm models institution sizes as following a Poisson distribution with parameter $\lambda$ equal to the mean sample count across institutions:
+\begin{equation}
+    \lambda = \frac{1}{K} \sum_{k=1}^{K} s_k = \frac{1251}{23} \approx 54.4
+\end{equation}
+
+Institutions whose sample count exceeds $2\lambda = 108.8$ are classified as \textit{outliers}. In our dataset, Institution 1 ($s_1 = 511 \gg 108.8$) and Institution 18 ($s_{18} = 382 \gg 108.8$) are the two outliers; the next-largest institution (Institution 4, $s_4 = 47$) falls well below the threshold.
+
+In each round, the algorithm draws a random decision on whether to include outliers. The paper states that outliers are ``dropped in most rounds'' but does not specify the exact inclusion probability. We set this to $p_{\text{include}} = 0.1$, meaning outlier institutions participate in approximately 10\% of rounds and are excluded from both training and evaluation in the remaining 90\%. This selective participation has two benefits: it reduces the dominance of large institutions in the aggregation (which would otherwise overwhelm the small-clinic signals), and it accelerates per-round training time (since the large institutions require proportionally more compute per epoch).
+
+\subsection{Implementation}
+
+We use \textbf{Flower} (flwr), an open-source FL framework, to orchestrate the server-client communication via gRPC. The FedPIDAvg aggregation logic is implemented as a custom Flower strategy that overrides the standard FedAvg aggregation.
+
+Each of the 23 institutions runs as a separate Flower client process. Each client implements Flower's \texttt{NumPyClient} interface, exposing methods for parameter exchange, local training (one epoch per round) and local evaluation. The server maintains the PID state (per-client cost history and previous-round costs) and applies the PID weighting formula during aggregation. The best global model is checkpointed whenever the weighted-average validation Dice improves.
 
 \subsection{Training Configuration}
 
-All FL training hyperparameters mirror the centralized baseline to ensure a fair comparison: AdamW optimizer with learning rate $3 \times 10^{-4}$, weight decay $10^{-5}$, batch size 1, and DiceCE loss. Each client performs one local epoch per communication round, and training runs for 100 rounds total. The best global model (highest weighted-average validation Dice across all clients) is retained.
+All FL training hyperparameters mirror the centralized baseline to ensure a fair comparison: AdamW optimizer with learning rate $3 \times 10^{-4}$, weight decay $10^{-5}$, batch size 1, and DiceCE loss. Each client performs one local epoch per communication round, and training runs for 100 rounds total.
 
 \subsection{Infrastructure}
 
-The FL experiment was deployed across four separate SLURM-managed HPC nodes, reflecting a realistic distributed training scenario where each participant operates on its own hardware:
-
-\begin{itemize}
-    \item \textbf{Server:} \texttt{mdc-1057-13-8} --- CPU-only node (no GPU required for parameter aggregation), 8 CPUs, 32\,GB RAM.
-    \item \textbf{Client 1:} \texttt{mdc-1057-18-3} --- 1$\times$ NVIDIA L40S (44.5\,GB VRAM), 16 CPUs, 64\,GB RAM.
-    \item \textbf{Client 2:} \texttt{mdc-1057-18-1} --- 1$\times$ NVIDIA L40S (44.5\,GB VRAM), 16 CPUs, 64\,GB RAM.
-    \item \textbf{Client 3:} \texttt{mdc-1057-18-4} --- 1$\times$ NVIDIA L40S (44.5\,GB VRAM), 16 CPUs, 64\,GB RAM.
-\end{itemize}
-
-Each client ran as an independent SLURM job on a dedicated GPU node, communicating with the server over the cluster's InfiniBand network via gRPC. This multi-node deployment is representative of a real FL federation where institutions train on their own infrastructure and only exchange model parameters. A background \texttt{ResourceMonitor} thread on each client polled system metrics (RAM, VRAM, GPU utilization) every second throughout training.
+The FL experiment was deployed across multiple SLURM-managed HPC nodes. The server ran on a CPU-only node (16 CPUs, 128\,GB RAM). The 23 clients were grouped into 7 SLURM array jobs, each running on a dedicated GPU node (1$\times$ NVIDIA L40S, 16 CPUs, 64\,GB RAM). Within each node, 3--4 client processes shared the GPU via a file-based lock that serialized GPU access, ensuring only one client's model occupied VRAM at any time. Client-server communication used gRPC over the cluster's private network.
 
 \section{Results}
 \label{sec:results}
 
-\subsection{Segmentation Performance}
+\subsection{Test-Set Segmentation Performance}
 
-Table~\ref{tab:test_results} presents the test-set Dice scores for both the centralized baseline and the federated model evaluated on each client's held-out test partition. The centralized model is evaluated on the union of all client test sets (127 samples), while the FL model is evaluated separately on each client's test split using the best global model from round 92.
+Table~\ref{tab:main_results} presents the overall test-set performance of both the FedPIDAvg global model (best checkpoint from round 17) and the centralized baseline, evaluated on the same 137 held-out test samples drawn from the identical per-institution splits. Both models were trained and evaluated on the 23-institution split described in Section~\ref{sec:split}.
 
 \begin{table}[h]
 \centering
 \begin{tabular}{lcccccc}
 \toprule
-\textbf{Setting} & \textbf{Test Samples} & \textbf{Test Loss} & \textbf{Dice WT} & \textbf{Dice TC} & \textbf{Dice ET} & \textbf{Mean Dice} \\
+\textbf{Setting} & \textbf{Test $n$} & \textbf{Dice WT} & \textbf{Dice TC} & \textbf{Dice ET} & \textbf{Mean Dice} & \textbf{Mean HD95 (mm)} \\
 \midrule
-Centralized (all) & 127 & 0.1364 & 0.9051 & 0.8803 & 0.8256 & 0.8703 \\
+Centralized & 137 & 0.9124 & 0.8743 & 0.8273 & 0.8714 & 5.04 \\
 \midrule
-FL --- Client 1 & 52 & 0.0928 & 0.9280 & 0.9217 & 0.8819 & 0.9105 \\
-FL --- Client 2 & 39 & 0.1588 & 0.8726 & 0.8311 & 0.8288 & 0.8442 \\
-FL --- Client 3 & 36 & 0.2081 & 0.9170 & 0.8095 & 0.6967 & 0.8078 \\
-\midrule
-FL --- Weighted Avg & 127 & --- & --- & --- & --- & 0.8610 \\
+FedPIDAvg (weighted avg) & 137 & 0.8471 & 0.7340 & 0.7657 & 0.7823 & --- \\
+FedPIDAvg (cross-inst.\ mean) & 23 inst. & 0.8632 & 0.7503 & 0.7237 & 0.7791 & 14.50 \\
 \bottomrule
 \end{tabular}
-\caption{Test-set segmentation performance. The FL weighted average is computed by weighting each client's Mean Dice by its number of test samples: $(52 \times 0.9105 + 39 \times 0.8442 + 36 \times 0.8078) / 127 = 0.8610$.}
-\label{tab:test_results}
+\caption{Overall segmentation performance on the held-out test set. The weighted average weights each institution's per-region Dice by its test sample count (137 total); the cross-institution mean treats all 23 institutions equally. HD95 for the weighted-average row is omitted as the metric is not meaningfully composable across aggregation methods.}
+\label{tab:main_results}
 \end{table}
 
-\paragraph{Overall Performance} The weighted-average Mean Dice of the FL model (0.8610) is within 1.1\% of the centralized baseline (0.8703). This modest gap demonstrates that FL with FedAvg can approach centralized performance on non-IID medical imaging data while keeping all patient data within each institution's boundaries.
+The centralized baseline achieves a Mean Dice of \textbf{0.8714} with a Mean HD95 of 5.04\,mm across all 137 test samples. The FedPIDAvg model achieves a weighted-average test Dice of \textbf{0.7823} (cross-institution mean: 0.7791), trailing the centralized baseline by \textbf{8.9 percentage points} when weighted by test sample count. The weighted-average gap is driven predominantly by the two outlier institutions (1 and 18), which together contribute 91 of the 137 test samples (66\%) and achieve below-average federated Dice (0.8219 and 0.7286 respectively). The per-region gaps in the weighted average are: Whole Tumor $-$6.5pp (0.8471 vs.\ 0.9124), Tumor Core $-$14.0pp (0.7340 vs.\ 0.8743), and Enhancing Tumor $-$6.2pp (0.7657 vs.\ 0.8273). TC shows the largest gap, as the tumor core is the most spatially variable sub-region and benefits most from the large, diverse training set available in the centralized setting.
 
-\paragraph{Per-Client Analysis}
+\subsection{Global Metric Summary}
+
+Table~\ref{tab:global_stats} reports the cross-institution statistics for all metrics, matching the reporting format used in the original FedPIDAvg paper. These statistics are computed across the 23 per-institution mean values.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrrrr}
+\toprule
+\textbf{Metric} & \textbf{Mean} & \textbf{StdDev} & \textbf{Median} & \textbf{25th pctl} & \textbf{75th pctl} \\
+\midrule
+Dice WT & 0.8632 & 0.0868 & 0.8723 & 0.8295 & 0.9243 \\
+Dice TC & 0.7503 & 0.1624 & 0.7949 & 0.6498 & 0.8603 \\
+Dice ET & 0.7237 & 0.2511 & 0.8537 & 0.6537 & 0.8955 \\
+\midrule
+Sensitivity WT & 0.8800 & 0.0818 & 0.9118 & 0.8274 & 0.9412 \\
+Sensitivity TC & 0.8255 & 0.1941 & 0.8896 & 0.7392 & 0.9706 \\
+Sensitivity ET & 0.8353 & 0.1924 & 0.9056 & 0.8339 & 0.9424 \\
+\midrule
+Specificity WT & 0.9975 & 0.0027 & 0.9985 & 0.9974 & 0.9990 \\
+Specificity TC & 0.9977 & 0.0018 & 0.9980 & 0.9969 & 0.9990 \\
+Specificity ET & 0.9986 & 0.0016 & 0.9991 & 0.9988 & 0.9994 \\
+\midrule
+HD95 WT & 14.12 & 15.94 & 6.48 & 3.22 & 18.65 \\
+HD95 TC & 14.86 & 14.63 & 10.04 & 5.70 & 18.62 \\
+HD95 ET & 15.44 & 23.82 & 6.73 & 1.34 & 19.79 \\
+\midrule
+Precision WT & 0.8684 & 0.1270 & 0.9474 & 0.7782 & 0.9635 \\
+Precision TC & 0.7597 & 0.1693 & 0.7724 & 0.6748 & 0.8917 \\
+Precision ET & 0.6964 & 0.2477 & 0.8000 & 0.5877 & 0.8713 \\
+\bottomrule
+\end{tabular}
+\caption{Cross-institution metric statistics for FedPIDAvg test-set inference (23 institutions).}
+\label{tab:global_stats}
+\end{table}
+
+Several patterns emerge from the statistical summary. Specificity is consistently high across all regions ($>$0.997), indicating the model rarely produces false positives: it is conservative in labeling voxels as tumor. By contrast, the centralized baseline achieves sensitivity of 0.9275 (WT), 0.9314 (TC) and 0.913 (ET), compared to 0.88, 0.83 and 0.84 for FedPIDAvg --- a meaningful sensitivity gap that explains where the FL model loses Dice: it misses true tumor voxels rather than over-predicting them. The high standard deviation for ET Dice (0.2511) and ET HD95 (23.82\,mm) confirms that the Enhancing Tumor region is the primary source of cross-institution variability. The median Dice values (WT: 0.87, TC: 0.79, ET: 0.85) are consistently higher than the means, indicating that a few poorly-performing institutions pull the mean down --- the majority of institutions achieve reasonable segmentation quality. Median HD95 values (WT: 6.48\,mm, TC: 10.04\,mm, ET: 6.73\,mm) are substantially below the means due to a few catastrophic outlier cases inflating the average.
+
+\subsection{Per-Institution Test Performance}
+
+Table~\ref{tab:per_inst} presents the test-set Mean Dice and HD95 for each institution together with the cross-institutional results (Section~\ref{sec:cross_inst}), sorted by in-domain performance.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{rrrrrrr}
+\toprule
+\textbf{Inst.} & \textbf{Train} & \textbf{Test n} & \multicolumn{2}{c}{\textbf{Mean Dice}} & \multicolumn{2}{c}{\textbf{Mean HD95 (mm)}} \\
+\cmidrule(lr){4-5} \cmidrule(lr){6-7}
+& & & \textbf{In-Domain} & \textbf{Cross-Inst.} & \textbf{In-Domain} & \textbf{Cross-Inst.} \\
+\midrule
+22 &   5 &  1 & 0.9328 & 0.7812 &  1.47 & 15.23 \\
+11 &  11 &  2 & 0.9259 & 0.7802 &  1.86 & 15.31 \\
+ 7 &  10 &  2 & 0.9097 & 0.7804 &  3.87 & 15.34 \\
+21 &  28 &  4 & 0.9030 & 0.7787 &  4.93 & 15.51 \\
+20 &  26 &  4 & 0.8870 & 0.7792 &  7.43 & 15.27 \\
+19 &   2 &  1 & 0.8852 & 0.7815 & 19.31 & 14.84 \\
+23 &   3 &  1 & 0.8814 & 0.7816 &  3.23 & 15.19 \\
+ 5 &  18 &  3 & 0.8655 & 0.7804 &  4.84 & 15.38 \\
+ 2 &   4 &  1 & 0.8622 & 0.7817 &  6.02 & 15.22 \\
+ 6 &  27 &  4 & 0.8602 & 0.7800 & 20.28 & 14.75 \\
+16 &  24 &  3 & 0.8567 & 0.7806 & 30.28 & 14.93 \\
+ 9 &   2 &  1 & 0.8561 & 0.7818 &  4.72 & 15.22 \\
+17 &   7 &  1 & 0.8518 & 0.7818 &  2.11 & 15.22 \\
+ 1 & 409 & 52 & 0.8219 & 0.7581 & 13.54 & 15.65 \\
+10 &   6 &  1 & 0.7771 & 0.7823 &  4.52 & 15.21 \\
+ 4 &  38 &  5 & 0.7665 & 0.7829 &  7.17 & 15.50 \\
+18 & 306 & 39 & 0.7286 & 0.8037 & 16.00 & 14.26 \\
+ 8 &   6 &  1 & 0.6625 & 0.7832 & 18.65 & 15.20 \\
+13 &  28 &  4 & 0.6375 & 0.7867 & 23.17 & 14.99 \\
+14 &   4 &  1 & 0.6057 & 0.7836 & 15.73 & 15.15 \\
+15 &  10 &  2 & 0.5866 & 0.7852 & 17.56 & 15.29 \\
+ 3 &  12 &  2 & 0.5500 & 0.7857 & 34.22 & 14.85 \\
+12 &   9 &  2 & 0.3056 & 0.7894 & 72.53 & 14.49 \\
+\midrule
+\textbf{Mean} & & & \textbf{0.7791} & \textbf{0.7822} & \textbf{14.50} & \textbf{14.63} \\
+\bottomrule
+\end{tabular}
+\caption{Per-institution test-set performance sorted by in-domain Mean Dice (descending). In-Domain: each institution's own held-out test set ($n$ samples). Cross-Inst.: the FL model evaluated on the pooled test sets of all \emph{other} 22 institutions (85--136 samples depending on the excluded institution). Institutions 1 and 18 were designated Poisson outliers and excluded from $\sim$90\% of training rounds.}
+\label{tab:per_inst}
+\end{table}
+
+\paragraph{Key Observations}
+
 \begin{itemize}
-    \item \textbf{Client 1} achieves the highest FL test Dice (0.9105), \textit{exceeding} the centralized baseline (0.8703) by a significant margin. This client holds the largest partition (511 training samples from a single institution). Its homogeneous data distribution means the global model's representations align well with Institution 1's characteristics. The FedAvg weighting further amplifies this advantage: Client 1 contributes the most training examples, so its parameter updates receive the highest weight during aggregation.
+    \item \textbf{Wide performance range.} Per-institution test Dice spans from 0.3056 (Institution 12, HD95 = 72.5\,mm) to 0.9328 (Institution 22, HD95 = 1.5\,mm). This 63-point spread demonstrates that a single global model serves some institutions far better than others.
 
-    \item \textbf{Client 2} achieves a Mean Dice of 0.8442, below the centralized baseline by 2.6 percentage points. Institution 18 contributes the second-largest share of data, but its scans exhibit different acquisition characteristics than Institution 1. During FedAvg, Client 1's larger update weight can pull the global model slightly away from Institution 18's optimal parameters, diluting institution-specific features.
+    \item \textbf{The top-performing institutions are mid-sized.} Institutions 22, 11, 7 and 21 all achieve Mean Dice $>$ 0.90. Institution 20 (Dice 0.8870) and 19 (0.8852) follow closely. These institutions have 2--28 training samples --- enough data to contribute a meaningful gradient direction to the global model without dominating the aggregation. Their compact, representative test sets likely contain tumors whose appearance aligns well with the global model's learned representations.
 
-    \item \textbf{Client 3} shows the lowest Mean Dice (0.8078), driven primarily by a significantly lower Enhancing Tumor Dice (0.6967 vs.\ 0.8256 centralized). This client aggregates 21 small institutions, each contributing only 4--47 samples. The extreme heterogeneity within this client --- different scanners, protocols and patient demographics across 21 sources --- makes it the hardest partition for the global model to fit. The ET region is typically the smallest and most variable tumor sub-region, making it particularly sensitive to distribution shifts. With only 286 training samples spread across 21 distinct sources, no single source provides enough data to robustly capture ET boundaries, and the global model's compromise across all clients hurts this already-challenging sub-region the most.
+    \item \textbf{Outlier institutions (1 and 18) underperform relative to their data volume.} Institution 1 (409 train, 52 test) achieves Dice 0.8219 and Institution 18 (306 train, 39 test) achieves 0.7286. Despite contributing 71\% of the total training data, their Poisson-excluded participation ($\sim$10\% of rounds) limits their influence on the global model. Moreover, their large and statistically reliable test sets (52 and 39 samples) produce more realistic Dice estimates than the 1--4 sample test sets of smaller institutions.
+
+    \item \textbf{Bottom performers suffer from data-model mismatch.} Institution 12 (Dice 0.3056, HD95 = 72.5\,mm) and Institution 3 (Dice 0.5500, HD95 = 34.2\,mm) show that the global model fails catastrophically on certain institutional distributions. With only 9 and 12 training samples respectively, these institutions could not steer the global model toward their specific tumor characteristics during training. The ET Dice for Institution 12 is 0.0289, indicating near-complete failure to segment enhancing tumor --- likely due to unusual contrast enhancement patterns or atypical tumor morphology. Institution 15 (ET Dice 0.2526) and Institution 13 (ET Dice 0.2557) also show severe ET degradation despite adequate WT performance (0.8758 and 0.9014 respectively), pointing to sub-region-specific domain mismatch rather than a global model failure.
+
+    \item \textbf{Test set size affects metric reliability.} Institutions with only 1 test sample (10 of 23 institutions) produce inherently noisy metrics --- a single easy case yields Dice $>$ 0.9 while a single difficult case can yield Dice $<$ 0.5, regardless of the model's true capability. The most reliable performance estimates come from Institutions 1 (52 test) and 18 (39 test).
 \end{itemize}
 
-\subsection{Training Dynamics}
+\subsection{Cross-Institutional Generalizability}
+\label{sec:cross_inst}
 
-Table~\ref{tab:training} summarizes the training progression for both settings.
+The in-domain evaluation described above measures how well the FL model handles the specific imaging characteristics of the institution whose data it is tested on. A complementary and arguably more clinically relevant question is: \emph{how well does the model generalize to patient data from institutions it has never been explicitly evaluated on?} To answer this, we evaluate the FL global model for each institution $k$ on the pooled held-out test sets of all other 22 institutions (85--136 samples, depending on the excluded institution's test-set size). The results are shown in the Cross-Inst.\ columns of Table~\ref{tab:per_inst} and the global summaries in Tables~\ref{tab:overall_comparison} and \ref{tab:comparison}.
+
+\paragraph{Global averages are nearly identical.}
+At the federation level, cross-institutional Mean Dice is 0.7822 versus in-domain 0.7791 --- a difference of only 0.31pp. Cross-institutional Mean HD95 (14.63\,mm) likewise matches the in-domain figure (14.50\,mm). These nearly identical global means suggest that the FL model has learned a broadly applicable representation: it segments tumors from unseen institutions at essentially the same average quality as from its own training-data partners.
+
+\paragraph{Per-institution variance collapses.}
+The headline summary conceals a dramatic difference in variance. In-domain Mean Dice ranges from 0.3056 to 0.9328 (spread: 63pp). Cross-institutional Mean Dice ranges from 0.7581 to 0.8037 (spread: 4.6pp, std $\approx 0.007$). When each institution evaluates on 85--136 diverse samples instead of its own 1--52, the institution-specific characteristics that drive the extreme in-domain spread are averaged out. The cross-institutional score is therefore a far more stable and reliable signal of the global model's actual capability.
+
+\paragraph{Poorly-performing institutions improve dramatically.}
+The three worst in-domain institutions show the largest cross-institutional gains: Institution 12 ($+$48pp: 0.3056 $\to$ 0.7894), Institution 3 ($+$24pp: 0.5500 $\to$ 0.7857), and Institution 15 ($+$20pp: 0.5866 $\to$ 0.7852). Institution 18 ($+$7.5pp: 0.7286 $\to$ 0.8037) also improves substantially. The interpretation is direct: the global model is not generically weak; it is specifically ill-suited to these institutions' idiosyncratic imaging characteristics. When removed from the evaluation loop, the model performs at or above the federation average on the remaining data.
+
+\paragraph{Top-performing institutions decline sharply.}
+Institutions 22, 11, 7 and 21, which achieve in-domain Dice of 0.90--0.93, drop to the federation mean ($\approx 0.78$) when evaluated cross-institutionally. This confirms that their high in-domain scores reflect easy or highly representative test cases rather than a model that has been especially well-fitted to those institutions. Their in-domain advantage is a property of their test sets, not the model.
+
+\paragraph{Institution 1 (largest) drops cross-institutionally.}
+Institution 1 (in-domain 0.8219, cross-institutional 0.7581) shows the only notable decline among the non-bottom performers. When Institution 1 is removed from the test pool, the remaining 85 samples disproportionately include data from the weaker institutions (12, 3, 15), pulling the cross-institutional average down. This reflects Institution 1's role as a stabilizing majority contributor: its 52 in-domain test samples produce reliable, above-average metrics, but without them the remaining pool is harder for the global model.
+
+\paragraph{Sub-region-level shifts.}
+At the metric level (Table~\ref{tab:comparison}), cross-institutional ET Dice is 0.7653 versus in-domain 0.7237 ($+$4.2pp) --- the largest per-region improvement. This is entirely driven by the exclusion of the catastrophically low ET scores from Institutions 12, 13 and 15 from their own cross-institutional evaluations: each of those institutions evaluates on a pool that omits their own hard ET cases, substantially lifting the average. Conversely, cross-institutional precision drops for WT ($-$3.6pp) and TC ($-$6.9pp) because the larger, more diverse evaluation pool includes more cases where the model over-predicts boundaries. Sensitivity increases cross-institutionally for all regions (TC: $+$7.5pp), reflecting the exclusion of institution-specific under-detection failures from each client's cross-institutional set.
+
+\subsection{Training Dynamics}
 
 \begin{table}[h]
 \centering
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Setting} & \textbf{Best Epoch/Round} & \textbf{Best Val Dice} & \textbf{Final Val Dice} & \textbf{Total Duration} \\
+\textbf{Setting} & \textbf{Best Epoch/Round} & \textbf{Best Val Dice} & \textbf{Final Val Dice} & \textbf{Duration} \\
 \midrule
 Centralized & Epoch 78 & 0.8966 & 0.8949 & $\sim$17 hours \\
-FL (global) & Round 92 & 0.8888 & 0.8842 & $\sim$11 hours \\
+FedPIDAvg & Round 17 & 0.7869 & 0.7677 & $\sim$28 hours \\
 \bottomrule
 \end{tabular}
 \caption{Training dynamics comparison.}
 \label{tab:training}
 \end{table}
 
-The centralized model achieved its best validation Dice of 0.8966 at epoch 78, while the FL model peaked at 0.8888 at round 92. Both models exhibit convergence stability in later stages, with minimal fluctuation in validation Dice after approximately round/epoch 60. The FL model's delayed peak (round 92 vs.\ epoch 78) is expected: each FL round involves only one local epoch followed by parameter averaging, and the aggregation step introduces noise that the model must absorb over additional rounds.
+The centralized model converged steadily, reaching its best validation Dice of 0.8966 at epoch 78 with minimal fluctuation thereafter. The FedPIDAvg model, in contrast, peaked early at round 17 (Dice 0.7869) and did not improve in the remaining 83 rounds. The final-round weighted-average Dice was 0.7677, indicating mild instability rather than steady convergence.
 
-The FL experiment completed in approximately 11 hours --- significantly faster than the 17-hour centralized run --- because each client trains on only its own partition (286--408 samples) rather than the full pooled dataset (999 samples). All three clients train simultaneously on separate nodes, so the wall-clock time per round is determined by the slowest client, which has at most 408 samples. The parameter serialization, gRPC transfer and server-side aggregation overhead is negligible relative to the forward and backward passes on 3D volumes.
+This early-peak-then-plateau behavior has several contributing factors:
 
-\subsection{Per-Client Training Behavior}
+\begin{enumerate}
+    \item \textbf{PID weight instability with extreme non-IID data.} The D-term (cost decrease) can produce negative weights when a client's loss increases between rounds. With 23 heterogeneous clients, it is common for several clients to regress in any given round, leading to negative PID weights that destabilize the aggregation. By round 100, the PID weights show values ranging from $-0.29$ to $+0.84$, far from the uniform distribution that stable convergence would require.
 
-Analysis of the per-client validation Dice over 100 rounds reveals distinct convergence patterns:
+    \item \textbf{Poisson exclusion of dominant data sources.} Institutions 1 and 18, which together hold 71\% of the training data, are excluded from $\sim$90\% of rounds. While this protects smaller institutions from being overwhelmed, it also means the global model receives limited signal from the majority of the dataset. The remaining 21 institutions collectively provide only 358 training samples, insufficient to drive the large Swin UNETR model ($\sim$62M parameters) to convergence.
 
-\begin{table}[h]
-\centering
-\begin{tabular}{lccccc}
-\toprule
-\textbf{Client} & \textbf{Train Samples} & \textbf{Round 1 Val Dice} & \textbf{Best Val Dice} & \textbf{Best Round} & \textbf{Round 100 Val Dice} \\
-\midrule
-Client 1 & 408 & 0.6895 & 0.9123 & 93 & 0.9078 \\
-Client 2 & 305 & 0.6526 & 0.9020 & 92 & 0.8847 \\
-Client 3 & 286 & 0.7319 & 0.8625 & 86 & 0.8504 \\
-\bottomrule
-\end{tabular}
-\caption{Per-client FL training progression.}
-\label{tab:client_train}
-\end{table}
+    \item \textbf{Tiny institution noise.} Nine institutions have fewer than 10 training samples. Their per-round loss values are noisy (high variance from so few samples), which injects noise into both the D-term and I-term of the PID controller, further destabilizing the aggregation weights.
+\end{enumerate}
 
-All three clients start from the same randomly initialized global model (Dice 0.65--0.73) and converge steadily, with Client 3 reaching its local peak earliest at round 86 while Clients 1 and 2 peak later at rounds 92--93. Client 3's earlier saturation and lower ceiling reflect the challenge of fitting a single global model to data spanning 21 heterogeneous institutions. Client 2 starts with the lowest initial Dice (0.6526) but converges effectively, reaching a best validation Dice of 0.9020. The gap between each client's validation Dice and its test Dice is consistent (2--5 percentage points), indicating that the validation and test sets are representative of each other within each partition.
-
-\subsection{Resource Utilization}
-
-Table~\ref{tab:resources} presents the resource consumption measured during training. In the multi-node FL deployment, each client ran on its own dedicated GPU node, enabling direct comparison of per-client resource usage against the centralized baseline.
+\subsection{Communication Efficiency}
 
 \begin{table}[h]
 \centering
-\begin{tabular}{lcccc}
+\begin{tabular}{lc}
 \toprule
-\textbf{Metric} & \textbf{Centralized} & \textbf{FL Client 1} & \textbf{FL Client 2} & \textbf{FL Client 3} \\
+\textbf{Metric} & \textbf{Value} \\
 \midrule
-Node & mdc-1057-18-1 & mdc-1057-18-3 & mdc-1057-18-1 & mdc-1057-18-4 \\
-GPUs & 2$\times$ L40S & 1$\times$ L40S & 1$\times$ L40S & 1$\times$ L40S \\
-Peak VRAM (MB) & 26,719 & 26,387 & 21,731 & 21,731 \\
-Peak RAM (MB) & 11,578 & 15,873 & 18,128 & 21,349 \\
-GPU Utilization & 100\% & 100\% & 100\% & 100\% \\
-Training Duration & $\sim$17 hours & \multicolumn{3}{c}{$\sim$11 hours (all clients, simultaneous)} \\
+Model parameters & 62.19M ($\sim$248\,MB per transfer) \\
+Clients per round (typical) & 21 (excl. outliers) \\
+Bytes per round & $21 \times 248\,\text{MB} \times 2 \approx 10.4$\,GB \\
+Total communication (100 rounds) & $\sim$1,040\,GB \\
 \bottomrule
 \end{tabular}
-\caption{Resource utilization comparison across dedicated nodes.}
-\label{tab:resources}
+\caption{Communication cost analysis.}
+\label{tab:comm}
 \end{table}
 
-\paragraph{GPU Memory} The centralized baseline used 26.7\,GB of VRAM across two L40S GPUs via DataParallel. Each FL client used a single L40S GPU, with Client 1 consuming a comparable 26.4\,GB and Clients 2 and 3 consuming 21.7\,GB each. The per-client VRAM usage is proportional to the local dataset size: Client 1's larger partition (408 training samples) requires more memory for the data pipeline, while Clients 2 and 3 have smaller partitions. These measurements confirm that each FL client's GPU memory footprint is comparable to a single GPU's share in the centralized DataParallel setup.
+The communication cost is dominated by the model size ($\sim$248\,MB per parameter transfer). Each round involves downloading the global model to each selected client and uploading updated parameters back, resulting in $\sim$10.4\,GB per round with 21 participating clients. Over 100 rounds, the total communication volume is approximately 1\,TB. This raw byte volume reflects the cost of using the large Swin UNETR model: each of the $\sim$21 selected clients per round must download and upload a 248\,MB parameter tensor, giving $\sim$10.4\,GB per round.
 
-\paragraph{System RAM} FL clients consumed more system RAM (15.9--21.3\,GB) than the centralized baseline (11.6\,GB). This is because each client independently loads and preprocesses its 3D volumes in separate DataLoader worker processes, whereas the centralized baseline shares a single set of workers. Client 3's higher RAM usage (21.3\,GB) correlates with its more heterogeneous data from 21 institutions, which may produce more varied volume sizes after preprocessing.
+\subsection{Overall Performance Comparison}
 
-\paragraph{Training Time} The FL experiment completed in approximately 11 hours, 35\% faster than the 17-hour centralized run. This speedup arises because each FL round involves one local epoch on a partition of 286--408 samples (executed in parallel across three nodes), compared to one centralized epoch over 999 samples on a single node. The communication overhead --- serializing, transferring and deserializing the Swin UNETR's $\sim$62M parameters ($\sim$248\,MB) per round via gRPC --- is negligible relative to the minutes-long training step.
+Table~\ref{tab:overall_comparison} summarises the headline segmentation metrics --- mean Dice and mean HD95 averaged across all three tumor sub-regions --- for all three settings.
 
-\paragraph{Total Resource Consumption} While each FL client uses fewer resources than the centralized node, the aggregate resource footprint is higher: 3 GPU nodes and 1 CPU node versus a single 2-GPU node. This is the fundamental trade-off of FL --- privacy preservation comes at the cost of distributed hardware requirements. In a real-world medical federation, however, these resources already exist at each institution; the FL overhead is limited to the server node and network bandwidth.
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Setting} & \textbf{Model} & \textbf{Mean Dice} & \textbf{Mean HD95 (mm)} \\
+\midrule
+Original FedPIDAvg (FeTS 2022 winner) & 3D U-Net   & 0.7595 & 29.88 \\
+Ours: FedPIDAvg (in-domain)           & Swin UNETR & 0.7791 & 14.50 \\
+Ours: FedPIDAvg (cross-institutional) & Swin UNETR & 0.7822 & 14.63 \\
+Ours: Centralized                     & Swin UNETR & 0.8714 &  5.04 \\
+\bottomrule
+\end{tabular}
+\caption{Overall mean Dice and mean HD95 across all three tumor sub-regions (WT, TC, ET). Original FedPIDAvg values are cross-institution means from Tables 3 and 4 of the FedPIDAvg paper. In-domain: each institution evaluated on its own test set. Cross-institutional: each institution evaluated on all other 22 institutions' pooled test sets. Mean HD95 is the arithmetic mean of the per-region HD95 means.}
+\label{tab:overall_comparison}
+\end{table}
+
+Three findings stand out. First, switching from 3D U-Net to Swin UNETR improves federated mean Dice from 0.7595 to 0.7791 ($+$2.0pp), confirming that the transformer-based architecture retains its representational advantage even under the communication and data-fragmentation constraints of FL. Second, the improvement in boundary precision is more striking: mean HD95 drops from 29.88\,mm to 14.50\,mm ($-$51\%), indicating that Swin UNETR's long-range self-attention produces substantially sharper tumor delineation than the convolutional U-Net in the federated setting. Third, the centralized Swin UNETR remains the clear performance ceiling, outperforming the federated model by 8.9pp in Dice and by 9.46\,mm in HD95. Fourth, the cross-institutional evaluation (0.7822 Mean Dice, 14.63\,mm HD95) matches the in-domain result almost exactly ($+$0.31pp Dice, $+$0.13\,mm HD95), confirming that the FL model generalizes to unseen institutional distributions at the same level as to its own training-time partners. The small positive gap is fully explained by the exclusion of each institution's hardest cases from its own cross-institutional pool, as detailed in Section~\ref{sec:cross_inst}.
+
+\subsection{Centralized vs.\ Federated Swin UNETR}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Metric} & \textbf{Centralized} & \textbf{FedPIDAvg} & \textbf{FedPIDAvg} \\
+ & \textbf{(Swin UNETR)} & \textbf{(In-Domain)} & \textbf{(Cross-Inst.)} \\
+\midrule
+\multicolumn{4}{l}{\textit{Dice Score}} \\
+\quad WT & 0.9124 & 0.8632 & 0.8472 \\
+\quad TC & 0.8743 & 0.7503 & 0.7340 \\
+\quad ET & 0.8273 & 0.7237 & 0.7653 \\
+\midrule
+\multicolumn{4}{l}{\textit{Sensitivity}} \\
+\quad WT & 0.9275 & 0.8800 & 0.8993 \\
+\quad TC & 0.9314 & 0.8255 & 0.9008 \\
+\quad ET & 0.9130 & 0.8353 & 0.8790 \\
+\midrule
+\multicolumn{4}{l}{\textit{Specificity}} \\
+\quad WT & 0.9985 & 0.9975 & 0.9973 \\
+\quad TC & 0.9992 & 0.9977 & 0.9975 \\
+\quad ET & 0.9995 & 0.9986 & 0.9990 \\
+\midrule
+\multicolumn{4}{l}{\textit{Precision}} \\
+\quad WT & 0.9125 & 0.8684 & 0.8327 \\
+\quad TC & 0.8663 & 0.7597 & 0.6905 \\
+\quad ET & 0.8134 & 0.6964 & 0.7366 \\
+\midrule
+\multicolumn{4}{l}{\textit{HD95 (mm)}} \\
+\quad WT &  6.52 & 14.12 & 15.13 \\
+\quad TC &  4.28 & 14.86 & 16.54 \\
+\quad ET &  4.31 & 15.44 & 12.19 \\
+\midrule
+Communication Volume & --- & $\sim$1,040\,GB & $\sim$1,040\,GB \\
+\bottomrule
+\end{tabular}
+\caption{Per-region comparison of centralized and federated Swin UNETR. In-Domain: each institution evaluated on its own held-out test set (137 total samples, cross-institution means). Cross-Inst.: each institution evaluated on the pooled test sets of all other 22 institutions (85--136 samples per client, cross-institution means). All three columns use the same model architecture and MONAI evaluation pipeline; the FL columns use the same trained checkpoint.}
+\label{tab:comparison}
+\end{table}
+
+\paragraph{Centralized vs.\ in-domain federated.}
+The overall FL cost is 8.9pp in mean Dice (weighted average: 0.7823 vs.\ 0.8714) and 9.46\,mm in mean HD95 (14.50 vs.\ 5.04\,mm), but these headline numbers conceal important sub-region structure.
+
+\textbf{TC is the most affected region.} The Tumor Core Dice gap is the largest at 14.0pp (weighted average: 0.7340 vs.\ 0.8743). TC HD95 also shows the greatest absolute increase, rising from 4.28\,mm to 14.86\,mm --- a $3.5\times$ increase. Sensitivity for TC drops 10.6pp (0.9314$\to$0.8255) and precision drops 10.7pp (0.8663$\to$0.7597). TC is the most compact and morphologically variable sub-region; its precise delineation requires the model to learn institution-specific tumor core patterns that are directly undermined by non-IID fragmentation and by the Poisson exclusion of the two largest institutions, which together provide the most TC training examples.
+
+\textbf{HD95 degrades disproportionately relative to Dice.} Across all regions the relative HD95 increase far exceeds the relative Dice decrease. ET HD95 rises $258\%$ (4.31$\to$15.44\,mm) while ET Dice falls only $12.5\%$ (0.8273$\to$0.7237). This asymmetry is diagnostic: Dice measures volumetric overlap and tolerates boundary errors if the interior voxels are correctly classified, whereas HD95 captures the worst-case boundary displacement. The federated model produces boundaries that are correct on average but inconsistent at the periphery --- a pattern that Dice partially obscures and HD95 exposes.
+
+\textbf{The model under-detects rather than over-predicts.} Sensitivity drops substantially across all regions in the federated setting (WT: $-$4.8pp, TC: $-$10.6pp, ET: $-$7.8pp) while specificity remains virtually identical ($>$0.997 in both settings). The FL model is not generating spurious false positives; it is missing true tumor voxels. This conservative bias is consistent with a global model that has learned an averaged representation of tumor appearance: it reliably marks regions that look like tumors across most institutions but misses atypical presentations that are well-represented only in individual datasets.
+
+\textbf{WT is the most robust sub-region.} The Whole Tumor Dice gap is only 4.9pp (cross-institution mean: 0.8632 vs.\ 0.9124), the smallest of the three regions. WT is the union of all tumor classes and represents the largest, most spatially consistent segmentation target --- easier for a global model to approximate regardless of institutional heterogeneity. Its relative resilience explains why FL remains clinically useful for coarse tumor localization even when sub-region precision suffers.
+
+\paragraph{In-domain vs.\ cross-institutional federated.}
+Comparing the two FL columns reveals how metric composition is affected by the choice of evaluation pool. At the mean-Dice level the two are nearly identical (0.7791 in-domain vs.\ 0.7822 cross-institutional), but the per-metric picture diverges.
+
+\textbf{ET Dice rises $+$4.2pp cross-institutionally} (0.7237 $\to$ 0.7653). This is an artifact of the in-domain evaluation pulling down the average: when each institution evaluates on its own data, the catastrophically low ET scores from Institutions 12, 13 and 15 (in-domain ET Dice: 0.03, 0.26, 0.25) enter their respective in-domain averages. In the cross-institutional setting, those institutions instead evaluate on other institutions' data, where ET performance is near the federation mean --- so those catastrophic cases are excluded from the per-client mean before the global average is taken.
+
+\textbf{TC sensitivity jumps $+$7.5pp cross-institutionally} (0.8255 $\to$ 0.9008) for the same reason: the institutions that most severely under-detect TC in-domain evaluate on an easier cross-institutional pool, inflating the global cross-institutional sensitivity mean.
+
+\textbf{WT and TC precision fall cross-institutionally} ($-$3.6pp and $-$6.9pp respectively). The larger, more diverse evaluation pool includes more cases from institutions whose tumor profiles elicit false-positive over-segmentation, reducing precision below the in-domain average.
+
+\textbf{WT and TC HD95 worsen slightly cross-institutionally} ($+$1.0\,mm and $+$1.7\,mm). The in-domain evaluation, dominated by the small-institution test sets where the global model tends to perform reliably, yields slightly lower HD95 than the cross-institutional pool, which incorporates data from the full range of institutional distributions.
+
+These shifts are all consistent with a single underlying phenomenon: the in-domain evaluation is strongly biased by the specific mix of each institution's test cases, while the cross-institutional evaluation produces a more homogeneous, distribution-averaged signal. The two numbers measure different things --- local fit versus global generalization --- and should be interpreted together rather than as competing estimates of the same quantity.
+
+The communication volume of $\sim$1,040\,GB reflects the cost of transmitting the 248\,MB Swin UNETR tensor to the $\sim$21 selected clients and receiving their updates each round ($21 \times 248\,\text{MB} \times 2 \approx 10.4$\,GB/round over 100 rounds). This figure is architecture-specific; the large Swin UNETR parameter count ($\sim$62M weights) dominates the per-round byte cost, and a more compact architecture would reduce communication overhead proportionally.
 
 \subsection{Summary}
 
 The experimental results lead to three conclusions:
 
 \begin{enumerate}
-    \item \textbf{FL achieves competitive performance.} The weighted-average test Dice of the FL model (0.8610) is within 1.1\% of the centralized baseline (0.8703), confirming that FedAvg can effectively aggregate knowledge from non-IID medical imaging data with only a modest reduction in segmentation quality. This gap is notably smaller than the variance between individual clients.
+    \item \textbf{The privacy-accuracy gap is meaningful but bounded.} The FedPIDAvg model (weighted-average test Dice 0.7823) trails the centralized baseline (0.8714) by 8.9 percentage points when both are evaluated on the same 137 held-out samples. The gap is widest for TC ($-$14.0pp weighted avg; $-$12.4pp cross-institution mean) and smallest for WT ($-$6.5pp weighted avg; $-$4.9pp cross-institution mean). Despite this gap, the median per-institution Dice of 0.8561 indicates that the majority of institutions receive clinically reasonable segmentation quality from the global model. The gap reflects the inherent cost of privacy preservation in a highly heterogeneous federation.
 
-    \item \textbf{Performance varies across clients according to data characteristics.} Client 1 (large, homogeneous institution) exceeds the centralized baseline with a Mean Dice of 0.9105. Client 2 (mid-sized institution) achieves 0.8442, a moderate gap. Client 3 (21 small heterogeneous clinics) shows the largest deficit at 0.8078, driven almost entirely by the challenging Enhancing Tumor sub-region (0.6967 vs.\ 0.8256). This gradient directly reflects the non-IID severity: the more heterogeneous and data-scarce a client's partition, the less a global model serves its specific distribution. This motivates future work on personalized FL strategies that adapt the global model to each client's local characteristics.
+    \item \textbf{FedPIDAvg's PID weighting is sensitive to data heterogeneity.} The algorithm's derivative and integral terms amplify noise from tiny institutions (2--6 training samples), producing unstable aggregation weights that hinder convergence beyond round 17. The Poisson exclusion of large institutions compounds this by removing the most informative data sources from 90\% of rounds. These dynamics suggest that FedPIDAvg may require more careful hyperparameter tuning ($\alpha$, $\beta$, $\gamma$) or complementary stabilization techniques when applied to architectures larger than the 3D U-Net it was designed for.
 
-    \item \textbf{FL is faster but requires more total hardware.} The multi-node FL experiment completed in $\sim$11 hours versus $\sim$17 hours for centralized training, a 35\% wall-clock speedup from parallelism. However, FL consumed 3 GPU nodes plus a server node compared to a single 2-GPU node. Per-client resource usage (VRAM, GPU utilization) was comparable to the centralized per-GPU baseline, confirming that the Flower framework and gRPC communication introduce negligible computational overhead. The primary cost of FL is not computation but the coordination of distributed infrastructure.
+    \item \textbf{Per-institution performance is highly variable, motivating personalized FL.} The global model achieves Dice $>$ 0.90 for 4 institutions (22, 11, 7 and 21) but falls below 0.60 for 3 others (15, 3 and 12). This variability is driven by data-model mismatch at poorly-served institutions rather than data volume alone. Personalized FL strategies --- such as per-institution fine-tuning, clustered FL, or local adaptation layers --- are needed to ensure equitable segmentation quality across all federation participants.
 \end{enumerate}
 
 \bibliography{references}

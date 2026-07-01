@@ -20,31 +20,34 @@ from monai.transforms import (
 )
 from monai.data import Dataset, DataLoader
 
+def get_institution_sizes(partitioning_csv):
+    """Returns {partition_id: sample_count} for all institutions."""
+    df = pd.read_csv(partitioning_csv)
+    return df['Partition_ID'].value_counts().to_dict()
+
+
 def get_client_splits(data_dir, partitioning_csv, client_id):
     """
-    Reads the partitioning file, filters by client_id, creates data dicts,
-    and returns deterministic 80-10-10 train/val/test splits for that specific client.
+    Reads the partitioning file, filters by client_id (1-23, mapping directly
+    to Partition_ID), creates data dicts, and returns deterministic train/val/test
+    splits. For institutions with <10 samples, 1 val + 1 test are mandatory and
+    the rest go to train. For >=10 samples, an 80-10-10 split is used.
     """
     df = pd.read_csv(partitioning_csv)
-    
-    if client_id == 1:
-        df = df[df['Partition_ID'] == 1]
-    elif client_id == 2:
-        df = df[df['Partition_ID'] == 18]
-    elif client_id == 3:
-        df = df[~df['Partition_ID'].isin([1, 18])]
-    else:
-        raise ValueError(f"Invalid client_id: {client_id}")
-    
+
+    if client_id < 1 or client_id > df['Partition_ID'].max():
+        raise ValueError(f"Invalid client_id: {client_id}. Must be 1-{df['Partition_ID'].max()}")
+
+    df = df[df['Partition_ID'] == client_id]
     subjects = df['Subject_ID'].tolist()
-    
+
     data_dicts = []
     base_folder = os.path.join(data_dir, "MICCAI_FeTS2022_TrainingData")
     for subject in subjects:
         subject_folder = os.path.join(base_folder, subject)
         if not os.path.exists(subject_folder):
             continue
-            
+
         data_dicts.append({
             "image": [
                 os.path.join(subject_folder, f"{subject}_flair.nii.gz"),
@@ -54,13 +57,21 @@ def get_client_splits(data_dir, partitioning_csv, client_id):
             ],
             "label": os.path.join(subject_folder, f"{subject}_seg.nii.gz")
         })
-        
+
     if len(data_dicts) == 0:
         return [], [], []
 
-    # 80-10-10 split independently for this specific client
-    train_files, val_test_files = train_test_split(data_dicts, test_size=0.20, random_state=42)
-    val_files, test_files = train_test_split(val_test_files, test_size=0.50, random_state=42)
+    if len(data_dicts) < 10:
+        import random
+        shuffled = list(data_dicts)
+        random.Random(42).shuffle(shuffled)
+        test_files = [shuffled[-1]]
+        val_files = [shuffled[-2]]
+        train_files = shuffled[:-2]
+    else:
+        train_files, val_test_files = train_test_split(data_dicts, test_size=0.20, random_state=42)
+        val_files, test_files = train_test_split(val_test_files, test_size=0.50, random_state=42)
+
     return train_files, val_files, test_files
 
 def create_data_loaders(data_dir, partitioning_csv, client_id=None, batch_size=1, num_workers=4):
@@ -71,7 +82,7 @@ def create_data_loaders(data_dir, partitioning_csv, client_id=None, batch_size=1
     """
     if client_id in [0, None]:
         train_files, val_files, test_files = [], [], []
-        for cid in [1, 2, 3]:
+        for cid in range(1, 24):
             t, v, te = get_client_splits(data_dir, partitioning_csv, cid)
             train_files.extend(t)
             val_files.extend(v)
