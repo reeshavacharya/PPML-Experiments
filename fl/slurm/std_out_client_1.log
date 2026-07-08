@@ -10,24 +10,221 @@ GPUs Available: 1
 Client 1 using device: cuda
 /work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/monai/utils/deprecate_utils.py:321: FutureWarning: monai.transforms.spatial.dictionary Orientationd.__init__:labels: Current default value of argument `labels=(('L', 'R'), ('P', 'A'), ('I', 'S'))` was changed in version None from `labels=(('L', 'R'), ('P', 'A'), ('I', 'S'))` to `labels=None`. Default value changed to None meaning that the transform now uses the 'space' of a meta-tensor, if applicable, to determine appropriate axis labels.
   warn_deprecated(argname, msg, warning_category)
-[Client 1] Resuming from round 12, appending to /work/r/reeshav/PPML-Experiments-FL/fl/client_1_metrics.csv
+[Client 1] Resuming from round 1, appending to /work/r/reeshav/PPML-Experiments-FL/fl/client_1_metrics.csv
+/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/torch/optim/lr_scheduler.py:227: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn(
 [Client 1] Connection attempt 1/10
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message be9369a6-e028-4a81-acfc-39a57fee861b
-I0628 23:16:45.780718   65252 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 1, Round 13] 9% (40/408) Loss: 0.3586
-[Client 1, Round 13] 19% (80/408) Loss: 0.4664
-[Client 1, Round 13] 29% (120/408) Loss: 0.4494
-[Client 1, Round 13] 39% (160/408) Loss: 0.3744
-[Client 1, Round 13] 49% (200/408) Loss: 0.5840
-[Client 1, Round 13] 58% (240/408) Loss: 0.3491
-[Client 1, Round 13] 68% (280/408) Loss: 0.4094
-[Client 1, Round 13] 78% (320/408) Loss: 0.2412
-[Client 1, Round 13] 88% (360/408) Loss: 0.2329
-[Client 1, Round 13] 98% (400/408) Loss: 0.1741
-[Client 1, Round 13] 100% (408/408) Loss: 0.2792
-[Client 1, Round 13] Train Loss: 0.3820
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: reconnect message 0aa296a3-9be5-483c-8c39-91302f147a26
-[92mINFO [0m:      Disconnect and shut down
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_status:14, grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"}"
+>
+[Client 1] Disconnected. Retrying in 30s...
+[Client 1] Connection attempt 2/10
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused", grpc_status:14}"
+>
+[Client 1] Disconnected. Retrying in 60s...
+[Client 1] Connection attempt 3/10
+I0706 23:12:17.287159   57442 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:12:17.298952   58087 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: Bad file descriptor (9)
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused", grpc_status:14}"
+>
+[Client 1] Disconnected. Retrying in 90s...
+[Client 1] Connection attempt 4/10
+I0706 23:13:47.657809   57442 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_status:14, grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"}"
+>
+[Client 1] Disconnected. Retrying in 120s...
+[Client 1] Connection attempt 5/10
+I0706 23:15:47.959564   57442 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:15:47.971740   60152 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: Bad file descriptor (9)
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused", grpc_status:14}"
+>
+[Client 1] Disconnected. Retrying in 150s...
+[Client 1] Connection attempt 6/10
+I0706 23:18:18.276896   57442 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:18:18.288191   60608 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: Bad file descriptor (9)
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_status:14, grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"}"
+>
+[Client 1] Disconnected. Retrying in 180s...
+[Client 1] Connection attempt 7/10
+I0706 23:21:18.559227   57442 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:21:18.570594   61243 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: Bad file descriptor (9)
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused", grpc_status:14}"
+>
+[Client 1] Disconnected. Retrying in 210s...
+[Client 1] Connection attempt 8/10
+I0706 23:24:48.843106   57442 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:24:48.854484   61871 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: Bad file descriptor (9)
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_status:14, grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"}"
+>
+[Client 1] Disconnected. Retrying in 240s...
+[Client 1] Connection attempt 9/10
+I0706 23:28:49.162138   57442 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:28:49.179274   62467 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: Bad file descriptor (9)
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused", grpc_status:14}"
+>
+[Client 1] Disconnected. Retrying in 270s...
+[Client 1] Connection attempt 10/10
+I0706 23:33:19.485225   57442 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:33:19.502635   63216 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: file descriptor was created pre fork
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_status:14, grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"}"
+>
+[Client 1] All 10 attempts exhausted. Exiting.

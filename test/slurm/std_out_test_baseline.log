@@ -1,12 +1,11 @@
 ==================================================
-System Information for: Centralized Baseline Test
+System Information for: Centralized Test (fets)
 Node Name: mdc-1057-18-1.rc.usf.edu
 OS Platform: Linux-3.10.0-1160.2.1.el7.x86_64-x86_64-with-glibc2.17
 CPU: 32 physical cores, 64 logical cores
 Total RAM: 251.21 GB
-GPUs Available: 2
+GPUs Available: 1
   GPU 0: NVIDIA L40S (VRAM: 44.53 GB)
-  GPU 1: NVIDIA L40S (VRAM: 44.53 GB)
 ==================================================
 Using device: cuda
 Test set size: 137 samples
@@ -24,17 +23,17 @@ Loading checkpoint from /work/r/reeshav/PPML-Experiments-FL/checkpoint/swin_unet
   Testing: 100% (137/137)
 
 ==================================================
-Centralized Baseline Test Results
+Centralized Test Results (fets)
 ==================================================
   Samples       : 137
-  Test Loss     : 0.1376
-  Mean Dice     : 0.8714
-    WT=0.9124  TC=0.8743  ET=0.8273
-  Mean HD95     : 5.04
-    WT=6.52  TC=4.28  ET=4.31
-  Sensitivity   : WT=0.9275  TC=0.9314  ET=0.913
-  Specificity   : WT=0.9985  TC=0.9992  ET=0.9995
-  Precision     : WT=0.9125  TC=0.8663  ET=0.8134
+  Test Loss     : 0.1391
+  Mean Dice     : 0.8767
+    WT=0.9175  TC=0.8786  ET=0.834
+  Mean HD95     : 6.05
+    WT=7.0  TC=6.15  ET=5.0
+  Sensitivity   : WT=0.9236  TC=0.9234  ET=0.9093
+  Specificity   : WT=0.9987  TC=0.9994  ET=0.9996
+  Precision     : WT=0.9258  TC=0.8843  ET=0.8268
 ==================================================
 
 Results saved to /work/r/reeshav/PPML-Experiments-FL/test/centralized_baseline_results.json

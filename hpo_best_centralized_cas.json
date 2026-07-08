@@ -1,0 +1,11 @@
+{
+  "study_name": "centralized_hpo_cas",
+  "best_trial": 2,
+  "best_val_dice": 0.3872,
+  "best_params": {
+    "lr": 0.000291063591313307,
+    "weight_decay": 6.25137357452175e-05
+  },
+  "n_trials_completed": 8,
+  "hpo_epochs": 6
+}

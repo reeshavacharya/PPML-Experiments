@@ -1,0 +1,6 @@
+Round/Epoch,Train Loss,SGD Steps,Val Loss,Val Balanced Accuracy,Val Macro F1,Val Recall MEL,Val Recall NV,Val Recall BCC,Val Recall AK,Val Recall BKL,Val Recall DF,Val Recall VASC,Val Recall SCC,Val Macro AUC OvR,Val Cohen Kappa,Peak RAM (MB),Peak VRAM (MB),Peak GPU Util (%)
+0_val,,,0.1219,0.3762,0.1854,0.4167,0.4643,1.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.7406,0.1464,,,
+1,0.0715,9,,,,,,,,,,,,,,3100.4,6387.0,31.0
+1_val,,,0.0589,0.8274,0.4883,0.5833,0.5536,1.0000,0.0000,1.0000,1.0000,0.0000,0.0000,0.8941,0.2688,,,
+2,0.0629,9,,,,,,,,,,,,,,4364.0,7457.0,67.0
+2_val,,,0.0289,0.8631,0.5100,0.8333,0.4821,1.0000,0.0000,1.0000,1.0000,0.0000,0.0000,0.9042,0.2849,,,

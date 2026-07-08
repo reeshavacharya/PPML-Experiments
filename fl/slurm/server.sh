@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=fl_server
+#SBATCH --job-name=ft_legsv
 #SBATCH --partition=muma_2021
 #SBATCH --qos=muma21
 #SBATCH --nodes=1

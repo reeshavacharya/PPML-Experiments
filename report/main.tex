@@ -24,11 +24,7 @@ Our goal is to analyze Privacy Enhancing Techniques (PETs) in the medical imagin
 
 Our primary task is 3D image segmentation. Segmentation refers to the task of identifying and delineating a region of interest (ROI) in an image. In our setting, the model receives a multi-modal MRI scan of the brain and produces a voxel-wise segmentation mask that identifies tumor sub-regions. During training, each scan is paired with a ground truth mask in which tumor tissue is labeled and healthy tissue is background. Once trained, the model should generalize to produce accurate masks on previously unseen scans.
 
-We measure segmentation performance using the Dice Similarity Coefficient (DSC), which quantifies the spatial overlap between a predicted mask and the ground truth. It is defined as:
-\begin{equation}
-    \text{DSC} = \frac{2 |P \cap G|}{|P| + |G|}
-\end{equation}
-where $P$ is the set of predicted voxels and $G$ is the set of ground truth voxels. The score ranges from 0 (no overlap) to 1 (perfect agreement).
+We quantify the cost of this privacy guarantee using five complementary segmentation metrics --- Dice, HD95, Sensitivity, Specificity, and Precision --- described in Section~\ref{sec:metrics}.
 
 This experiment focuses exclusively on FL without Differential Privacy (DP). Subsequent experiments will incorporate DP, Homomorphic Encryption (HE) and Secure Multi-Party Computation (MPC) as additional privacy layers.
 
@@ -96,6 +92,44 @@ Table~\ref{tab:splits} summarizes the resulting data distribution.
 \caption{Per-institution data splits. Institutions with $<$10 samples use forced 1-val/1-test splits; others use 80-10-10.}
 \label{tab:splits}
 \end{table}
+
+\section{Evaluation Metrics}
+\label{sec:metrics}
+
+All metrics are computed independently for each of the three tumor sub-regions (WT, TC, ET) over binary voxel masks: the predicted mask $P$ (sigmoid output thresholded at 0.5) and the ground truth mask $G$. Let $TP$, $FP$, $TN$, $FN$ denote true positives, false positives, true negatives and false negatives at the voxel level.
+
+\paragraph{Dice Similarity Coefficient (DSC).}
+\begin{equation}
+    \text{DSC} = \frac{2\,|P \cap G|}{|P| + |G|} = \frac{2\,TP}{2\,TP + FP + FN}
+\end{equation}
+Dice measures volumetric overlap and is the primary metric in BraTS-family challenges. A score of 1.0 indicates perfect agreement; 0.0 indicates no overlap. In brain tumor segmentation, WT is the easiest region (large, contiguous) and typically yields the highest Dice, while ET and TC are smaller and more morphologically variable, producing lower scores. Dice is relatively insensitive to boundary errors: a model can achieve 0.85 Dice while still misplacing the tumor boundary by several millimeters, which motivates the complementary HD95 metric.
+
+\paragraph{95th Percentile Hausdorff Distance (HD95).}
+\begin{equation}
+    \text{HD95} = \text{percentile}_{95}\!\left(\{d(p, G)\}_{p \in \partial P} \cup \{d(g, P)\}_{g \in \partial G}\right)
+\end{equation}
+where $d(p, G) = \min_{g \in \partial G} \|p - g\|$ is the distance from surface point $p$ to the nearest surface point of $G$. HD95 measures boundary accuracy in millimeters: it reports the worst-case surface displacement after discarding the most extreme 5\% of outlier points (which controls sensitivity to isolated false-positive voxels). Lower is better. In brain tumor segmentation, HD95 is diagnostically important because surgical margins are planned from tumor boundaries; a model with good Dice but poor HD95 produces interior segmentations that are volumetrically plausible but spatially imprecise at the boundary.
+
+\paragraph{Sensitivity (Recall).}
+\begin{equation}
+    \text{Sensitivity} = \frac{TP}{TP + FN}
+\end{equation}
+Sensitivity measures the fraction of true tumor voxels that the model correctly labels as tumor. A high sensitivity model misses few tumor voxels (low false negatives), which is clinically critical: under-detected tumor regions may be excluded from treatment planning. In the FeTS setting, where each institution has a distinct tumor presentation, a globally trained model may have lower sensitivity for institutions whose tumor characteristics diverge from the federation mean.
+
+\paragraph{Specificity.}
+\begin{equation}
+    \text{Specificity} = \frac{TN}{TN + FP}
+\end{equation}
+Specificity measures the fraction of non-tumor voxels correctly identified as background. Because brain tumor voxels occupy a very small fraction of the total brain volume (ET in particular spans only a few cubic centimeters against a $\sim$150 cm$^3$ brain), specificity is typically very high ($>$0.99) even for models with mediocre segmentation quality. It serves as a sanity check: near-perfect specificity confirms that the model is not hallucinating tumor throughout healthy tissue.
+
+\paragraph{Precision (Positive Predictive Value).}
+\begin{equation}
+    \text{Precision} = \frac{TP}{TP + FP}
+\end{equation}
+Precision measures the fraction of voxels predicted as tumor that are genuinely tumor. It complements sensitivity: a model with high sensitivity but low precision detects all the tumor but also over-segments into healthy tissue, while a model with high precision but low sensitivity produces tight, conservative predictions that miss tumor extent. In a federated setting, the global model may learn an averaged tumor boundary that over-segments when applied to institutions with compact tumors and under-detects when applied to institutions with diffuse tumors.
+
+\medskip
+Together, these five metrics capture distinct failure modes: Dice and HD95 measure segmentation geometry; Sensitivity and Precision characterize the detection-overdetection tradeoff; Specificity confirms background fidelity. All five are reported per tumor sub-region (WT, TC, ET), yielding 15 scalar values per model, which are summarized by the cross-region Mean Dice and Mean HD95 for headline comparisons.
 
 \section{Model: Swin UNETR}
 
@@ -231,144 +265,29 @@ The FL experiment was deployed across multiple SLURM-managed HPC nodes. The serv
 
 \subsection{Test-Set Segmentation Performance}
 
-Table~\ref{tab:main_results} presents the overall test-set performance of both the FedPIDAvg global model (best checkpoint from round 17) and the centralized baseline, evaluated on the same 137 held-out test samples drawn from the identical per-institution splits. Both models were trained and evaluated on the 23-institution split described in Section~\ref{sec:split}.
-
-\begin{table}[h]
-\centering
-\begin{tabular}{lcccccc}
-\toprule
-\textbf{Setting} & \textbf{Test $n$} & \textbf{Dice WT} & \textbf{Dice TC} & \textbf{Dice ET} & \textbf{Mean Dice} & \textbf{Mean HD95 (mm)} \\
-\midrule
-Centralized & 137 & 0.9124 & 0.8743 & 0.8273 & 0.8714 & 5.04 \\
-\midrule
-FedPIDAvg (weighted avg) & 137 & 0.8471 & 0.7340 & 0.7657 & 0.7823 & --- \\
-FedPIDAvg (cross-inst.\ mean) & 23 inst. & 0.8632 & 0.7503 & 0.7237 & 0.7791 & 14.50 \\
-\bottomrule
-\end{tabular}
-\caption{Overall segmentation performance on the held-out test set. The weighted average weights each institution's per-region Dice by its test sample count (137 total); the cross-institution mean treats all 23 institutions equally. HD95 for the weighted-average row is omitted as the metric is not meaningfully composable across aggregation methods.}
-\label{tab:main_results}
-\end{table}
-
-The centralized baseline achieves a Mean Dice of \textbf{0.8714} with a Mean HD95 of 5.04\,mm across all 137 test samples. The FedPIDAvg model achieves a weighted-average test Dice of \textbf{0.7823} (cross-institution mean: 0.7791), trailing the centralized baseline by \textbf{8.9 percentage points} when weighted by test sample count. The weighted-average gap is driven predominantly by the two outlier institutions (1 and 18), which together contribute 91 of the 137 test samples (66\%) and achieve below-average federated Dice (0.8219 and 0.7286 respectively). The per-region gaps in the weighted average are: Whole Tumor $-$6.5pp (0.8471 vs.\ 0.9124), Tumor Core $-$14.0pp (0.7340 vs.\ 0.8743), and Enhancing Tumor $-$6.2pp (0.7657 vs.\ 0.8273). TC shows the largest gap, as the tumor core is the most spatially variable sub-region and benefits most from the large, diverse training set available in the centralized setting.
-
-\subsection{Global Metric Summary}
-
-Table~\ref{tab:global_stats} reports the cross-institution statistics for all metrics, matching the reporting format used in the original FedPIDAvg paper. These statistics are computed across the 23 per-institution mean values.
+Table~\ref{tab:main_results} presents the overall test-set performance of both the FedPIDAvg global model (best checkpoint from round 17) and the centralized baseline, evaluated on the same pooled set of 137 held-out test samples drawn from the identical per-institution splits. Both models were trained and evaluated on the 23-institution split described in Section~\ref{sec:split}.
 
 \begin{table}[h]
 \centering
 \small
-\begin{tabular}{lrrrrr}
+\begin{tabular}{lc cccc cccc}
 \toprule
-\textbf{Metric} & \textbf{Mean} & \textbf{StdDev} & \textbf{Median} & \textbf{25th pctl} & \textbf{75th pctl} \\
+\textbf{Setting} & \textbf{Test $n$}
+  & \multicolumn{4}{c}{\textbf{Dice}}
+  & \multicolumn{4}{c}{\textbf{HD95 (mm)}} \\
+\cmidrule(lr){3-6} \cmidrule(lr){7-10}
+ &  & \textbf{WT} & \textbf{TC} & \textbf{ET} & \textbf{Mean}
+    & \textbf{WT} & \textbf{TC} & \textbf{ET} & \textbf{Mean} \\
 \midrule
-Dice WT & 0.8632 & 0.0868 & 0.8723 & 0.8295 & 0.9243 \\
-Dice TC & 0.7503 & 0.1624 & 0.7949 & 0.6498 & 0.8603 \\
-Dice ET & 0.7237 & 0.2511 & 0.8537 & 0.6537 & 0.8955 \\
-\midrule
-Sensitivity WT & 0.8800 & 0.0818 & 0.9118 & 0.8274 & 0.9412 \\
-Sensitivity TC & 0.8255 & 0.1941 & 0.8896 & 0.7392 & 0.9706 \\
-Sensitivity ET & 0.8353 & 0.1924 & 0.9056 & 0.8339 & 0.9424 \\
-\midrule
-Specificity WT & 0.9975 & 0.0027 & 0.9985 & 0.9974 & 0.9990 \\
-Specificity TC & 0.9977 & 0.0018 & 0.9980 & 0.9969 & 0.9990 \\
-Specificity ET & 0.9986 & 0.0016 & 0.9991 & 0.9988 & 0.9994 \\
-\midrule
-HD95 WT & 14.12 & 15.94 & 6.48 & 3.22 & 18.65 \\
-HD95 TC & 14.86 & 14.63 & 10.04 & 5.70 & 18.62 \\
-HD95 ET & 15.44 & 23.82 & 6.73 & 1.34 & 19.79 \\
-\midrule
-Precision WT & 0.8684 & 0.1270 & 0.9474 & 0.7782 & 0.9635 \\
-Precision TC & 0.7597 & 0.1693 & 0.7724 & 0.6748 & 0.8917 \\
-Precision ET & 0.6964 & 0.2477 & 0.8000 & 0.5877 & 0.8713 \\
+Centralized (Swin UNETR) & 137 & 0.9124 & 0.8743 & 0.8273 & 0.8714 &  6.52 &  4.28 &  4.31 &  5.04 \\
+FedPIDAvg   (Swin UNETR) & 137 & 0.8632 & 0.7503 & 0.7237 & 0.7791 & 14.12 & 14.86 & 15.44 & 14.50 \\
 \bottomrule
 \end{tabular}
-\caption{Cross-institution metric statistics for FedPIDAvg test-set inference (23 institutions).}
-\label{tab:global_stats}
+\caption{Overall segmentation performance on the pooled 137 held-out test samples. FedPIDAvg metrics are cross-institution means across all 23 institutions. Both settings use the same Swin UNETR architecture, data splits, and MONAI evaluation pipeline.}
+\label{tab:main_results}
 \end{table}
 
-Several patterns emerge from the statistical summary. Specificity is consistently high across all regions ($>$0.997), indicating the model rarely produces false positives: it is conservative in labeling voxels as tumor. By contrast, the centralized baseline achieves sensitivity of 0.9275 (WT), 0.9314 (TC) and 0.913 (ET), compared to 0.88, 0.83 and 0.84 for FedPIDAvg --- a meaningful sensitivity gap that explains where the FL model loses Dice: it misses true tumor voxels rather than over-predicting them. The high standard deviation for ET Dice (0.2511) and ET HD95 (23.82\,mm) confirms that the Enhancing Tumor region is the primary source of cross-institution variability. The median Dice values (WT: 0.87, TC: 0.79, ET: 0.85) are consistently higher than the means, indicating that a few poorly-performing institutions pull the mean down --- the majority of institutions achieve reasonable segmentation quality. Median HD95 values (WT: 6.48\,mm, TC: 10.04\,mm, ET: 6.73\,mm) are substantially below the means due to a few catastrophic outlier cases inflating the average.
-
-\subsection{Per-Institution Test Performance}
-
-Table~\ref{tab:per_inst} presents the test-set Mean Dice and HD95 for each institution together with the cross-institutional results (Section~\ref{sec:cross_inst}), sorted by in-domain performance.
-
-\begin{table}[h]
-\centering
-\footnotesize
-\begin{tabular}{rrrrrrr}
-\toprule
-\textbf{Inst.} & \textbf{Train} & \textbf{Test n} & \multicolumn{2}{c}{\textbf{Mean Dice}} & \multicolumn{2}{c}{\textbf{Mean HD95 (mm)}} \\
-\cmidrule(lr){4-5} \cmidrule(lr){6-7}
-& & & \textbf{In-Domain} & \textbf{Cross-Inst.} & \textbf{In-Domain} & \textbf{Cross-Inst.} \\
-\midrule
-22 &   5 &  1 & 0.9328 & 0.7812 &  1.47 & 15.23 \\
-11 &  11 &  2 & 0.9259 & 0.7802 &  1.86 & 15.31 \\
- 7 &  10 &  2 & 0.9097 & 0.7804 &  3.87 & 15.34 \\
-21 &  28 &  4 & 0.9030 & 0.7787 &  4.93 & 15.51 \\
-20 &  26 &  4 & 0.8870 & 0.7792 &  7.43 & 15.27 \\
-19 &   2 &  1 & 0.8852 & 0.7815 & 19.31 & 14.84 \\
-23 &   3 &  1 & 0.8814 & 0.7816 &  3.23 & 15.19 \\
- 5 &  18 &  3 & 0.8655 & 0.7804 &  4.84 & 15.38 \\
- 2 &   4 &  1 & 0.8622 & 0.7817 &  6.02 & 15.22 \\
- 6 &  27 &  4 & 0.8602 & 0.7800 & 20.28 & 14.75 \\
-16 &  24 &  3 & 0.8567 & 0.7806 & 30.28 & 14.93 \\
- 9 &   2 &  1 & 0.8561 & 0.7818 &  4.72 & 15.22 \\
-17 &   7 &  1 & 0.8518 & 0.7818 &  2.11 & 15.22 \\
- 1 & 409 & 52 & 0.8219 & 0.7581 & 13.54 & 15.65 \\
-10 &   6 &  1 & 0.7771 & 0.7823 &  4.52 & 15.21 \\
- 4 &  38 &  5 & 0.7665 & 0.7829 &  7.17 & 15.50 \\
-18 & 306 & 39 & 0.7286 & 0.8037 & 16.00 & 14.26 \\
- 8 &   6 &  1 & 0.6625 & 0.7832 & 18.65 & 15.20 \\
-13 &  28 &  4 & 0.6375 & 0.7867 & 23.17 & 14.99 \\
-14 &   4 &  1 & 0.6057 & 0.7836 & 15.73 & 15.15 \\
-15 &  10 &  2 & 0.5866 & 0.7852 & 17.56 & 15.29 \\
- 3 &  12 &  2 & 0.5500 & 0.7857 & 34.22 & 14.85 \\
-12 &   9 &  2 & 0.3056 & 0.7894 & 72.53 & 14.49 \\
-\midrule
-\textbf{Mean} & & & \textbf{0.7791} & \textbf{0.7822} & \textbf{14.50} & \textbf{14.63} \\
-\bottomrule
-\end{tabular}
-\caption{Per-institution test-set performance sorted by in-domain Mean Dice (descending). In-Domain: each institution's own held-out test set ($n$ samples). Cross-Inst.: the FL model evaluated on the pooled test sets of all \emph{other} 22 institutions (85--136 samples depending on the excluded institution). Institutions 1 and 18 were designated Poisson outliers and excluded from $\sim$90\% of training rounds.}
-\label{tab:per_inst}
-\end{table}
-
-\paragraph{Key Observations}
-
-\begin{itemize}
-    \item \textbf{Wide performance range.} Per-institution test Dice spans from 0.3056 (Institution 12, HD95 = 72.5\,mm) to 0.9328 (Institution 22, HD95 = 1.5\,mm). This 63-point spread demonstrates that a single global model serves some institutions far better than others.
-
-    \item \textbf{The top-performing institutions are mid-sized.} Institutions 22, 11, 7 and 21 all achieve Mean Dice $>$ 0.90. Institution 20 (Dice 0.8870) and 19 (0.8852) follow closely. These institutions have 2--28 training samples --- enough data to contribute a meaningful gradient direction to the global model without dominating the aggregation. Their compact, representative test sets likely contain tumors whose appearance aligns well with the global model's learned representations.
-
-    \item \textbf{Outlier institutions (1 and 18) underperform relative to their data volume.} Institution 1 (409 train, 52 test) achieves Dice 0.8219 and Institution 18 (306 train, 39 test) achieves 0.7286. Despite contributing 71\% of the total training data, their Poisson-excluded participation ($\sim$10\% of rounds) limits their influence on the global model. Moreover, their large and statistically reliable test sets (52 and 39 samples) produce more realistic Dice estimates than the 1--4 sample test sets of smaller institutions.
-
-    \item \textbf{Bottom performers suffer from data-model mismatch.} Institution 12 (Dice 0.3056, HD95 = 72.5\,mm) and Institution 3 (Dice 0.5500, HD95 = 34.2\,mm) show that the global model fails catastrophically on certain institutional distributions. With only 9 and 12 training samples respectively, these institutions could not steer the global model toward their specific tumor characteristics during training. The ET Dice for Institution 12 is 0.0289, indicating near-complete failure to segment enhancing tumor --- likely due to unusual contrast enhancement patterns or atypical tumor morphology. Institution 15 (ET Dice 0.2526) and Institution 13 (ET Dice 0.2557) also show severe ET degradation despite adequate WT performance (0.8758 and 0.9014 respectively), pointing to sub-region-specific domain mismatch rather than a global model failure.
-
-    \item \textbf{Test set size affects metric reliability.} Institutions with only 1 test sample (10 of 23 institutions) produce inherently noisy metrics --- a single easy case yields Dice $>$ 0.9 while a single difficult case can yield Dice $<$ 0.5, regardless of the model's true capability. The most reliable performance estimates come from Institutions 1 (52 test) and 18 (39 test).
-\end{itemize}
-
-\subsection{Cross-Institutional Generalizability}
-\label{sec:cross_inst}
-
-The in-domain evaluation described above measures how well the FL model handles the specific imaging characteristics of the institution whose data it is tested on. A complementary and arguably more clinically relevant question is: \emph{how well does the model generalize to patient data from institutions it has never been explicitly evaluated on?} To answer this, we evaluate the FL global model for each institution $k$ on the pooled held-out test sets of all other 22 institutions (85--136 samples, depending on the excluded institution's test-set size). The results are shown in the Cross-Inst.\ columns of Table~\ref{tab:per_inst} and the global summaries in Tables~\ref{tab:overall_comparison} and \ref{tab:comparison}.
-
-\paragraph{Global averages are nearly identical.}
-At the federation level, cross-institutional Mean Dice is 0.7822 versus in-domain 0.7791 --- a difference of only 0.31pp. Cross-institutional Mean HD95 (14.63\,mm) likewise matches the in-domain figure (14.50\,mm). These nearly identical global means suggest that the FL model has learned a broadly applicable representation: it segments tumors from unseen institutions at essentially the same average quality as from its own training-data partners.
-
-\paragraph{Per-institution variance collapses.}
-The headline summary conceals a dramatic difference in variance. In-domain Mean Dice ranges from 0.3056 to 0.9328 (spread: 63pp). Cross-institutional Mean Dice ranges from 0.7581 to 0.8037 (spread: 4.6pp, std $\approx 0.007$). When each institution evaluates on 85--136 diverse samples instead of its own 1--52, the institution-specific characteristics that drive the extreme in-domain spread are averaged out. The cross-institutional score is therefore a far more stable and reliable signal of the global model's actual capability.
-
-\paragraph{Poorly-performing institutions improve dramatically.}
-The three worst in-domain institutions show the largest cross-institutional gains: Institution 12 ($+$48pp: 0.3056 $\to$ 0.7894), Institution 3 ($+$24pp: 0.5500 $\to$ 0.7857), and Institution 15 ($+$20pp: 0.5866 $\to$ 0.7852). Institution 18 ($+$7.5pp: 0.7286 $\to$ 0.8037) also improves substantially. The interpretation is direct: the global model is not generically weak; it is specifically ill-suited to these institutions' idiosyncratic imaging characteristics. When removed from the evaluation loop, the model performs at or above the federation average on the remaining data.
-
-\paragraph{Top-performing institutions decline sharply.}
-Institutions 22, 11, 7 and 21, which achieve in-domain Dice of 0.90--0.93, drop to the federation mean ($\approx 0.78$) when evaluated cross-institutionally. This confirms that their high in-domain scores reflect easy or highly representative test cases rather than a model that has been especially well-fitted to those institutions. Their in-domain advantage is a property of their test sets, not the model.
-
-\paragraph{Institution 1 (largest) drops cross-institutionally.}
-Institution 1 (in-domain 0.8219, cross-institutional 0.7581) shows the only notable decline among the non-bottom performers. When Institution 1 is removed from the test pool, the remaining 85 samples disproportionately include data from the weaker institutions (12, 3, 15), pulling the cross-institutional average down. This reflects Institution 1's role as a stabilizing majority contributor: its 52 in-domain test samples produce reliable, above-average metrics, but without them the remaining pool is harder for the global model.
-
-\paragraph{Sub-region-level shifts.}
-At the metric level (Table~\ref{tab:comparison}), cross-institutional ET Dice is 0.7653 versus in-domain 0.7237 ($+$4.2pp) --- the largest per-region improvement. This is entirely driven by the exclusion of the catastrophically low ET scores from Institutions 12, 13 and 15 from their own cross-institutional evaluations: each of those institutions evaluates on a pool that omits their own hard ET cases, substantially lifting the average. Conversely, cross-institutional precision drops for WT ($-$3.6pp) and TC ($-$6.9pp) because the larger, more diverse evaluation pool includes more cases where the model over-predicts boundaries. Sensitivity increases cross-institutionally for all regions (TC: $+$7.5pp), reflecting the exclusion of institution-specific under-detection failures from each client's cross-institutional set.
+The centralized baseline achieves a Mean Dice of \textbf{0.8714} with a Mean HD95 of 5.04\,mm. The FedPIDAvg model achieves a Mean Dice of \textbf{0.7791} and Mean HD95 of 14.50\,mm on the same 137 test samples, trailing the centralized baseline by \textbf{8.9 percentage points} in Dice and \textbf{9.46\,mm} in HD95. The per-region Dice gaps are: Whole Tumor $-$4.9pp (0.8632 vs.\ 0.9124), Tumor Core $-$12.4pp (0.7503 vs.\ 0.8743), and Enhancing Tumor $-$10.4pp (0.7237 vs.\ 0.8273). TC shows the largest gap, as the tumor core is the most spatially variable sub-region and benefits most from the large, diverse training set available in the centralized setting.
 
 \subsection{Training Dynamics}
 
@@ -420,7 +339,7 @@ The communication cost is dominated by the model size ($\sim$248\,MB per paramet
 
 \subsection{Overall Performance Comparison}
 
-Table~\ref{tab:overall_comparison} summarises the headline segmentation metrics --- mean Dice and mean HD95 averaged across all three tumor sub-regions --- for all three settings.
+Table~\ref{tab:overall_comparison} summarises the headline segmentation metrics --- mean Dice and mean HD95 averaged across all three tumor sub-regions --- comparing the centralized and federated settings.
 
 \begin{table}[h]
 \centering
@@ -428,96 +347,79 @@ Table~\ref{tab:overall_comparison} summarises the headline segmentation metrics 
 \toprule
 \textbf{Setting} & \textbf{Model} & \textbf{Mean Dice} & \textbf{Mean HD95 (mm)} \\
 \midrule
-Original FedPIDAvg (FeTS 2022 winner) & 3D U-Net   & 0.7595 & 29.88 \\
-Ours: FedPIDAvg (in-domain)           & Swin UNETR & 0.7791 & 14.50 \\
-Ours: FedPIDAvg (cross-institutional) & Swin UNETR & 0.7822 & 14.63 \\
-Ours: Centralized                     & Swin UNETR & 0.8714 &  5.04 \\
+Ours: FedPIDAvg   & Swin UNETR & 0.7791 & 14.50 \\
+Ours: Centralized & Swin UNETR & 0.8714 &  5.04 \\
 \bottomrule
 \end{tabular}
-\caption{Overall mean Dice and mean HD95 across all three tumor sub-regions (WT, TC, ET). Original FedPIDAvg values are cross-institution means from Tables 3 and 4 of the FedPIDAvg paper. In-domain: each institution evaluated on its own test set. Cross-institutional: each institution evaluated on all other 22 institutions' pooled test sets. Mean HD95 is the arithmetic mean of the per-region HD95 means.}
+\caption{Overall mean Dice and mean HD95 across all three tumor sub-regions (WT, TC, ET). FedPIDAvg metrics are cross-institution means across 23 institutions. Mean HD95 is the arithmetic mean of the per-region HD95 means.}
 \label{tab:overall_comparison}
 \end{table}
 
-Three findings stand out. First, switching from 3D U-Net to Swin UNETR improves federated mean Dice from 0.7595 to 0.7791 ($+$2.0pp), confirming that the transformer-based architecture retains its representational advantage even under the communication and data-fragmentation constraints of FL. Second, the improvement in boundary precision is more striking: mean HD95 drops from 29.88\,mm to 14.50\,mm ($-$51\%), indicating that Swin UNETR's long-range self-attention produces substantially sharper tumor delineation than the convolutional U-Net in the federated setting. Third, the centralized Swin UNETR remains the clear performance ceiling, outperforming the federated model by 8.9pp in Dice and by 9.46\,mm in HD95. Fourth, the cross-institutional evaluation (0.7822 Mean Dice, 14.63\,mm HD95) matches the in-domain result almost exactly ($+$0.31pp Dice, $+$0.13\,mm HD95), confirming that the FL model generalizes to unseen institutional distributions at the same level as to its own training-time partners. The small positive gap is fully explained by the exclusion of each institution's hardest cases from its own cross-institutional pool, as detailed in Section~\ref{sec:cross_inst}.
+The centralized Swin UNETR is the clear performance ceiling, outperforming the federated model by \textbf{8.9pp in Mean Dice} (0.8714 vs.\ 0.7791) and by \textbf{9.46\,mm in Mean HD95} (5.04 vs.\ 14.50\,mm). The gap in boundary precision is particularly striking: the centralized model's HD95 of 5.04\,mm versus 14.50\,mm for FedPIDAvg indicates that unrestricted access to all 1,251 training scans produces significantly sharper tumor delineations. This performance gap is expected given the fundamental constraints of the federated setting: Poisson-based client selection excludes Institutions 1 and 18 (holding 71\% of training data) from $\sim$90\% of rounds, limiting the global model's exposure to the majority of available training signal.
 
 \subsection{Centralized vs.\ Federated Swin UNETR}
 
 \begin{table}[h]
 \centering
 \small
-\begin{tabular}{lrrr}
+\begin{tabular}{lrr}
 \toprule
-\textbf{Metric} & \textbf{Centralized} & \textbf{FedPIDAvg} & \textbf{FedPIDAvg} \\
- & \textbf{(Swin UNETR)} & \textbf{(In-Domain)} & \textbf{(Cross-Inst.)} \\
+\textbf{Metric} & \textbf{Centralized} & \textbf{FedPIDAvg} \\
+ & \textbf{(Swin UNETR)} & \textbf{(Swin UNETR)} \\
 \midrule
-\multicolumn{4}{l}{\textit{Dice Score}} \\
-\quad WT & 0.9124 & 0.8632 & 0.8472 \\
-\quad TC & 0.8743 & 0.7503 & 0.7340 \\
-\quad ET & 0.8273 & 0.7237 & 0.7653 \\
+\multicolumn{3}{l}{\textit{Dice Score}} \\
+\quad WT & 0.9124 & 0.8632 \\
+\quad TC & 0.8743 & 0.7503 \\
+\quad ET & 0.8273 & 0.7237 \\
 \midrule
-\multicolumn{4}{l}{\textit{Sensitivity}} \\
-\quad WT & 0.9275 & 0.8800 & 0.8993 \\
-\quad TC & 0.9314 & 0.8255 & 0.9008 \\
-\quad ET & 0.9130 & 0.8353 & 0.8790 \\
+\multicolumn{3}{l}{\textit{Sensitivity}} \\
+\quad WT & 0.9275 & 0.8800 \\
+\quad TC & 0.9314 & 0.8255 \\
+\quad ET & 0.9130 & 0.8353 \\
 \midrule
-\multicolumn{4}{l}{\textit{Specificity}} \\
-\quad WT & 0.9985 & 0.9975 & 0.9973 \\
-\quad TC & 0.9992 & 0.9977 & 0.9975 \\
-\quad ET & 0.9995 & 0.9986 & 0.9990 \\
+\multicolumn{3}{l}{\textit{Specificity}} \\
+\quad WT & 0.9985 & 0.9975 \\
+\quad TC & 0.9992 & 0.9977 \\
+\quad ET & 0.9995 & 0.9986 \\
 \midrule
-\multicolumn{4}{l}{\textit{Precision}} \\
-\quad WT & 0.9125 & 0.8684 & 0.8327 \\
-\quad TC & 0.8663 & 0.7597 & 0.6905 \\
-\quad ET & 0.8134 & 0.6964 & 0.7366 \\
+\multicolumn{3}{l}{\textit{Precision}} \\
+\quad WT & 0.9125 & 0.8684 \\
+\quad TC & 0.8663 & 0.7597 \\
+\quad ET & 0.8134 & 0.6964 \\
 \midrule
-\multicolumn{4}{l}{\textit{HD95 (mm)}} \\
-\quad WT &  6.52 & 14.12 & 15.13 \\
-\quad TC &  4.28 & 14.86 & 16.54 \\
-\quad ET &  4.31 & 15.44 & 12.19 \\
+\multicolumn{3}{l}{\textit{HD95 (mm)}} \\
+\quad WT &  6.52 & 14.12 \\
+\quad TC &  4.28 & 14.86 \\
+\quad ET &  4.31 & 15.44 \\
 \midrule
-Communication Volume & --- & $\sim$1,040\,GB & $\sim$1,040\,GB \\
+Communication Volume & --- & $\sim$1,040\,GB \\
 \bottomrule
 \end{tabular}
-\caption{Per-region comparison of centralized and federated Swin UNETR. In-Domain: each institution evaluated on its own held-out test set (137 total samples, cross-institution means). Cross-Inst.: each institution evaluated on the pooled test sets of all other 22 institutions (85--136 samples per client, cross-institution means). All three columns use the same model architecture and MONAI evaluation pipeline; the FL columns use the same trained checkpoint.}
+\caption{Per-region metric comparison of centralized and federated Swin UNETR on the same 137 held-out test samples. FedPIDAvg metrics are cross-institution means across 23 institutions. Both settings use the same Swin UNETR architecture and MONAI evaluation pipeline.}
 \label{tab:comparison}
 \end{table}
 
-\paragraph{Centralized vs.\ in-domain federated.}
-The overall FL cost is 8.9pp in mean Dice (weighted average: 0.7823 vs.\ 0.8714) and 9.46\,mm in mean HD95 (14.50 vs.\ 5.04\,mm), but these headline numbers conceal important sub-region structure.
+\paragraph{Centralized vs.\ Federated.}
+The overall FL cost is 8.9pp in Mean Dice (0.7791 vs.\ 0.8714) and 9.46\,mm in Mean HD95 (14.50 vs.\ 5.04\,mm), but these headline numbers conceal important sub-region structure.
 
-\textbf{TC is the most affected region.} The Tumor Core Dice gap is the largest at 14.0pp (weighted average: 0.7340 vs.\ 0.8743). TC HD95 also shows the greatest absolute increase, rising from 4.28\,mm to 14.86\,mm --- a $3.5\times$ increase. Sensitivity for TC drops 10.6pp (0.9314$\to$0.8255) and precision drops 10.7pp (0.8663$\to$0.7597). TC is the most compact and morphologically variable sub-region; its precise delineation requires the model to learn institution-specific tumor core patterns that are directly undermined by non-IID fragmentation and by the Poisson exclusion of the two largest institutions, which together provide the most TC training examples.
+\textbf{TC is the most affected region.} The Tumor Core Dice gap is the largest at 12.4pp (0.7503 vs.\ 0.8743). TC HD95 also shows the greatest absolute increase, rising from 4.28\,mm to 14.86\,mm --- a $3.5\times$ increase. Sensitivity for TC drops 10.6pp (0.9314$\to$0.8255) and precision drops 10.7pp (0.8663$\to$0.7597). TC is the most compact and morphologically variable sub-region; its precise delineation requires the model to learn institution-specific tumor core patterns that are directly undermined by non-IID fragmentation and by the Poisson exclusion of the two largest institutions, which together provide the most TC training examples.
 
 \textbf{HD95 degrades disproportionately relative to Dice.} Across all regions the relative HD95 increase far exceeds the relative Dice decrease. ET HD95 rises $258\%$ (4.31$\to$15.44\,mm) while ET Dice falls only $12.5\%$ (0.8273$\to$0.7237). This asymmetry is diagnostic: Dice measures volumetric overlap and tolerates boundary errors if the interior voxels are correctly classified, whereas HD95 captures the worst-case boundary displacement. The federated model produces boundaries that are correct on average but inconsistent at the periphery --- a pattern that Dice partially obscures and HD95 exposes.
 
 \textbf{The model under-detects rather than over-predicts.} Sensitivity drops substantially across all regions in the federated setting (WT: $-$4.8pp, TC: $-$10.6pp, ET: $-$7.8pp) while specificity remains virtually identical ($>$0.997 in both settings). The FL model is not generating spurious false positives; it is missing true tumor voxels. This conservative bias is consistent with a global model that has learned an averaged representation of tumor appearance: it reliably marks regions that look like tumors across most institutions but misses atypical presentations that are well-represented only in individual datasets.
 
-\textbf{WT is the most robust sub-region.} The Whole Tumor Dice gap is only 4.9pp (cross-institution mean: 0.8632 vs.\ 0.9124), the smallest of the three regions. WT is the union of all tumor classes and represents the largest, most spatially consistent segmentation target --- easier for a global model to approximate regardless of institutional heterogeneity. Its relative resilience explains why FL remains clinically useful for coarse tumor localization even when sub-region precision suffers.
-
-\paragraph{In-domain vs.\ cross-institutional federated.}
-Comparing the two FL columns reveals how metric composition is affected by the choice of evaluation pool. At the mean-Dice level the two are nearly identical (0.7791 in-domain vs.\ 0.7822 cross-institutional), but the per-metric picture diverges.
-
-\textbf{ET Dice rises $+$4.2pp cross-institutionally} (0.7237 $\to$ 0.7653). This is an artifact of the in-domain evaluation pulling down the average: when each institution evaluates on its own data, the catastrophically low ET scores from Institutions 12, 13 and 15 (in-domain ET Dice: 0.03, 0.26, 0.25) enter their respective in-domain averages. In the cross-institutional setting, those institutions instead evaluate on other institutions' data, where ET performance is near the federation mean --- so those catastrophic cases are excluded from the per-client mean before the global average is taken.
-
-\textbf{TC sensitivity jumps $+$7.5pp cross-institutionally} (0.8255 $\to$ 0.9008) for the same reason: the institutions that most severely under-detect TC in-domain evaluate on an easier cross-institutional pool, inflating the global cross-institutional sensitivity mean.
-
-\textbf{WT and TC precision fall cross-institutionally} ($-$3.6pp and $-$6.9pp respectively). The larger, more diverse evaluation pool includes more cases from institutions whose tumor profiles elicit false-positive over-segmentation, reducing precision below the in-domain average.
-
-\textbf{WT and TC HD95 worsen slightly cross-institutionally} ($+$1.0\,mm and $+$1.7\,mm). The in-domain evaluation, dominated by the small-institution test sets where the global model tends to perform reliably, yields slightly lower HD95 than the cross-institutional pool, which incorporates data from the full range of institutional distributions.
-
-These shifts are all consistent with a single underlying phenomenon: the in-domain evaluation is strongly biased by the specific mix of each institution's test cases, while the cross-institutional evaluation produces a more homogeneous, distribution-averaged signal. The two numbers measure different things --- local fit versus global generalization --- and should be interpreted together rather than as competing estimates of the same quantity.
+\textbf{WT is the most robust sub-region.} The Whole Tumor Dice gap is only 4.9pp (0.8632 vs.\ 0.9124), the smallest of the three regions. WT is the union of all tumor classes and represents the largest, most spatially consistent segmentation target --- easier for a global model to approximate regardless of institutional heterogeneity. Its relative resilience explains why FL remains clinically useful for coarse tumor localization even when sub-region precision suffers.
 
 The communication volume of $\sim$1,040\,GB reflects the cost of transmitting the 248\,MB Swin UNETR tensor to the $\sim$21 selected clients and receiving their updates each round ($21 \times 248\,\text{MB} \times 2 \approx 10.4$\,GB/round over 100 rounds). This figure is architecture-specific; the large Swin UNETR parameter count ($\sim$62M weights) dominates the per-round byte cost, and a more compact architecture would reduce communication overhead proportionally.
 
 \subsection{Summary}
 
-The experimental results lead to three conclusions:
+The experimental results lead to two conclusions:
 
 \begin{enumerate}
-    \item \textbf{The privacy-accuracy gap is meaningful but bounded.} The FedPIDAvg model (weighted-average test Dice 0.7823) trails the centralized baseline (0.8714) by 8.9 percentage points when both are evaluated on the same 137 held-out samples. The gap is widest for TC ($-$14.0pp weighted avg; $-$12.4pp cross-institution mean) and smallest for WT ($-$6.5pp weighted avg; $-$4.9pp cross-institution mean). Despite this gap, the median per-institution Dice of 0.8561 indicates that the majority of institutions receive clinically reasonable segmentation quality from the global model. The gap reflects the inherent cost of privacy preservation in a highly heterogeneous federation.
+    \item \textbf{The privacy-accuracy gap is meaningful but bounded.} The FedPIDAvg model (Mean Dice 0.7791) trails the centralized baseline (0.8714) by 8.9 percentage points on the same 137 held-out test samples. The gap is widest for TC ($-$12.4pp) and smallest for WT ($-$4.9pp), and is accompanied by a 9.46\,mm degradation in Mean HD95 (14.50 vs.\ 5.04\,mm). The gap reflects the inherent cost of privacy preservation in a highly heterogeneous, non-IID federation.
 
     \item \textbf{FedPIDAvg's PID weighting is sensitive to data heterogeneity.} The algorithm's derivative and integral terms amplify noise from tiny institutions (2--6 training samples), producing unstable aggregation weights that hinder convergence beyond round 17. The Poisson exclusion of large institutions compounds this by removing the most informative data sources from 90\% of rounds. These dynamics suggest that FedPIDAvg may require more careful hyperparameter tuning ($\alpha$, $\beta$, $\gamma$) or complementary stabilization techniques when applied to architectures larger than the 3D U-Net it was designed for.
-
-    \item \textbf{Per-institution performance is highly variable, motivating personalized FL.} The global model achieves Dice $>$ 0.90 for 4 institutions (22, 11, 7 and 21) but falls below 0.60 for 3 others (15, 3 and 12). This variability is driven by data-model mismatch at poorly-served institutions rather than data volume alone. Personalized FL strategies --- such as per-institution fine-tuning, clustered FL, or local adaptation layers --- are needed to ensure equitable segmentation quality across all federation participants.
 \end{enumerate}
 
 \bibliography{references}

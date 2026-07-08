@@ -1,0 +1,1 @@
+Round/Epoch,Train Loss,SGD Steps,Val Loss,Val Dice CORONARY,Val Mean Dice,Val HD95 CORONARY,Val Mean HD95,Val clDice CORONARY,Val Mean clDice,Val Sensitivity CORONARY,Val Specificity CORONARY,Val Precision CORONARY,Peak RAM (MB),Peak VRAM (MB),Peak GPU Util (%)

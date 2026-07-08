@@ -1,0 +1,44 @@
+PartitionName=amd_2021
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=normal,elevated,faculty,deadline,trouble-shooting,ac,ic,longrun,trial
+PartitionName=amdwoods_2022
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=amdwoods22,physics22,preempt,trouble-shooting
+PartitionName=bfbsm_2019
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=bfbsm19,normal,openaccess,elevated,faculty,trouble-shooting
+PartitionName=cbcs
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=ac_processing,fawcett_access,preempt,trouble-shooting,normal,openaccess
+PartitionName=charbonnier_2022
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=charbonnier22,preempt,trouble-shooting
+PartitionName=chbme_2018
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=trouble-shooting,elevated,chbme18,sim18,preempt
+PartitionName=cms_ocg_2022
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=cms_ocg,trouble-shooting
+PartitionName=cool2022
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=cool22,trouble-shooting,preempt_short
+PartitionName=general
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=normal,elevated,faculty,deadline,trouble-shooting,pest,ac,ic,longrun,trial
+PartitionName=gracehopper
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=devel,elevated,trouble-shooting
+PartitionName=hchg
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=hchg,interactive,trouble-shooting
+PartitionName=helios
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=devel,elevated,trouble-shooting,jrg26
+PartitionName=hii02
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=hii,hii-eap,rchii
+PartitionName=himem
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=memaccess,elevated,longrun
+PartitionName=margres_2020
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=margres20,preempt,trouble-shooting
+PartitionName=muma_2021
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=trouble-shooting,muma21,preempt_short
+PartitionName=qcg_gayles_2022
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=qcg_gayles22,physics22,preempt,trouble-shooting
+PartitionName=rra
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=rra,rra_longrun,rra_guest,trouble-shooting
+PartitionName=rra_con2020
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=rradl,rra,trouble-shooting
+PartitionName=simmons_itn18
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=trouble-shooting,elevated,chbme18,sim18,preempt_short,preempt
+PartitionName=snsm_itn19
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=normal,trouble-shooting,elevated,faculty,snsm19,snsm19_long,snsm19_special,openaccess
+PartitionName=tfawcett
+   AllowGroups=ALL AllowAccounts=ALL AllowQos=fawcett_access,longrun

@@ -46,3 +46,5 @@ typing_extensions==4.15.0
 flwr
 monai
 nibabel
+optuna
+timm

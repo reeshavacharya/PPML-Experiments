@@ -9,6 +9,8 @@ import numpy as np
 import platform
 from scipy.ndimage import distance_transform_edt, binary_erosion, generate_binary_structure
 
+from utils.cldice import compute_cldice  # re-exported for a single metrics import at call sites
+
 def log_system_info(client_id="Centralized"):
     print("="*50)
     print(f"System Information for: Client {client_id}" if isinstance(client_id, int) else f"System Information for: {client_id}")
@@ -59,9 +61,10 @@ class ResourceMonitor:
             self.thread.join()
 
     def _monitor(self):
+        proc = psutil.Process()
         while self.keep_running:
-            # RAM in MB
-            ram_mb = psutil.virtual_memory().used / (1024 * 1024)
+            # Per-process RSS so co-located clients don't inflate each other's reading
+            ram_mb = proc.memory_info().rss / (1024 * 1024)
             if ram_mb > self.peak_ram:
                 self.peak_ram = ram_mb
                 
@@ -201,19 +204,28 @@ def compute_metric_statistics(values):
     }
 
 
-def init_metrics_csv(filepath, extra_cols=None):
+def init_metrics_csv(filepath, region_names=("wt", "tc", "et"), extra_cols=None, include_cldice=False):
+    """
+    region_names: per-region labels for the Dice/HD95/sensitivity/specificity/
+    precision columns — defaults to FeTS's (WT, TC, ET) for backward
+    compatibility. CAS callers should pass region_names=("coronary",).
+    include_cldice: adds a clDice column per region + a mean column — off by
+    default since it's only meaningful for tubular structures (CAS), not the
+    FeTS tumor regions.
+    """
     if extra_cols is None:
         extra_cols = []
+    labels = [r.upper() for r in region_names]
 
-    headers = [
-        "Round/Epoch",
-        "Train Loss", "SGD Steps", "Val Loss",
-        "Val Dice WT", "Val Dice TC", "Val Dice ET", "Val Mean Dice",
-        "Val HD95 WT", "Val HD95 TC", "Val HD95 ET", "Val Mean HD95",
-        "Val Sensitivity WT", "Val Sensitivity TC", "Val Sensitivity ET",
-        "Val Specificity WT", "Val Specificity TC", "Val Specificity ET",
-        "Val Precision WT", "Val Precision TC", "Val Precision ET",
-    ] + extra_cols
+    headers = ["Round/Epoch", "Train Loss", "SGD Steps", "Val Loss"]
+    headers += [f"Val Dice {r}" for r in labels] + ["Val Mean Dice"]
+    headers += [f"Val HD95 {r}" for r in labels] + ["Val Mean HD95"]
+    if include_cldice:
+        headers += [f"Val clDice {r}" for r in labels] + ["Val Mean clDice"]
+    headers += [f"Val Sensitivity {r}" for r in labels]
+    headers += [f"Val Specificity {r}" for r in labels]
+    headers += [f"Val Precision {r}" for r in labels]
+    headers += extra_cols
 
     os.makedirs(os.path.dirname(filepath), exist_ok=True)
     with open(filepath, mode='w', newline='') as f:
@@ -224,3 +236,46 @@ def append_metrics_csv(filepath, row_data):
     with open(filepath, mode='a', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(row_data)
+
+
+def init_classification_metrics_csv(filepath, class_names, extra_cols=None):
+    """Header for the classification family (Fed-ISIC2019/ViT), parallel to
+    init_metrics_csv but with per-sample scalar metrics (balanced accuracy,
+    macro-F1, per-class recall, macro OvR AUC, Cohen's kappa) instead of
+    per-region Dice/HD95 tensors. Rows are still written with the shared
+    append_metrics_csv — only the header schema differs from segmentation."""
+    if extra_cols is None:
+        extra_cols = []
+
+    headers = ["Round/Epoch", "Train Loss", "SGD Steps", "Val Loss"]
+    headers += ["Val Balanced Accuracy", "Val Macro F1"]
+    headers += [f"Val Recall {c}" for c in class_names]
+    headers += ["Val Macro AUC OvR", "Val Cohen Kappa"]
+    headers += extra_cols
+
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    with open(filepath, mode='w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(headers)
+
+
+def init_multilabel_metrics_csv(filepath, class_names, extra_cols=None):
+    """Header for the multi-label family (NIH ChestX-ray14/ViT), sibling to
+    init_classification_metrics_csv. Per-label scalar metrics (mean AUC-ROC,
+    macro-F1, per-label AUC, per-label sensitivity at a fixed threshold)
+    instead of ISIC's single-label balanced-accuracy/kappa shape — 14
+    independent binary findings per image, not one mutually-exclusive
+    winner. Rows are still written with the shared append_metrics_csv."""
+    if extra_cols is None:
+        extra_cols = []
+
+    headers = ["Round/Epoch", "Train Loss", "SGD Steps", "Val Loss"]
+    headers += ["Val Mean AUC ROC", "Val Macro F1"]
+    headers += [f"Val AUC {c}" for c in class_names]
+    headers += [f"Val Sensitivity {c}" for c in class_names]
+    headers += extra_cols
+
+    os.makedirs(os.path.dirname(filepath), exist_ok=True)
+    with open(filepath, mode='w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(headers)

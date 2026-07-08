@@ -1,0 +1,29 @@
+{
+  "algorithm": "FedAvg",
+  "total_rounds": 5,
+  "best_round": 5,
+  "best_val_mean_auc": 0.7122,
+  "rounds_to_best_per_client": {
+    "1": 5,
+    "2": 4,
+    "3": 5,
+    "4": 5,
+    "5": 5
+  },
+  "per_client_best_mean_auc": {
+    "1": 0.6575,
+    "2": 0.6995,
+    "3": 0.748,
+    "4": 0.6934,
+    "5": 0.76
+  },
+  "total_sgd_steps": 3660,
+  "parallel_sgd_steps": 755,
+  "communication_cost_bytes": 17161884400,
+  "communication_cost_gb": 15.98,
+  "training_time_seconds": 2575.4,
+  "training_time_hours": 0.72,
+  "projected_convergence_score": 0.7122,
+  "model_parameter_count": 85809422,
+  "model_parameter_count_millions": 85.81
+}

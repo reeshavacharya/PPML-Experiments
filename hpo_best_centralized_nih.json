@@ -1,0 +1,11 @@
+{
+  "study_name": "centralized_hpo_nih",
+  "best_trial": 11,
+  "best_val_mean_auc_roc": 0.8302,
+  "best_params": {
+    "lr": 1.0353677627159782e-05,
+    "weight_decay": 2.2789750437993263e-05
+  },
+  "n_trials_completed": 6,
+  "hpo_epochs": 10
+}

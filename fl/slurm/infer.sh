@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=fl_infer
+#SBATCH --job-name=ft_inf
 #SBATCH --partition=muma_2021
 #SBATCH --qos=muma21
 #SBATCH --nodes=1

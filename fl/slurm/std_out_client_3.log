@@ -10,465 +10,224 @@ GPUs Available: 1
 Client 3 using device: cuda
 /work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/monai/utils/deprecate_utils.py:321: FutureWarning: monai.transforms.spatial.dictionary Orientationd.__init__:labels: Current default value of argument `labels=(('L', 'R'), ('P', 'A'), ('I', 'S'))` was changed in version None from `labels=(('L', 'R'), ('P', 'A'), ('I', 'S'))` to `labels=None`. Default value changed to None meaning that the transform now uses the 'space' of a meta-tensor, if applicable, to determine appropriate axis labels.
   warn_deprecated(argname, msg, warning_category)
-[Client 3] Resuming from round 77, appending to /work/r/reeshav/PPML-Experiments-FL/fl/client_3_metrics.csv
+[Client 3] Resuming from round 7, appending to /work/r/reeshav/PPML-Experiments-FL/fl/client_3_metrics.csv
+/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/torch/optim/lr_scheduler.py:227: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
+  warnings.warn(
 [Client 3] Connection attempt 1/10
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message 36aa0722-9653-4c6b-a8b0-80f1a713d93b
-I0628 23:28:12.190291   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 78] 8% (1/12) Loss: 0.7214
-[Client 3, Round 78] 16% (2/12) Loss: 0.7127
-[Client 3, Round 78] 25% (3/12) Loss: 0.4654
-[Client 3, Round 78] 33% (4/12) Loss: 0.6711
-[Client 3, Round 78] 41% (5/12) Loss: 0.8184
-[Client 3, Round 78] 50% (6/12) Loss: 0.7437
-[Client 3, Round 78] 58% (7/12) Loss: 0.6460
-[Client 3, Round 78] 66% (8/12) Loss: 0.6143
-[Client 3, Round 78] 75% (9/12) Loss: 0.7034
-[Client 3, Round 78] 83% (10/12) Loss: 0.4812
-[Client 3, Round 78] 91% (11/12) Loss: 0.4258
-[Client 3, Round 78] 100% (12/12) Loss: 0.4903
-[Client 3, Round 78] Train Loss: 0.6245
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message bafca483-9504-466d-a695-0954747a0032
-I0628 23:29:01.433672   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 78] Val Loss: 0.8995 | Dice: 0.2031 | HD95: 59.58
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message 327b8b57-bc41-43cc-8eb8-a1a44ae19303
-I0628 23:30:44.597837   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 79] 8% (1/12) Loss: 0.5917
-[Client 3, Round 79] 16% (2/12) Loss: 0.6707
-[Client 3, Round 79] 25% (3/12) Loss: 0.4541
-[Client 3, Round 79] 33% (4/12) Loss: 0.3910
-[Client 3, Round 79] 41% (5/12) Loss: 0.7332
-[Client 3, Round 79] 50% (6/12) Loss: 0.4015
-[Client 3, Round 79] 58% (7/12) Loss: 0.7467
-[Client 3, Round 79] 66% (8/12) Loss: 0.3737
-[Client 3, Round 79] 75% (9/12) Loss: 0.3855
-[Client 3, Round 79] 83% (10/12) Loss: 0.7074
-[Client 3, Round 79] 91% (11/12) Loss: 0.6381
-[Client 3, Round 79] 100% (12/12) Loss: 0.6079
-[Client 3, Round 79] Train Loss: 0.5585
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message 9d999c17-b34e-4ab4-8d96-c6dec2e22eb5
-I0628 23:33:32.915784   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 79] Val Loss: 0.8848 | Dice: 0.2318 | HD95: 58.24
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message 18a84e09-b4ae-4104-9af0-214b49094640
-I0628 23:36:03.435019   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 80] 8% (1/12) Loss: 0.6702
-[Client 3, Round 80] 16% (2/12) Loss: 0.3977
-[Client 3, Round 80] 25% (3/12) Loss: 0.8558
-[Client 3, Round 80] 33% (4/12) Loss: 0.7022
-[Client 3, Round 80] 41% (5/12) Loss: 0.3897
-[Client 3, Round 80] 50% (6/12) Loss: 0.5884
-[Client 3, Round 80] 58% (7/12) Loss: 0.5986
-[Client 3, Round 80] 66% (8/12) Loss: 0.3642
-[Client 3, Round 80] 75% (9/12) Loss: 0.7064
-[Client 3, Round 80] 83% (10/12) Loss: 0.5545
-[Client 3, Round 80] 91% (11/12) Loss: 0.3819
-[Client 3, Round 80] 100% (12/12) Loss: 0.8478
-[Client 3, Round 80] Train Loss: 0.5881
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message 51f25baa-b887-4f39-b558-4bc8bb114dfa
-I0628 23:37:54.242593   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 80] Val Loss: 0.8694 | Dice: 0.2476 | HD95: 57.89
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message 380c3b95-0235-4582-84d5-9e385c8d015a
-I0628 23:39:19.877208   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 81] 8% (1/12) Loss: 0.3555
-[Client 3, Round 81] 16% (2/12) Loss: 0.5541
-[Client 3, Round 81] 25% (3/12) Loss: 0.4378
-[Client 3, Round 81] 33% (4/12) Loss: 0.3730
-[Client 3, Round 81] 41% (5/12) Loss: 0.6841
-[Client 3, Round 81] 50% (6/12) Loss: 0.8026
-[Client 3, Round 81] 58% (7/12) Loss: 0.3614
-[Client 3, Round 81] 66% (8/12) Loss: 0.7157
-[Client 3, Round 81] 75% (9/12) Loss: 0.7093
-[Client 3, Round 81] 83% (10/12) Loss: 0.5529
-[Client 3, Round 81] 91% (11/12) Loss: 0.5923
-[Client 3, Round 81] 100% (12/12) Loss: 0.4078
-[Client 3, Round 81] Train Loss: 0.5455
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message 5ce5db63-b553-4a40-91b3-1458b2dffa60
-I0628 23:41:43.145699   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 81] Val Loss: 0.8476 | Dice: 0.2669 | HD95: 57.92
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message 8cf78760-8e84-41d7-aa34-45b88b37e386
-I0628 23:43:59.000869   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 82] 8% (1/12) Loss: 0.6925
-[Client 3, Round 82] 16% (2/12) Loss: 0.5823
-[Client 3, Round 82] 25% (3/12) Loss: 0.4826
-[Client 3, Round 82] 33% (4/12) Loss: 0.3552
-[Client 3, Round 82] 41% (5/12) Loss: 0.3650
-[Client 3, Round 82] 50% (6/12) Loss: 0.7902
-[Client 3, Round 82] 58% (7/12) Loss: 0.6375
-[Client 3, Round 82] 66% (8/12) Loss: 0.6881
-[Client 3, Round 82] 75% (9/12) Loss: 0.5352
-[Client 3, Round 82] 83% (10/12) Loss: 0.3822
-[Client 3, Round 82] 91% (11/12) Loss: 0.3393
-[Client 3, Round 82] 100% (12/12) Loss: 0.4388
-[Client 3, Round 82] Train Loss: 0.5241
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message 738cceab-3237-464a-b5dc-408f902c4b09
-I0628 23:46:03.359667   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 82] Val Loss: 0.8322 | Dice: 0.3054 | HD95: 57.50
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message d1b5a8d3-51b6-43b9-8ee8-4b051a49f495
-I0628 23:48:02.475534   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 83] 8% (1/12) Loss: 0.3551
-[Client 3, Round 83] 16% (2/12) Loss: 0.3703
-[Client 3, Round 83] 25% (3/12) Loss: 0.8171
-[Client 3, Round 83] 33% (4/12) Loss: 0.6943
-[Client 3, Round 83] 41% (5/12) Loss: 0.5393
-[Client 3, Round 83] 50% (6/12) Loss: 0.3442
-[Client 3, Round 83] 58% (7/12) Loss: 0.3073
-[Client 3, Round 83] 66% (8/12) Loss: 0.6446
-[Client 3, Round 83] 75% (9/12) Loss: 0.3690
-[Client 3, Round 83] 83% (10/12) Loss: 0.5601
-[Client 3, Round 83] 91% (11/12) Loss: 0.7094
-[Client 3, Round 83] 100% (12/12) Loss: 0.6233
-[Client 3, Round 83] Train Loss: 0.5278
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message 1faab427-9970-4e7d-83dd-d957f7a524dd
-I0628 23:50:40.199961   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 83] Val Loss: 0.8243 | Dice: 0.3157 | HD95: 57.34
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message f51eaf63-89f7-44fc-a257-499caae874f5
-I0628 23:53:11.601092   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 84] 8% (1/12) Loss: 0.3663
-[Client 3, Round 84] 16% (2/12) Loss: 0.5312
-[Client 3, Round 84] 25% (3/12) Loss: 0.4335
-[Client 3, Round 84] 33% (4/12) Loss: 0.3761
-[Client 3, Round 84] 41% (5/12) Loss: 0.7723
-[Client 3, Round 84] 50% (6/12) Loss: 0.3615
-[Client 3, Round 84] 58% (7/12) Loss: 0.8243
-[Client 3, Round 84] 66% (8/12) Loss: 0.6861
-[Client 3, Round 84] 75% (9/12) Loss: 0.8543
-[Client 3, Round 84] 83% (10/12) Loss: 0.6793
-[Client 3, Round 84] 91% (11/12) Loss: 0.3723
-[Client 3, Round 84] 100% (12/12) Loss: 0.5570
-[Client 3, Round 84] Train Loss: 0.5679
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message d67c4369-a27f-4d2f-ada1-340f521391f9
-I0628 23:54:32.188880   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 84] Val Loss: 0.8235 | Dice: 0.3125 | HD95: 57.36
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message 30afaf73-d04d-4a14-9f70-8c3d66b81ebb
-I0628 23:56:53.760224   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 85] 8% (1/12) Loss: 0.7124
-[Client 3, Round 85] 16% (2/12) Loss: 0.4845
-[Client 3, Round 85] 25% (3/12) Loss: 0.3592
-[Client 3, Round 85] 33% (4/12) Loss: 0.5532
-[Client 3, Round 85] 41% (5/12) Loss: 0.3268
-[Client 3, Round 85] 50% (6/12) Loss: 0.5163
-[Client 3, Round 85] 58% (7/12) Loss: 0.7162
-[Client 3, Round 85] 66% (8/12) Loss: 0.5848
-[Client 3, Round 85] 75% (9/12) Loss: 0.3584
-[Client 3, Round 85] 83% (10/12) Loss: 0.3650
-[Client 3, Round 85] 91% (11/12) Loss: 0.6677
-[Client 3, Round 85] 100% (12/12) Loss: 0.3082
-[Client 3, Round 85] Train Loss: 0.4960
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message 9789ccbd-b3de-4efe-90d0-767c913bbd72
-I0629 00:00:10.797534   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 85] Val Loss: 0.7900 | Dice: 0.3666 | HD95: 57.28
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message 55c59a32-2938-4eb1-9c8a-608cda05db4d
-I0629 00:02:41.574411   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 86] 8% (1/12) Loss: 0.5409
-[Client 3, Round 86] 16% (2/12) Loss: 0.3413
-[Client 3, Round 86] 25% (3/12) Loss: 0.4991
-[Client 3, Round 86] 33% (4/12) Loss: 0.2863
-[Client 3, Round 86] 41% (5/12) Loss: 0.6721
-[Client 3, Round 86] 50% (6/12) Loss: 0.3408
-[Client 3, Round 86] 58% (7/12) Loss: 0.3272
-[Client 3, Round 86] 66% (8/12) Loss: 0.3394
-[Client 3, Round 86] 75% (9/12) Loss: 0.5889
-[Client 3, Round 86] 83% (10/12) Loss: 0.7928
-[Client 3, Round 86] 91% (11/12) Loss: 0.8212
-[Client 3, Round 86] 100% (12/12) Loss: 0.6868
-[Client 3, Round 86] Train Loss: 0.5197
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message 89d7835d-1f65-4cfb-bbc9-d900b557e850
-I0629 00:04:35.647272   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 86] Val Loss: 0.7946 | Dice: 0.3678 | HD95: 56.02
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message 99417349-3ec7-4261-83ab-a234f8446e2f
-I0629 00:06:39.627949   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 87] 8% (1/12) Loss: 0.3436
-[Client 3, Round 87] 16% (2/12) Loss: 0.5026
-[Client 3, Round 87] 25% (3/12) Loss: 0.3781
-[Client 3, Round 87] 33% (4/12) Loss: 0.6563
-[Client 3, Round 87] 41% (5/12) Loss: 0.3006
-[Client 3, Round 87] 50% (6/12) Loss: 0.5269
-[Client 3, Round 87] 58% (7/12) Loss: 0.5516
-[Client 3, Round 87] 66% (8/12) Loss: 0.3933
-[Client 3, Round 87] 75% (9/12) Loss: 0.6697
-[Client 3, Round 87] 83% (10/12) Loss: 0.8666
-[Client 3, Round 87] 91% (11/12) Loss: 0.6779
-[Client 3, Round 87] 100% (12/12) Loss: 0.3858
-[Client 3, Round 87] Train Loss: 0.5211
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message a89a5d5e-375d-4a8c-ba12-f4375905d24c
-I0629 00:09:17.381445   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 87] Val Loss: 0.8601 | Dice: 0.3016 | HD95: 50.92
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message f6b6c4b7-4986-4107-84e9-4bda2bf29d85
-I0629 00:10:09.094625   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 88] 8% (1/12) Loss: 0.4332
-[Client 3, Round 88] 16% (2/12) Loss: 0.9364
-[Client 3, Round 88] 25% (3/12) Loss: 0.4276
-[Client 3, Round 88] 33% (4/12) Loss: 0.2972
-[Client 3, Round 88] 41% (5/12) Loss: 0.3203
-[Client 3, Round 88] 50% (6/12) Loss: 0.2881
-[Client 3, Round 88] 58% (7/12) Loss: 0.6345
-[Client 3, Round 88] 66% (8/12) Loss: 0.6132
-[Client 3, Round 88] 75% (9/12) Loss: 0.7215
-[Client 3, Round 88] 83% (10/12) Loss: 0.7186
-[Client 3, Round 88] 91% (11/12) Loss: 0.2767
-[Client 3, Round 88] 100% (12/12) Loss: 0.5181
-[Client 3, Round 88] Train Loss: 0.5155
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message c9cff8c1-e0ca-4e85-896d-05e0c81bfc77
-I0629 00:12:26.251898   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 88] Val Loss: 0.7932 | Dice: 0.3265 | HD95: 56.84
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message 38bfc838-c454-42e6-b3f5-f2bac8967d1a
-I0629 00:14:08.690364   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 89] 8% (1/12) Loss: 0.2976
-[Client 3, Round 89] 16% (2/12) Loss: 0.3782
-[Client 3, Round 89] 25% (3/12) Loss: 0.5139
-[Client 3, Round 89] 33% (4/12) Loss: 0.7383
-[Client 3, Round 89] 41% (5/12) Loss: 0.3406
-[Client 3, Round 89] 50% (6/12) Loss: 0.4746
-[Client 3, Round 89] 58% (7/12) Loss: 0.6601
-[Client 3, Round 89] 66% (8/12) Loss: 0.5542
-[Client 3, Round 89] 75% (9/12) Loss: 0.6596
-[Client 3, Round 89] 83% (10/12) Loss: 0.3839
-[Client 3, Round 89] 91% (11/12) Loss: 0.5753
-[Client 3, Round 89] 100% (12/12) Loss: 0.3893
-[Client 3, Round 89] Train Loss: 0.4971
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message 00f2d3f8-1612-40fb-9527-f59bb6579f43
-I0629 00:17:20.210675   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 89] Val Loss: 0.7342 | Dice: 0.4334 | HD95: 51.90
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message aa873fb3-f5c2-4063-bbb9-dcae439f547d
-I0629 00:19:49.016999   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 90] 8% (1/12) Loss: 0.6673
-[Client 3, Round 90] 16% (2/12) Loss: 0.2542
-[Client 3, Round 90] 25% (3/12) Loss: 0.3710
-[Client 3, Round 90] 33% (4/12) Loss: 0.2881
-[Client 3, Round 90] 41% (5/12) Loss: 0.8026
-[Client 3, Round 90] 50% (6/12) Loss: 0.5029
-[Client 3, Round 90] 58% (7/12) Loss: 0.8165
-[Client 3, Round 90] 66% (8/12) Loss: 0.3242
-[Client 3, Round 90] 75% (9/12) Loss: 0.4677
-[Client 3, Round 90] 83% (10/12) Loss: 0.3244
-[Client 3, Round 90] 91% (11/12) Loss: 0.6540
-[Client 3, Round 90] 100% (12/12) Loss: 0.6885
-[Client 3, Round 90] Train Loss: 0.5135
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message 3fffed1a-1dfc-47f2-8ad4-03f04b24dec5
-I0629 00:22:35.788590   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 90] Val Loss: 0.7326 | Dice: 0.4526 | HD95: 47.37
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message 16c8b59e-4b0c-44f3-b54c-e52216727e9a
-I0629 00:25:10.606963   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 91] 8% (1/12) Loss: 0.3223
-[Client 3, Round 91] 16% (2/12) Loss: 0.5297
-[Client 3, Round 91] 25% (3/12) Loss: 0.2767
-[Client 3, Round 91] 33% (4/12) Loss: 0.4699
-[Client 3, Round 91] 41% (5/12) Loss: 0.8582
-[Client 3, Round 91] 50% (6/12) Loss: 0.7949
-[Client 3, Round 91] 58% (7/12) Loss: 0.3179
-[Client 3, Round 91] 66% (8/12) Loss: 0.6396
-[Client 3, Round 91] 75% (9/12) Loss: 0.3518
-[Client 3, Round 91] 83% (10/12) Loss: 0.3398
-[Client 3, Round 91] 91% (11/12) Loss: 0.6636
-[Client 3, Round 91] 100% (12/12) Loss: 0.5053
-[Client 3, Round 91] Train Loss: 0.5058
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message b8da4f2a-ebf9-4472-b43d-945ad69c5814
-I0629 00:26:23.546904   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 91] Val Loss: 0.7528 | Dice: 0.3946 | HD95: 52.79
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message 47751d74-c493-4bf3-ab64-4928dc788a0d
-I0629 00:28:38.812130   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 92] 8% (1/12) Loss: 0.5876
-[Client 3, Round 92] 16% (2/12) Loss: 0.6679
-[Client 3, Round 92] 25% (3/12) Loss: 0.3247
-[Client 3, Round 92] 33% (4/12) Loss: 0.6142
-[Client 3, Round 92] 41% (5/12) Loss: 0.3399
-[Client 3, Round 92] 50% (6/12) Loss: 0.3287
-[Client 3, Round 92] 58% (7/12) Loss: 0.4872
-[Client 3, Round 92] 66% (8/12) Loss: 0.2510
-[Client 3, Round 92] 75% (9/12) Loss: 0.3039
-[Client 3, Round 92] 83% (10/12) Loss: 0.4530
-[Client 3, Round 92] 91% (11/12) Loss: 0.6218
-[Client 3, Round 92] 100% (12/12) Loss: 0.6241
-[Client 3, Round 92] Train Loss: 0.4670
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message 7d45ef2a-59de-4c60-bd4f-697a5934624f
-I0629 00:30:03.964466   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 92] Val Loss: 0.7757 | Dice: 0.3373 | HD95: 52.41
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message 56cf97e2-b580-4127-8b37-301604e00164
-I0629 00:35:17.205127   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 93] 8% (1/12) Loss: 0.5006
-[Client 3, Round 93] 16% (2/12) Loss: 0.4603
-[Client 3, Round 93] 25% (3/12) Loss: 0.3487
-[Client 3, Round 93] 33% (4/12) Loss: 0.7186
-[Client 3, Round 93] 41% (5/12) Loss: 0.7017
-[Client 3, Round 93] 50% (6/12) Loss: 0.5183
-[Client 3, Round 93] 58% (7/12) Loss: 0.2854
-[Client 3, Round 93] 66% (8/12) Loss: 0.5140
-[Client 3, Round 93] 75% (9/12) Loss: 0.2981
-[Client 3, Round 93] 83% (10/12) Loss: 0.4256
-[Client 3, Round 93] 91% (11/12) Loss: 0.2964
-[Client 3, Round 93] 100% (12/12) Loss: 0.2406
-[Client 3, Round 93] Train Loss: 0.4424
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message 923a0af5-8db7-46dd-93d5-7e39b2a8e9cb
-I0629 00:37:37.193800   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 93] Val Loss: 0.7202 | Dice: 0.4227 | HD95: 51.97
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message fab35473-d4dd-493b-8e0b-fe4f5d459359
-I0629 00:40:04.923929   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 94] 8% (1/12) Loss: 0.2517
-[Client 3, Round 94] 16% (2/12) Loss: 0.6747
-[Client 3, Round 94] 25% (3/12) Loss: 0.4555
-[Client 3, Round 94] 33% (4/12) Loss: 0.2528
-[Client 3, Round 94] 41% (5/12) Loss: 0.5199
-[Client 3, Round 94] 50% (6/12) Loss: 0.6397
-[Client 3, Round 94] 58% (7/12) Loss: 0.5397
-[Client 3, Round 94] 66% (8/12) Loss: 0.2911
-[Client 3, Round 94] 75% (9/12) Loss: 0.4745
-[Client 3, Round 94] 83% (10/12) Loss: 0.3029
-[Client 3, Round 94] 91% (11/12) Loss: 0.2250
-[Client 3, Round 94] 100% (12/12) Loss: 0.8465
-[Client 3, Round 94] Train Loss: 0.4562
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message b2602c80-59de-4901-b604-38f255675270
-I0629 00:41:54.424801   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 94] Val Loss: 0.6992 | Dice: 0.4641 | HD95: 42.58
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message b2e911db-e819-40bb-b9dd-b27387a39422
-I0629 00:44:03.873339   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 95] 8% (1/12) Loss: 0.4152
-[Client 3, Round 95] 16% (2/12) Loss: 0.2724
-[Client 3, Round 95] 25% (3/12) Loss: 0.5010
-[Client 3, Round 95] 33% (4/12) Loss: 0.5108
-[Client 3, Round 95] 41% (5/12) Loss: 0.2652
-[Client 3, Round 95] 50% (6/12) Loss: 0.4425
-[Client 3, Round 95] 58% (7/12) Loss: 0.3013
-[Client 3, Round 95] 66% (8/12) Loss: 0.4751
-[Client 3, Round 95] 75% (9/12) Loss: 0.2864
-[Client 3, Round 95] 83% (10/12) Loss: 0.3329
-[Client 3, Round 95] 91% (11/12) Loss: 0.6583
-[Client 3, Round 95] 100% (12/12) Loss: 0.6602
-[Client 3, Round 95] Train Loss: 0.4268
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message 4b62a9d3-6388-4162-9108-b4956b702d97
-I0629 00:46:33.981267   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 95] Val Loss: 0.7200 | Dice: 0.4490 | HD95: 51.94
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message 87ee40a1-4188-4203-ace3-f886f6dfc5e6
-I0629 00:51:55.622424   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 96] 8% (1/12) Loss: 0.6246
-[Client 3, Round 96] 16% (2/12) Loss: 0.2695
-[Client 3, Round 96] 25% (3/12) Loss: 0.5115
-[Client 3, Round 96] 33% (4/12) Loss: 0.3936
-[Client 3, Round 96] 41% (5/12) Loss: 0.3231
-[Client 3, Round 96] 50% (6/12) Loss: 0.3255
-[Client 3, Round 96] 58% (7/12) Loss: 0.6248
-[Client 3, Round 96] 66% (8/12) Loss: 0.3950
-[Client 3, Round 96] 75% (9/12) Loss: 0.5431
-[Client 3, Round 96] 83% (10/12) Loss: 0.4392
-[Client 3, Round 96] 91% (11/12) Loss: 0.2343
-[Client 3, Round 96] 100% (12/12) Loss: 0.4777
-[Client 3, Round 96] Train Loss: 0.4302
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message 40c49152-2faf-4679-ab35-1874c79dcd3b
-I0629 00:54:04.796042   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 96] Val Loss: 0.7439 | Dice: 0.3690 | HD95: 51.83
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message 577404d4-b1cf-46ff-8c31-43e47d4f209a
-I0629 00:55:55.657618   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 97] 8% (1/12) Loss: 0.2536
-[Client 3, Round 97] 16% (2/12) Loss: 0.5378
-[Client 3, Round 97] 25% (3/12) Loss: 0.4430
-[Client 3, Round 97] 33% (4/12) Loss: 0.2334
-[Client 3, Round 97] 41% (5/12) Loss: 0.6571
-[Client 3, Round 97] 50% (6/12) Loss: 0.3688
-[Client 3, Round 97] 58% (7/12) Loss: 0.3014
-[Client 3, Round 97] 66% (8/12) Loss: 0.3152
-[Client 3, Round 97] 75% (9/12) Loss: 0.6402
-[Client 3, Round 97] 83% (10/12) Loss: 0.2820
-[Client 3, Round 97] 91% (11/12) Loss: 0.5073
-[Client 3, Round 97] 100% (12/12) Loss: 0.4694
-[Client 3, Round 97] Train Loss: 0.4174
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: evaluate message 23e82cb8-ee92-4f09-9cce-33849a07d369
-I0629 01:02:20.645713   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 97] Val Loss: 0.7430 | Dice: 0.3418 | HD95: 51.63
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: train message 67e45823-b91e-4f2a-8264-3a36793be59f
-I0629 01:05:01.744078   65263 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
-[Client 3, Round 98] 8% (1/12) Loss: 0.6628
-[Client 3, Round 98] 16% (2/12) Loss: 0.2377
-[Client 3, Round 98] 25% (3/12) Loss: 0.4326
-[Client 3, Round 98] 33% (4/12) Loss: 0.5214
-[Client 3, Round 98] 41% (5/12) Loss: 0.4668
-[Client 3, Round 98] 50% (6/12) Loss: 0.2720
-[Client 3, Round 98] 58% (7/12) Loss: 0.6377
-[Client 3, Round 98] 66% (8/12) Loss: 0.2438
-[Client 3, Round 98] 75% (9/12) Loss: 0.3004
-[Client 3, Round 98] 83% (10/12) Loss: 0.8101
-[Client 3, Round 98] 91% (11/12) Loss: 0.4885
-[Client 3, Round 98] 100% (12/12) Loss: 0.3150
-[Client 3, Round 98] Train Loss: 0.4491
-[92mINFO [0m:      Sent reply
-[92mINFO [0m:      
-[92mINFO [0m:      Received: reconnect message 7b5dc8fa-06ff-4dcd-a5af-8450674f8554
-[92mINFO [0m:      Disconnect and shut down
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_status:14, grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"}"
+>
+[Client 3] Disconnected. Retrying in 30s...
+[Client 3] Connection attempt 2/10
+I0706 23:11:17.796416   57441 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:11:17.814188   57965 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: Bad file descriptor (9)
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused", grpc_status:14}"
+>
+[Client 3] Disconnected. Retrying in 60s...
+[Client 3] Connection attempt 3/10
+I0706 23:12:18.043085   57441 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:12:18.054524   58258 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: Bad file descriptor (9)
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused", grpc_status:14}"
+>
+[Client 3] Disconnected. Retrying in 90s...
+[Client 3] Connection attempt 4/10
+I0706 23:13:48.332048   57441 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:13:48.343499   58753 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: Bad file descriptor (9)
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused", grpc_status:14}"
+>
+[Client 3] Disconnected. Retrying in 120s...
+[Client 3] Connection attempt 5/10
+I0706 23:15:48.651926   57441 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:15:48.663458   60295 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: Bad file descriptor (9)
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_status:14, grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"}"
+>
+[Client 3] Disconnected. Retrying in 150s...
+[Client 3] Connection attempt 6/10
+I0706 23:18:18.881258   57441 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:18:18.892679   60723 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: Bad file descriptor (9)
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_status:14, grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"}"
+>
+[Client 3] Disconnected. Retrying in 180s...
+[Client 3] Connection attempt 7/10
+I0706 23:21:19.163362   57441 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:21:19.174888   61300 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: Bad file descriptor (9)
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_status:14, grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"}"
+>
+[Client 3] Disconnected. Retrying in 210s...
+[Client 3] Connection attempt 8/10
+I0706 23:24:49.478568   57441 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:24:49.489894   61936 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: Bad file descriptor (9)
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused", grpc_status:14}"
+>
+[Client 3] Disconnected. Retrying in 240s...
+[Client 3] Connection attempt 9/10
+I0706 23:28:49.765550   57441 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:28:49.783250   62530 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: Bad file descriptor (9)
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused", grpc_status:14}"
+>
+[Client 3] Disconnected. Retrying in 270s...
+[Client 3] Connection attempt 10/10
+I0706 23:33:20.095444   57441 fork_posix.cc:71] Other threads are currently calling into gRPC, skipping fork() handlers
+E0706 23:33:20.107091   63291 ev_epoll1_linux.cc:191] OrphanHandle: epoll_ctl failed: Bad file descriptor (9)
+Traceback (most recent call last):
+  File "/work/r/reeshav/PPML-Experiments-FL/fl/client.py", line 306, in main
+    fl.client.start_client(server_address=args.server_address, client=client.to_client())
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 180, in start_client
+    start_client_internal(
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/app.py", line 415, in start_client_internal
+    message = receive()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/flwr/client/grpc_client/connection.py", line 151, in receive
+    proto = next(server_message_iterator)
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 538, in __next__
+    return self._next()
+  File "/work/r/reeshav/PPML-Experiments-FL/.venv/lib/python3.9/site-packages/grpc/_channel.py", line 956, in _next
+    raise self
+grpc._channel._MultiThreadedRendezvous: <_MultiThreadedRendezvous of RPC that terminated with:
+	status = StatusCode.UNAVAILABLE
+	details = "failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"
+	debug_error_string = "UNKNOWN:Error received from peer  {grpc_status:14, grpc_message:"failed to connect to all addresses; last error: UNKNOWN: ipv4:10.250.2.12:8080: Failed to connect to remote host: Connection refused"}"
+>
+[Client 3] All 10 attempts exhausted. Exiting.

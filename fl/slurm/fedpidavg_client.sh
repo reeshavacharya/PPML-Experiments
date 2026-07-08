@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=fpid_cli
+#SBATCH --job-name=ft_pcl
 #SBATCH --partition=muma_2021
 #SBATCH --qos=muma21
 #SBATCH --nodes=1
@@ -8,6 +8,7 @@
 #SBATCH --mem=64G
 #SBATCH --gres=gpu:1
 #SBATCH --time=96:00:00
+#SBATCH --exclude=mdc-1057-13-8,mdc-1057-18-3,mdc-1057-18-4
 #SBATCH --output=/work/r/reeshav/PPML-Experiments-FL/fl/slurm/std_out_group_%a.log
 #SBATCH --error=/work/r/reeshav/PPML-Experiments-FL/fl/slurm/std_err_group_%a.log
 #SBATCH --array=1-7
@@ -35,6 +36,15 @@ done
 SERVER_ADDR=$(cat "$ADDR_FILE" | tr -d '[:space:]')
 echo "Server address: ${SERVER_ADDR}:8080"
 
+# Explicit PID tracking + trap: `scancel` sends SIGTERM to this script's own
+# process, but backgrounded children (&) aren't guaranteed to receive it too
+# — an orphaned client.py can survive the cancellation and keep
+# retrying/reconnecting to whatever server is later listening on the same
+# port, silently corrupting a later run's client count. Trap ensures they
+# actually die with this job.
+CHILD_PIDS=()
+trap 'echo "Caught signal — killing child clients: ${CHILD_PIDS[*]}"; kill "${CHILD_PIDS[@]}" 2>/dev/null; exit 1' TERM INT
+
 # Launch one Flower client per institution (GPU lock serializes access)
 for CID in $CLIENTS; do
     python3 -u fl/client.py \
@@ -43,11 +53,12 @@ for CID in $CLIENTS; do
         --num_workers 1 \
         --resume \
         > fl/slurm/std_out_client_${CID}.log 2>&1 &
+    CHILD_PIDS+=($!)
     echo "  Client $CID started (PID: $!)"
     sleep 2
 done
 
 echo "All clients in group $SLURM_ARRAY_TASK_ID launched. Waiting..."
-wait
+wait "${CHILD_PIDS[@]}"
 
 echo "=== Group $SLURM_ARRAY_TASK_ID finished at $(date) ==="

@@ -1,0 +1,86 @@
+=== cbcs ===
+srun: job 33358433 queued and waiting for resources
+srun: job 33358433 has been allocated resources
+checkpoint
+data
+data_loader
+fl
+FL-Claude-Research.md
+hpo_best_centralized_cas.json
+hpo_best_centralized_isic.json
+hpo_best_centralized.json
+hpo_best_centralized_nih.json
+info.txt
+jobs.txt
+models
+nodes.txt
+optuna_centralized_cas.db
+optuna_centralized.db
+optuna_centralized_isic.db
+optuna_centralized_nih.db
+optuna_fl_cas.db
+optuna_fl.db
+optuna_fl_isic.db
+optuna_fl_isic_fast.db
+optuna_fl_nih.db
+optuna_fl_nih_fast.db
+papers
+partition.txt
+qos_candidates.txt
+queue.txt
+report
+requirements.txt
+test
+test.sh
+train
+utils
+=== chbme_2018 ===
+srun: job 33358434 queued and waiting for resources
+srun: job 33358434 has been allocated resources
+slurmstepd: error: couldn't chdir to `/work/r/reeshav/PPML-Experiments-FL': No such file or directory: going to /tmp instead
+slurmstepd: error: couldn't chdir to `/work/r/reeshav/PPML-Experiments-FL': No such file or directory: going to /tmp instead
+/bin/ls: cannot access /work/r/reeshav/PPML-Experiments-FL: No such file or directory
+srun: error: mdc-1057-26-14: task 0: Exited with exit code 2
+=== margres_2020 ===
+srun: job 33358435 queued and waiting for resources
+srun: job 33358435 has been allocated resources
+checkpoint
+data
+data_loader
+fl
+FL-Claude-Research.md
+hpo_best_centralized_cas.json
+hpo_best_centralized_isic.json
+hpo_best_centralized.json
+hpo_best_centralized_nih.json
+info.txt
+jobs.txt
+models
+nodes.txt
+optuna_centralized_cas.db
+optuna_centralized.db
+optuna_centralized_isic.db
+optuna_centralized_nih.db
+optuna_fl_cas.db
+optuna_fl.db
+optuna_fl_isic.db
+optuna_fl_isic_fast.db
+optuna_fl_nih.db
+optuna_fl_nih_fast.db
+papers
+partition.txt
+qos_candidates.txt
+queue.txt
+report
+requirements.txt
+test
+test.sh
+train
+utils
+=== simmons_itn18 ===
+srun: job 33358436 queued and waiting for resources
+srun: job 33358436 has been allocated resources
+slurmstepd: error: couldn't chdir to `/work/r/reeshav/PPML-Experiments-FL': No such file or directory: going to /tmp instead
+slurmstepd: error: couldn't chdir to `/work/r/reeshav/PPML-Experiments-FL': No such file or directory: going to /tmp instead
+/bin/ls: cannot access /work/r/reeshav/PPML-Experiments-FL: No such file or directory
+srun: error: mdc-1057-26-10: task 0: Exited with exit code 2
